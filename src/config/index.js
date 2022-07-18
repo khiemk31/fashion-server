@@ -5,7 +5,7 @@ const port = 5000;
 const mysqlConfig = {
   host: 'localhost',
   user: 'modelfashion',
-  password: 'Bt8ELGhy68HTPytd',
+  password: 'WeT2LX4Xx2kFnkFZ',
   port: 3306,
   database: 'modelfashion',
 };
@@ -24,6 +24,9 @@ const private_key = 'admin';
 //tk twilo
 // ginhotaru282@gmail.com
 // dangtrungkien300197
+
+//khiemk31@gmail.com
+//nguyenduykhiem171098
 
 //cloudinary
 //ginhotaru282@gmail.com
