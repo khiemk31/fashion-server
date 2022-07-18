@@ -28,17 +28,20 @@ const checkUser = async (req, res) => {
 //API  registerUser
 const register = async (req, res) => {
   try {
-    const {user_id,phone, password, user_name} = req.body;
+    const {phone, password, user_name} = req.body;
     const connection = await getConnection(req);
+    const lengthListUser = (await query(connection, userSQL.queryAllUser)).length;
+    let id = 'USER' + (lengthListUser + 1);
+    console.log(id);
     const newPassword = await encodePassword(password);
     const newUser = {
-      user_id: user_id,
-      phone,
+      user_id: id,
+      phone: phone,
       password: newPassword,
       user_name,
-      gender: 1,
+      gender: 0,
       date_of_birth: new Date(),
-      permission	: 'user',
+      permission: 'user',
       active: 0,
       created_at: new Date(),
     };
@@ -74,7 +77,7 @@ const postInsertUser = async (req, res) => {
       user_name: data.user_name,
       gender: data.gender,
       address: data.address,
-      permission	: data.permission	,
+      permission: data.permission,
       avatar: avatar,
       active: 0,
       created_at: new Date(),
