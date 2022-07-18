@@ -5,7 +5,7 @@ const port = 5000;
 const mysqlConfig = {
   host: 'localhost',
   user: 'modelfashion',
-  password: 'fFyz7pZhXwXPF4fG',
+  password: 'WeT2LX4Xx2kFnkFZ',
   port: 3306,
   database: 'modelfashion',
 };

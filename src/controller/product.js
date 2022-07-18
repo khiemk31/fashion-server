@@ -17,7 +17,7 @@ const product = async (req, res) => {
   for (const product of listProduct) {
     product.price = formatMoney(product.price);
   }
-  res.render('product1', {listProduct: listProduct});
+  res.render('product', {listProduct: listProduct});
 };
 //delete
 const removeProduct = async (req, res) => {
