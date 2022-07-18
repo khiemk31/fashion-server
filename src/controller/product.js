@@ -161,22 +161,11 @@ const update = async (req, res) => {
 };
 
 // API MOBILE
-const getList = async (req, res) => {
+const getAllProductByCategory = async (req, res) => {
   try {
-    const {offset} = req.query;
     const connection = await getConnection(req);
-    const getProductLimit = `SELECT product.product_id ,product.product_name, product.product_image , product.price  
-    FROM  product , category 
-    WHERE  product.category_id = category.category_id and  product.deleted_at is NULL and category.deleted_at is NULL 
-    LIMIT  10 
-    OFFSET  ${offset}`;
-    const listProductLimit = await query(connection, getProductLimit);
-    const listAllProduct = await query(connection, productSQL.getAllProduct);
-    return res.status(200).json({
-      message: 'success',
-      listProduct: listProductLimit,
-      totalPage: getTotalPage(listAllProduct.length, 10),
-    });
+    const listProduct = await query(connection, productSQL.getAllProductByCategory);
+    return res.status(200).json({message: 'success', listProduct: listProduct});
   } catch (e) {
     return res.status(500).json({message: `${e}`});
   }
@@ -266,7 +255,7 @@ module.exports = {
   listProductCreated,
   insertProduct,
   add,
-  getList,
+  getAllProductByCategory,
   getProductByCategory,
   getProductDetail,
   getProductByPrice,
