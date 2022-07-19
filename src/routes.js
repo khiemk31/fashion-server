@@ -10,15 +10,15 @@ module.exports = (router) => {
   //Main Router
   router.get('/main', middleware.requireAuth, view.main);
   //category API
+  router.get('/category/getAll', category.getAll);
+  //category Web View
   router.get('/category/', category.category);
   router.get('/category/remove/:id', category.removeCategory);
   router.get('/insertCategory', category.getAddCategory);
   router.post('/addCategory', category.addCategory);
-  router.get('/category/getUpdateCategory/:id', category.getUpdateCategory);
   router.post('/category/update', category.update);
   router.post('/category/search', category.search);
-  router.get('/category/getAll', category.getAll);
-  router.post('/category/update', category.update);
+  router.get('/category/getUpdateCategory/:id', category.getUpdateCategory);
   router.get('/category/deleted', category.getCategoryDeleted);
   router.get('/category/updated', category.getCategoryUpdated);
   router.get('/category/created', category.getCategoryCreated);
