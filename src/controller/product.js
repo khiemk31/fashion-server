@@ -199,7 +199,7 @@ const getProductDetail = async (req, res) => {
     if (isEmpty(product)) {
       return res.status(404).json({message: 'Product not found'});
     }
-    const listSize = await query(connection, productSQL.listSizeProductQuery, [id]);
+    const listSize = await query(connection, productSQL.getListSizeDetailProduct, [id]);
 
     return res.status(200).json({product, listSize});
   } catch (e) {
