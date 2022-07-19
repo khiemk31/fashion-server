@@ -37,7 +37,7 @@ const register = async (req, res) => {
       user_id: id,
       phone: phone,
       password: newPassword,
-      user_name,
+      user_name : user_name,
       gender: 0,
       date_of_birth: new Date(),
       permission: 'user',
