@@ -10,7 +10,6 @@ var jwt = require('jsonwebtoken');
 const twilio = require('twilio');
 const {accountSid, authToken} = require('../config');
 const userSQL = require('../sql/userSQL');
-const {render} = require('express/lib/response');
 const client = twilio(accountSid, authToken);
 
 //API checkUser
