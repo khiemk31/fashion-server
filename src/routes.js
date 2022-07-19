@@ -23,7 +23,7 @@ module.exports = (router) => {
   router.get('/category/updated', category.getCategoryUpdated);
   router.get('/category/created', category.getCategoryCreated);
   //Product API
-  router.get('/product/getAll', product.getList);
+  router.get('/product/getAllProductByCategory', product.getAllProductByCategory);
   router.get('/product/getProductByCategory/:id', product.getProductByCategory);
   router.get('/product/getProductDiscount', product.getProductDiscount);
   router.get('/product/getProductByPrice', product.getProductByPrice);
