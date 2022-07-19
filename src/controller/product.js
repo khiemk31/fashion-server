@@ -4,7 +4,6 @@ const sizeSQL = require('../sql/sizeSQL');
 const categorySQL = require('../sql/categorySQL');
 const {getConnection, query} = require('../utils/database');
 const {uploadImage} = require('../utils/image');
-const {render} = require('express/lib/response');
 const moment = require('moment');
 const {getTotalPage} = require('../utils/index');
 const {formatMoney} = require('../utils/formatMoney');
@@ -17,7 +16,7 @@ const product = async (req, res) => {
   for (const product of listProduct) {
     product.price = formatMoney(product.price);
   }
-  res.render('product', {listProduct: listProduct});
+  res.render('product1', {listProduct: listProduct});
 };
 //delete
 const removeProduct = async (req, res) => {
@@ -207,7 +206,7 @@ const getProductDetail = async (req, res) => {
   try {
     const {id} = req.params;
     const connection = await getConnection(req);
-    const product = await query(connection, productSQL.detailProductQuery, [id]);
+    const product = await query(connection, productSQL.getDetailProduct, [id]);
     if (isEmpty(product)) {
       return res.status(404).json({message: 'Product not found'});
     }
