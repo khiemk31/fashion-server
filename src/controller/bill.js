@@ -82,7 +82,7 @@ const cancelOrder = async (req, res) => {
     if (isEmpty(bill)) {
       return res.status(404).json({message: 'Bill not found'});
     }
-    await query(connection, billSQL.updateBill, ['Yêu Cầu Hủy', cancellation_reason, bill_id]);
+    await query(connection, billSQL.updateBill, ['Yêu Cầu Hủy Đơn', cancellation_reason, bill_id]);
     return res.status(200).json({message: 'success'});
   } catch (error) {
     return res.status(500).json({message: `${error}`});
@@ -114,7 +114,7 @@ const returnRequest = async (req, res) => {
     if (isEmpty(bill)) {
       return res.status(404).json({message: 'Bill not found'});
     }
-    await query(connection, billSQL.updateReturnRequest, ['Yêu Cầu Trả Hàng', return_request, bill_id]);
+    await query(connection, billSQL.updateReturnRequest, ['Yêu Cầu Trả Đơn', return_request, bill_id]);
     return res.status(200).json({message: 'success'});
   } catch (error) {
     return res.status(500).json({message: `${error}`});
@@ -206,7 +206,7 @@ const getCancelled = async (req, res) => {
 // Lọc đơn từ chối
 const getRefuse = async (req, res) => {
   const connection = await getConnection(req);
-  const queryBill = 'SELECT * FROM bill WHERE status="Từ Chối" order by created_at DESC ';
+  const queryBill = 'SELECT * FROM bill WHERE status="Từ Chối Đơn" order by created_at DESC ';
   const listBill = await query(connection, queryBill);
   for (const bill of listBill) {
     bill.created_at = moment(bill.created_at).format('DD-MM-YYYY');
@@ -284,7 +284,7 @@ const billCancel = async (req, res) => {
     const connection = await getConnection(req);
     const bill = await query(connection, billSQL.queryBillById, [id]);
     if (isEmpty(bill)) return res.status(404).json({message: 'Bill not found'});
-    await query(connection, billSQL.updateStatusBillWeb, ['Từ Chối', id]);
+    await query(connection, billSQL.updateStatusBillWeb, ['Từ Chối Đơn', id]);
     const listBill = await query(connection, billSQL.queryAllBill);
     for (const bill of listBill) {
       bill.created_at = moment(bill.created_at).format('DD-MM-YYYY');

@@ -37,8 +37,8 @@ const register = async (req, res) => {
       user_id: id,
       phone: phone,
       password: newPassword,
-      user_name : user_name,
-      gender: 0,
+      user_name: user_name,
+      gender: 1,
       date_of_birth: new Date(),
       permission: 'user',
       active: 0,
@@ -115,7 +115,7 @@ const login = async (req, res) => {
 const recoveryPassword = async (req, res) => {
   try {
     const {password, phone} = req.body;
-
+    console.log(`Recovery password`, password, phone);
     const connection = await getConnection(req);
     const user = await query(connection, UserSQL.getUserQuerySQL, [phone]);
     if (isEmpty(user)) {
@@ -141,19 +141,16 @@ const update = async (req, res) => {
       const date = date_of_birth.split('-');
       newDateOfBirth = `${date[2]}-${date[1]}-${date[0]}`;
     }
-
     const connection = await getConnection(req);
-    const user = await query(connection, `select * from user where user_id = '${user_id}'`);
-    if (isEmpty(user)) return res.status(404).json({message: 'User not found'});
+    const user = await query(connection, UserSQL.getUserById, [user_id]);
+    if (isEmpty(user)) return res.status(404).json({message: 'Không tìm thấy User'});
     await query(connection, UserSQL.updateUserSQL, [
-      {
-        user_name: user_name || null,
-        gender: gender || user[0].gender,
-        date_of_birth: newDateOfBirth || user[0].date_of_birth,
-        avatar: newAvatar?.url || avatar || user[0].avatar,
-        address: address || user[0].address,
-        updated_at: new Date(),
-      },
+      user_name || user[0].user_name || null,
+      gender || user[0].gender,
+      newDateOfBirth || user[0].date_of_birth,
+      newAvatar?.url || avatar || user[0].avatar,
+      address || user[0].address,
+      new Date(),
       user_id,
     ]);
     return res.status(200).json({message: 'Sửa thành công !'});

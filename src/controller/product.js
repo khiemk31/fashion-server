@@ -200,44 +200,19 @@ const getProductDetail = async (req, res) => {
       return res.status(404).json({message: 'Product not found'});
     }
     const listSize = await query(connection, productSQL.getListSizeDetailProduct, [id]);
-
     return res.status(200).json({product, listSize});
   } catch (e) {
     return res.status(500).json({message: `${e}`});
   }
 };
-const getProductByPrice = async (req, res) => {
-  try {
-    const {category_name, price1, price2, sort, offset} = req.query;
-    const connection = await getConnection(req);
-    const getProductLimit = `SELECT product.product_id ,product.product_name, product.price , product.product_image , category.category_name 
-    FROM product , category 
-    WHERE product.category_id=category.category_id AND category.category_name = '${category_name}' AND product.price BETWEEN ${price1} AND ${price2} AND product.deleted_at IS null AND category.deleted_at IS null 
-    ORDER BY product.price ${sort}  
-    LIMIT  10 
-    OFFSET  ${offset}`;
-    const listProductLimit = await query(connection, getProductLimit);
-    const queryProductByPriceAndCategory = `SELECT product.product_id ,product.product_name, product.price , product.product_image , category.category_name 
-    FROM product , category 
-    WHERE product.category_id=category.category_id AND category.category_name = '${category_name}' AND  product.price BETWEEN ${price1} AND ${price2}  AND product.deleted_at IS null AND category.deleted_at IS null 
-    ORDER BY product.price ${sort} `;
-    const listAllProduct = await query(connection, queryProductByPriceAndCategory);
-    return res.status(200).json({
-      message: 'success',
-      listProduct: listProductLimit,
-      totalPage: getTotalPage(listAllProduct.length, 10),
-    });
-  } catch (e) {
-    return res.status(500).json({message: `${e}`});
-  }
-};
+//Tất cả sp giảm giá (Màn Home)
 const getProductDiscount = async (req, res) => {
   try {
     const connection = await getConnection(req);
     const getProductDiscount = `SELECT product.product_id ,product.product_name, product.price , product.product_image , product.discount
     FROM product , category 
     WHERE product.category_id=category.category_id  AND product.discount BETWEEN 0  AND 99 AND product.deleted_at IS null AND category.deleted_at IS null 
-    ORDER BY product.price ASC `;
+    ORDER BY product.discount DESC `;
     const listProductDiscount = await query(connection, getProductDiscount);
     return res.status(200).json({
       message: 'success',
@@ -247,7 +222,44 @@ const getProductDiscount = async (req, res) => {
     return res.status(500).json({message: `${e}`});
   }
 };
+// Tất cả sản phẩm giảm giá (Màn xem tất cả,Có phân trang)
+const getAllProductDiscount = async (req, res) => {
+  try {
+    const {price1, price2, sortPrice, sortDiscount, pageNumber} = req.body;
+    var offset = 0;
+    if (pageNumber == 1) {
+      offset = 0;
+    } else if (pageNumber > 1) {
+      offset = (pageNumber - 1) * 10;
+    }
+    console.log(offset);
+    const connection = await getConnection(req);
+    const getAllProductDiscount = `SELECT product.product_id ,product.product_name, product.price , product.product_image , product.discount
+    FROM product , category 
+    WHERE product.category_id=category.category_id  
+    AND product.price BETWEEN ${price1}  AND ${price2} AND product.deleted_at IS null AND category.deleted_at IS null 
+    ORDER BY product.price ${sortPrice} , product.discount ${sortDiscount}`;
+    const getProductLimit = `SELECT product.product_id ,product.product_name, product.price , product.product_image , product.discount
+    FROM product , category 
+    WHERE product.category_id=category.category_id  
+    AND product.price BETWEEN ${price1}  AND ${price2} AND product.deleted_at IS null AND category.deleted_at IS null 
+    ORDER BY product.price ${sortPrice} , product.discount ${sortDiscount}
+    LIMIT  10
+    OFFSET  ${offset}`;
+
+    const listAllProduct = await query(connection, getAllProductDiscount);
+    const listProductLimit = await query(connection, getProductLimit);
+    return res.status(200).json({
+      message: 'success',
+      listProduct: listProductLimit,
+      totalPage: getTotalPage(listAllProduct.length, 10),
+    });
+  } catch (e) {
+    return res.status(500).json({message: `${e}`});
+  }
+};
 module.exports = {
+  getAllProductDiscount,
   getProductDiscount,
   update,
   getUpdate,
@@ -257,7 +269,6 @@ module.exports = {
   getAllProductByCategory,
   getProductByCategory,
   getProductDetail,
-  getProductByPrice,
   search,
   listProductDeleted,
   productDetail,

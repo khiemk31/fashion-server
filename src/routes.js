@@ -1,6 +1,5 @@
 const user = require('./controller/user');
 const category = require('./controller/category');
-const size = require('./controller/size');
 const product = require('./controller/product');
 const bill = require('./controller/bill');
 const view = require('./controller/main');
@@ -26,8 +25,8 @@ module.exports = (router) => {
   router.get('/product/getAllProductByCategory', product.getAllProductByCategory);
   router.get('/product/getProductByCategory/:id', product.getProductByCategory);
   router.get('/product/getProductDiscount', product.getProductDiscount);
-  router.get('/product/getProductByPrice', product.getProductByPrice);
   router.get('/product/detail/:id', product.getProductDetail);
+  router.get('/product/getAllProductDiscount', product.getAllProductDiscount);
   //Product Web View
   router.get('/updateProduct/:id', middleware.requireAuth, product.getUpdate);
   router.post('/product/update', middleware.requireAuth, product.update);
@@ -66,8 +65,6 @@ module.exports = (router) => {
   router.get('/getAllAdmin', middleware.requireAuth, user.getAllAdmin);
   router.get('/getSupperAdmin', middleware.requireAuth, user.getSupperAdmin);
   router.get('/getUserBlock', middleware.requireAuth, user.getUserBlock);
-  //Size API
-  router.post('/size/add', size.insertSize);
   //Bill API
   router.post('/bill/add', bill.add);
   router.get('/bill/getListBill/:id', bill.getListBill);
