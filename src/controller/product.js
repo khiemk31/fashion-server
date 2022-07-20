@@ -163,8 +163,15 @@ const update = async (req, res) => {
 const getAllProductByCategory = async (req, res) => {
   try {
     const connection = await getConnection(req);
-    const listProduct = await query(connection, productSQL.getAllProductByCategory);
-    return res.status(200).json({message: 'success', listProduct: listProduct});
+    const listCategory = await query(connection, categorySQL.queryListCategory);
+    const listAllProduct = [];
+
+    for (const category of listCategory) {
+      const listProduct = await query(connection, productSQL.queryProductByCategory, [category.category_id]);
+      listAllProduct.push(listProduct);
+    }
+    console.log(listAllProduct);
+    return res.status(200).json({message: 'success', listAllProduct: listAllProduct});
   } catch (e) {
     return res.status(500).json({message: `${e}`});
   }
