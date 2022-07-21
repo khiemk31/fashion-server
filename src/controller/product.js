@@ -210,7 +210,7 @@ const getProductDiscount = async (req, res) => {
 // Tất cả sản phẩm giảm giá (Màn xem tất cả,Có phân trang)
 const getAllProductDiscount = async (req, res) => {
   try {
-    const {price1, price2, sortPrice, sortDiscount, pageNumber} = req.body;
+    const {price1, price2, sortPrice, sortDiscount, pageNumber} = req.query;
     const connection = await getConnection(req);
     var offset = 0;
     if (pageNumber == 1) {
@@ -246,7 +246,7 @@ const getAllProductDiscount = async (req, res) => {
 //Tất cả sản phẩm theo thể loại ( Có Phân Trang):
 const getProductByCategory = async (req, res) => {
   try {
-    const {category_id, price1, price2, sortPrice, sortDiscount, pageNumber} = req.body;
+    const {category_id, price1, price2, sortPrice, sortDiscount, pageNumber} = req.query;
     const connection = await getConnection(req);
     var offset = 0;
     if (pageNumber == 1) {
