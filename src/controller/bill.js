@@ -251,20 +251,32 @@ const billDone = async (req, res) => {
     const {id} = req.params;
     const connection = await getConnection(req);
     const bill = await query(connection, billSQL.queryBillById, [id]);
-    if (isEmpty(bill)) return res.status(404).json({message: 'Bill not found'});
+    if (isEmpty(bill)) return res.status(404).json({message: 'Không tìm thấy bill'});
     const queryListBillDetail = 'SELECT product_name ,size ,quantity FROM bill_detail WHERE bill_id=?';
     const listBillDetail = await query(connection, queryListBillDetail, [id]);
     const queryProduct = 'SELECT product_id ,quantity_sold FROM product WHERE product_name =?';
     const updateProduct = 'UPDATE product SET quantity_sold=? WHERE product_id=?';
-    const querySize = 'SELECT quantity,size_id FROM size WHERE product_id=? AND size=?';
+    const querySize = 'SELECT size, quantity,size_id FROM size WHERE product_id=? AND size=?';
     const updateSize = 'UPDATE size SET quantity=? WHERE size_id=?';
     for (const billDetail of listBillDetail) {
       const product = await query(connection, queryProduct, [billDetail.product_name]);
       const newQuantity = product[0].quantity_sold + billDetail.quantity;
       await query(connection, updateProduct, [newQuantity, product[0].product_id]);
       const size = await query(connection, querySize, [product[0].product_id, billDetail.size]);
-      const newSizeQuantity = size[0].quantity - billDetail.quantity;
-      await query(connection, updateSize, [newSizeQuantity, size.size_id]);
+      if (size[0].quantity > 0) {
+        if (size[0].quantity >= billDetail.quantity) {
+          const newSizeQuantity = size[0].quantity - billDetail.quantity;
+          await query(connection, updateSize, [newSizeQuantity, size[0].size_id]);
+        } else {
+          return res.status(404).json({
+            message: `Số lượng hàng của size ${size[0].size} không đủ so với đặt hàng ! Còn ${size[0].quantity} sp size ${size[0].size}`,
+          });
+        }
+      } else {
+        return res.status(404).json({
+          message: `Size ${size[0].size} hết hàng`,
+        });
+      }
     }
     await query(connection, billSQL.updateStatusBillWeb, ['Hoàn Thành', id]);
     const listBill = await query(connection, billSQL.queryAllBill);
