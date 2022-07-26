@@ -11,7 +11,7 @@ const getAddCategory = async (req, res) => {
 const addCategory = async (req, res) => {
   try {
     const data = req.body;
-
+    console.log(data);
     if (req.files.category_image.data) {
       var categoryImage = 'data:image/jpeg;base64,' + req.files.category_image.data.toString('base64');
       const upload = await uploadImage(categoryImage);
@@ -72,16 +72,18 @@ const search = async (req, res) => {
 const category = async (req, res) => {
   const connection = await getConnection(req);
   const listCategory = await query(connection, categorySQL.listCategoryQuerySQL);
+
   for (const category of listCategory) {
-    if (category.created_at != null) {
+    if (category.created_at) {
       category.created_at = moment(category.created_at).format('DD-MM-YYYY');
     }
-    if (category.updated_at != null) {
+    if (category.updated_at) {
       category.updated_at = moment(category.updated_at).format('DD-MM-YYYY');
     }
-    if (category.deleted_at != null) {
+    if (category.deleted_at) {
       category.deleted_at = moment(category.deleted_at).format('DD-MM-YYYY');
     }
+    console.log(listCategory);
   }
   res.render('category', {listCategory: listCategory});
 };
@@ -163,7 +165,6 @@ const getUpdateCategory = async (req, res) => {
   const connection = await getConnection(req);
   const search = 'select *  from category where  category_id=?';
   const listCategory = await query(connection, search, [data.id]);
-  console.log(listCategory);
   res.render('update_category', {category: listCategory[0]});
 };
 //update thể loại
@@ -186,6 +187,7 @@ const update = async (req, res) => {
   }
   res.render('category', {listCategory: listCategory});
 };
+
 //API Category
 //Lấy tất cả
 const getAll = async (req, res) => {

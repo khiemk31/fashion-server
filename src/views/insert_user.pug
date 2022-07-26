@@ -1,0 +1,144 @@
+doctype html
+head
+    meta(charset='utf-8')
+    link(rel='apple-touch-icon' sizes='76x76' href='https://res.cloudinary.com/cde/image/upload/v1658206315/Icon/logo_cdrkpi.png')
+    link(rel='icon' type='image/png' href='https://res.cloudinary.com/cde/image/upload/v1658206315/Icon/logo_cdrkpi.png')
+    meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
+    title Model Fashion
+    meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
+
+    link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700,200' rel='stylesheet')
+    link(href='https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' rel='stylesheet')
+    // CSS Files
+    style 
+        include ./assets/css/bootstrap.min.css
+    style 
+        include ./assets/css/paper-dashboard.css 
+    style 
+        include ./assets/demo/demo.css
+.wrapper
+    .sidebar(data-color='white' data-active-color='danger')
+        .logo
+            a.simple-text.logo-mini(href='/main')
+                .logo-image-small
+                    img(src="https://res.cloudinary.com/cde/image/upload/v1658206315/Icon/logo_cdrkpi.png")
+            a.simple-text.logo-normal(href='/main')
+                | Model Fashion
+        .sidebar-wrapper
+            ul.nav
+                li
+                    a(href='/main')
+                        i.nc-icon.nc-chart-pie-36
+                        p Dashboard
+                li.active
+                    a(href='/user')
+                        i.nc-icon.nc-circle-10
+                        p User
+                li
+                    a(href='/category')
+                        i.nc-icon.nc-bullet-list-67
+                        p Category
+                li
+                    a(href='/product')
+                        i.nc-icon.nc-align-left-2
+                        p Product
+                li
+                    a(href='#')
+                        i.nc-icon.nc-money-coins
+                        p Voucher
+                li
+                    a(href='/bill')
+                        i.nc-icon.nc-delivery-fast
+                        p Bill
+                li
+                    a(href='/profile')
+                        i.nc-icon.nc-single-02
+                        p Profile
+                li.active-pro
+                    a(href='#')
+                        i.nc-icon.nc-user-run
+                        p Log Out
+    .main-panel
+        nav.navbar.navbar-expand-lg.navbar-absolute.fixed-top.navbar-transparent
+            .container-fluid
+                .navbar-wrapper
+                    a.navbar-brand(href='#') Tạo tài khoản
+        .content.d-flex.justify-content-center
+            .col-md-5
+                .card.card-user
+                    .card-header
+                        h5.card-title  Nhập thông tin tài khoản
+                    .card-body
+                        form.was-validated(action='/user/insertUser' method='POST' enctype='multipart/form-data' role='form')
+                            .row
+                                .col-md-10.pr-1
+                                    .form-group
+                                        label Tên Người Dùng
+                                        input.form-control(type='text' name='user_name' required='')
+                            .row
+                                .col-md-10.pr-1
+                                    .form-group
+                                        label Số Điện Thoại
+                                        input.form-control(type='phone' name='phone' required='')
+                            .row
+                                .col-md-5.pr-1
+                                    .form-group
+                                        label(for='exampleInputEmail1') Giới Tính
+                                        select#inputState.form-control(name='gender' required='') Chọn Giới Tính
+                                            option(value=1 name='gender'  ) Nam
+                                            option(value=2 name='gender'  ) Nữ
+                                            option(value=0 name='gender') Không Xác Định
+                                .col-md-5.pr-1
+                                    .form-group
+                                        label Loại Tài Khoản
+                                        select#inputState.form-control(name='permission' required='' ) Chọn loại tài khoản
+                                            option(value="user" name='permission'  ) Khách Hàng
+                                            option(value='admin' name='permission'  ) Admin
+                            .row    
+                                .col-md-10.pr-1
+                                    .form-group
+                                        label Ngày Sinh
+                                        input.form-control(type='date' name='date_of_birth' required='' )
+                            .row
+                                .col-md-10.pr-1
+                                    .form-group
+                                        label Địa Chỉ
+                                        input.form-control(type='text' name='address' required=''  )
+                            .row
+                                .col-md-10.pr-1
+                                    .form-group
+                                        label Mật khẩu
+                                        input.form-control(type='password' name='password' required='')
+                            .row    
+                                .col-md-5.pr-1.pb-3.align-self-center
+                                    .form-group
+                                        label Avatar
+                                    .flex.justify-between.mb-6
+                                        .flex
+                                            input#fileToUpload1(type='file' name='avatar' required='')
+                            .row
+                                .update.ml-auto.mr-auto
+                                    button.btn.btn-primary(type='submit' value='Tạo tài khoản' name='submit') Tạo tài khoản
+
+script
+    include ./assets/js/core/jquery.min.js
+script
+    include ./assets/js/core/popper.min.js
+script
+    include ./assets/js/core/bootstrap.min.js
+script
+    include ./assets/js/plugins/perfect-scrollbar.jquery.min.js
+script
+    include ./assets/js/plugins/chartjs.min.js
+script
+    include ./assets/js/plugins/bootstrap-notify.js
+script
+    include ./assets/js/paper-dashboard.min.js
+script
+    include ./assets/demo/demo.js
+script 
+    include ./assets/js/plugins/bootstrap-notify.js
+// Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc
+script(src='../assets/js/paper-dashboard.min.js?v=2.0.1' type='text/javascript')
+// Paper Dashboard DEMO methods, don't include it in your project!
+script(src='../assets/demo/demo.js')

@@ -8,18 +8,7 @@ const {formatMoney} = require('../utils/formatMoney');
 //Tạo hóa đơn
 const add = async (req, res) => {
   try {
-    let {
-      user_id,
-      product_list,
-      total_price,
-      list_quantity,
-      list_size,
-      list_price,
-      list_price_sale,
-      price,
-      product_image,
-      address,
-    } = req.body;
+    let {user_id, product_list, total_price, list_quantity, list_size, price, product_image, address} = req.body;
     const connection = await getConnection(req);
     const user = await query(connection, userSQL.getUserById, [user_id]);
     if (isEmpty(user)) return res.status(404).json({message: 'User not found'});
@@ -46,8 +35,6 @@ const add = async (req, res) => {
         product_name: product,
         size: list_size[index],
         quantity: list_quantity[index],
-        price: list_price[index],
-        price_sale: list_price_sale[index],
       });
     }
     return res.status(200).json({message: 'success'});
