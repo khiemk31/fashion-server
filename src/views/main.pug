@@ -156,7 +156,7 @@ head
                         .card-header
                             h5.card-title Thống Kế Doanh Số
                         .card-body
-                            canvas#chartHours(width='400' height='100')
+                            canvas#chartHours(width='400' height='100')=ListDoanhThu
                         .card-footer
                             hr
                             .stats
@@ -227,5 +227,5 @@ script.
     $(document).ready(function() {
         $()
     // Javascript method's body can be found in assets/assets-for-demo/js/demo.js
-    demo.initChartsPages("testdsfsdfasdf");
+    demo.initChartsPages(ListDoanhThu);
     });
