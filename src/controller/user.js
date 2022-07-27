@@ -527,6 +527,11 @@ const getUserBlock = async (req, res) => {
     const listUser = await query(connection, userSQL.getAllUserBlock);
     res.render('user', { listUser: listUser });
 };
+const getLogOut = async (req, res) => {
+    res.clearCookie('token');
+    res.render('login');
+    res.end();
+};
 
 module.exports = {
     getUser,
@@ -554,4 +559,5 @@ module.exports = {
     getAllUser,
     loginAdmin,
     checkActive,
+    getLogOut,
 };
