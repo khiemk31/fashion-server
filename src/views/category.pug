@@ -88,6 +88,7 @@ head
                             .table-responsive   
                                 table#myTable
                                     thead.text-primary
+                                        th ID
                                         th Tên thể loại
                                         th Ảnh minh họa
                                         th Ngày thêm
@@ -96,7 +97,8 @@ head
                                         th
                                     tbody
                                         each category in listCategory
-                                            tr
+                                            tr  
+                                                td=category.category_id
                                                 td= category.category_name
                                                 td
                                                     .card(style='width: 8rem;')
@@ -110,7 +112,7 @@ head
                                                         button.btn.btn-info.dropdown-toggle.dropdown-toggle-split(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
                                                             span.sr-only Toggle Dropdown
                                                         .dropdown-menu
-                                                            a.dropdown-item(href='#') Sửa thể loại
+                                                            a.dropdown-item(href='/category/update/'+category.category_id) Sửa thể loại
                                                             a.dropdown-item(href='#') Xóa thể loại
                             //- nav.d-flex.justify-content-end(aria-label='...')
                             //-     ul.pagination
@@ -147,4 +149,6 @@ script
     include ./assets/js/paper-dashboard.min.js
 script
     include ./assets/demo/demo.js
+script
+    include ./assets/js/main.js
 

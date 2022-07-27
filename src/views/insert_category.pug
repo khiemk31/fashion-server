@@ -67,24 +67,46 @@ head
             .col-md-5
                 .card.card-user
                     .card-header
-                        h5.card-title  Tạo thể loại mới
+                        if(update)
+                            h5.card-title  Update thể loại
+                        else
+                            h5.card-title  Tạo thể loại mới
                     .card-body
-                        form.was-validated(action='/addCategory' method='POST' enctype='multipart/form-data' role='form')
-                            .row
-                                .col-md-10.pr-1
-                                    .form-group
-                                        label Tên thể loại
-                                        input.form-control(type='text' name='category_name' required='')
-                            .row    
-                                .col-md-5.pr-1.pb-3.align-self-center
-                                    .form-group
-                                        label Ảnh minh họa
-                                    .flex.justify-between.mb-6
-                                        .flex
-                                            input#fileToUpload1(type='file' name='avatar' required='')
-                            .row
-                                .update.ml-auto.mr-auto
-                                    button.btn.btn-primary(type='submit' value='Tạo thể loại' name='submit') Tạo thể loại
+                        if(update)
+                            form(action='/category/update' method='POST' enctype='multipart/form-data' role='form')
+                                input.form-control(type='text' name='category_id'  hidden   value=category.category_id  )
+                                .row
+                                    .col-md-10.pr-1
+                                        .form-group
+                                            label Tên thể loại
+                                            input.form-control(type='text' name='category_name' value=category.category_name)
+                                .row    
+                                    .col-md-5.pr-1.pb-3.align-self-center
+                                        .form-group
+                                            label Ảnh minh họa
+                                        .flex.justify-between.mb-6
+                                            .flex
+                                                input#fileToUpload1(type='file' name='category_image')
+                                .row
+                                    .update.ml-auto.mr-auto
+                                        button.btn.btn-primary(type='submit' value='Update' name='submit') Update
+                        else 
+                            form.was-validated(action='/addCategory' method='POST' enctype='multipart/form-data' role='form')
+                                .row
+                                    .col-md-10.pr-1
+                                        .form-group
+                                            label Tên thể loại
+                                            input.form-control(type='text' name='category_name' required='')
+                                .row    
+                                    .col-md-5.pr-1.pb-3.align-self-center
+                                        .form-group
+                                            label Ảnh minh họa
+                                        .flex.justify-between.mb-6
+                                            .flex
+                                                input#fileToUpload1(type='file' name='category_image' required='')
+                                .row
+                                    .update.ml-auto.mr-auto
+                                        button.btn.btn-primary(type='submit' value='Tạo thể loại' name='submit') Tạo thể loại
 
 script
     include ./assets/js/core/jquery.min.js

@@ -13,12 +13,11 @@ module.exports = (router) => {
     router.get('/category/getAll', category.getAll);
     //category Web View
     router.get('/category/', category.category);
-    router.get('/category/remove/:id', category.removeCategory);
     router.get('/insertCategory', category.getAddCategory);
     router.post('/addCategory', category.addCategory);
+    router.get('/category/update/:id', category.getUpdateCategory);
     router.post('/category/update', category.update);
-    router.post('/category/search', category.search);
-    router.get('/category/getUpdateCategory/:id', category.getUpdateCategory);
+    router.get('/category/remove/:id', category.removeCategory);
     router.get('/category/deleted', category.getCategoryDeleted);
     router.get('/category/updated', category.getCategoryUpdated);
     router.get('/category/created', category.getCategoryCreated);
@@ -53,6 +52,7 @@ module.exports = (router) => {
     router.post('/user/send-otp', user.apiSendOTP);
     router.post('/user/verify-otp', user.verifyOTP);
     //User Web View
+    router.get('/user/logout', user.getLogOut);
     router.post('/user/searchUser', middleware.requireAuth, user.searchUser);
     router.get('/user/insertUser', middleware.requireAuth, user.getInsertUser);
     router.post('/user/insertUser', middleware.requireAuth, user.postInsertUser);

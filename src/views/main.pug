@@ -54,7 +54,7 @@ head
                         i.nc-icon.nc-single-02
                         p Profile
                 li.active-pro
-                    a(href='#')
+                    a(href='/user/logout')
                         i.nc-icon.nc-user-run
                         p Log Out
     .main-panel
@@ -128,7 +128,7 @@ head
                                 .col-7.col-md-8
                                     .numbers
                                         p.card-category.text-danger Đang Xử Lý
-                                        p.card-title.text-primary= donDangXuLy
+                                        p.card-title.text-primary= donDangXuLy 
                         .card-footer
                             hr
                             .stats
@@ -204,6 +204,11 @@ head
                             .card-stats
                                 i.fa.fa-check
                                 |  Data information certified
+        - var month7 = ListDoanhThu.month
+        - var DoanhThu = ListDoanhThu.DoanhThu
+        #data(hidden)
+            p=month7
+            p=DoanhThu
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js
@@ -225,7 +230,7 @@ script
 script(src='')
 script.
     $(document).ready(function() {
-        $()
-    // Javascript method's body can be found in assets/assets-for-demo/js/demo.js
-    demo.initChartsPages(ListDoanhThu);
+        console.log($('#data p:eq(0)').text());
+        console.log($('#data p:eq(1)').text());
+    demo.initChartsPages($('#data p[0]').text());
     });
