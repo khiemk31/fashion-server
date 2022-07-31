@@ -79,10 +79,12 @@ const getBillDetail = async (req, res) => {
         const { id } = req.params;
         const connection = await getConnection(req);
         const bill = await query(connection, billSQL.queryBillByBillID, [id]);
-        const listProduct = await query(connection, billSQL.queryBillDetailByBillID, [id]);
         if (isEmpty(bill)) {
             return res.status(404).json({ message: 'Bill not found' });
         }
+        if(bill[0].created_at){bill[0].created_at =moment(bill[0].created_at).format('DD-MM-YYYY')};
+        if(bill[0].updated_at){bill[0].updated_at=moment(bill[0].updated_at).format('DD-MM-YYYY')};
+        const listProduct = await query(connection, billSQL.queryBillDetailByBillID, [id]);
         return res.status(200).json({ bill, listProduct });
     } catch (e) {
         return res.status(500).json({ message: `${e}` });
