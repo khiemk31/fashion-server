@@ -60,7 +60,6 @@ const category = async (req, res) => {
         if (category.deleted_at) {
             category.deleted_at = moment(category.deleted_at).format('DD-MM-YYYY');
         }
-        console.log(listCategory);
     }
     res.render('category', { listCategory: listCategory });
 };
@@ -147,7 +146,6 @@ const getUpdateCategory = async (req, res) => {
 //update thể loại
 const update = async (req, res) => {
     const data = req.body;
-    console.log(data);
     const connection = await getConnection(req);
     const updateCategoryQuery = `UPDATE category SET category_name='${data.category_name}' , updated_at=? WHERE category_id='${data.category_id}'`;
     await query(connection, updateCategoryQuery, [new Date()]);

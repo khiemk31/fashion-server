@@ -72,7 +72,6 @@ const add = async (req, res) => {
         const product = await query(connection, productSQL.productQuery, [product_name]);
         if (!isEmpty(product)) return res.status(409).json({ message: 'Sản Phẩm Đã TỒn Tại' });
         const lengthListProduct = (await query(connection, productSQL.getLengthListProduct)).length;
-        console.log(lengthListProduct);
         const id = 'SP' + (lengthListProduct + 1);
         await query(connection, productSQL.insertProductQuery, {
             product_id: id,
@@ -170,7 +169,6 @@ const getAllProductByCategory = async (req, res) => {
             const listProduct = await query(connection, productSQL.queryProductByCategory, [category.category_id]);
             listAllProduct.push(listProduct);
         }
-        console.log(listAllProduct);
         return res.status(200).json({ message: 'success', listAllProduct: listAllProduct });
     } catch (e) {
         return res.status(500).json({ message: `${e}` });

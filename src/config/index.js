@@ -2,10 +2,10 @@ const {v2: cloudinary} = require('cloudinary');
 
 const port = 5000;
 const mysqlConfig = {
-  host: 'localhost',
+  host: '127.0.0.1',
   user: 'modelfashion',
   password: 'WeT2LX4Xx2kFnkFZ',
-  port: 3306,
+  port: 3399,
   database: 'modelfashion',
 };
 cloudinary.config({

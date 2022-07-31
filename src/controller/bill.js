@@ -14,18 +14,16 @@ const add = async (req, res) => {
             total_price,
             list_quantity,
             list_size,
-            price,
             list_price,
             list_price_sale,
             discount_voucher_price,
-            product_image,
             address,
+            payment_status,
         } = req.body;
         const connection = await getConnection(req);
         const user = await query(connection, userSQL.getUserById, [user_id]);
         if (isEmpty(user)) return res.status(404).json({ message: 'User not found' });
         const listID = await query(connection, billSQL.queryListID);
-        console.log(listID.length);
         const id = 'HD' + (listID.length + 1);
         await query(connection, billSQL.insertBill, {
             bill_id: id,
@@ -34,12 +32,8 @@ const add = async (req, res) => {
             total_price: total_price,
             total_product: product_list.length,
             address: address,
-            product_name: product_list[0],
-            size: list_size[0],
-            quantity: list_quantity[0],
-            price: price,
             discount_voucher_price: discount_voucher_price,
-            product_image: product_image,
+            payment_status: payment_status,
             created_at: new Date(),
         });
         for (const [index, product] of product_list.entries()) {
@@ -67,7 +61,14 @@ const getListBill = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
         const listBill = await query(connection, billSQL.queryListBillByUserID, [id]);
-        return res.status(200).json(listBill);
+        var listData = [];
+        for (var bill of listBill) {
+            bill.created_at = moment(bill.created_at).format('DD-MM-YYYY');
+            var product = await query(connection, billSQL.queryProductListBillUser, [bill.bill_id]);
+            bill = { ...bill, ...product[0] };
+            listData.push(bill);
+        }
+        return res.status(200).json(listData);
     } catch (e) {
         return res.status(500).json({ message: `${e}` });
     }
@@ -79,7 +80,6 @@ const getBillDetail = async (req, res) => {
         const connection = await getConnection(req);
         const bill = await query(connection, billSQL.queryBillByBillID, [id]);
         const listProduct = await query(connection, billSQL.queryBillDetailByBillID, [id]);
-        console.log(listProduct);
         if (isEmpty(bill)) {
             return res.status(404).json({ message: 'Bill not found' });
         }
@@ -123,7 +123,6 @@ const feedback = async (req, res) => {
 const returnRequest = async (req, res) => {
     try {
         const { bill_id, return_request } = req.body;
-        console.log(return_request);
         const connection = await getConnection(req);
         const bill = await query(connection, billSQL.queryBill, [bill_id]);
         if (isEmpty(bill)) {
@@ -143,13 +142,21 @@ const getBillDetailWeb = async (req, res) => {
     const connection = await getConnection(req);
     const bill = await query(connection, billSQL.queryBillByBillID, [bill_id]);
     const listProduct = await query(connection, billSQL.queryBillDetailByBillID, [bill_id]);
-    console.log(listProduct);
-    for (const b of bill) {
-        b.created_at = moment(b.created_at).format('DD-MM-YYYY');
-        b.updated_at = moment(b.updated_at).format('DD-MM-YYYY');
-        b.total_price = formatMoney(b.total_price);
+    bill[0].created_at = moment(bill[0].created_at).format('DD-MM-YYYY');
+    if (bill[0].updated_at) bill[0].updated_at = moment(bill[0].updated_at).format('DD-MM-YYYY');
+    var total_price_no_voucher = bill[0].total_price + bill[0].discount_voucher_price;
+    bill[0].total_price = formatMoney(bill[0].total_price);
+    bill[0].discount_voucher_price = formatMoney(bill[0].discount_voucher_price);
+    total_price_no_voucher = formatMoney(total_price_no_voucher);
+    for (const p of listProduct) {
+        p.price = formatMoney(p.price);
+        p.price_sale = formatMoney(p.price_sale);
     }
-    res.render('bill_detail', { bill: bill[0], listProduct: listProduct });
+    res.render('bill_detail', {
+        bill: bill[0],
+        total_price_no_voucher: total_price_no_voucher,
+        listProduct: listProduct,
+    });
 };
 // Lấy tất cả bill
 const getAll = async (req, res) => {
@@ -237,14 +244,12 @@ const bill = async (req, res) => {
         bill.created_at = moment(bill.created_at).format('DD-MM-YYYY');
         bill.total_price = formatMoney(bill.total_price);
     }
-    console.log(listBill);
     res.render('bill', { listBill: listBill });
 };
 // Nhận đơn
 const billConfirm = async (req, res) => {
     try {
         const data = req.body;
-        console.log(data.messenger);
         const { id } = req.params;
         const connection = await getConnection(req);
         const bill = await query(connection, billSQL.queryBillById, [id]);

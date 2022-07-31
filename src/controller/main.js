@@ -20,7 +20,6 @@ const main = async (req, res) => {
   WHERE user.user_id = bill.user_id AND status="Đã Giao"
   GROUP BY user_id 
   ORDER BY COUNT(bill_id) DESC LIMIT 0,10`;
-    console.log(ListDoanhThu);
     res.render('main', {
         ListDoanhThu: ListDoanhThu[0],
         tongDoanhThu: tongDoanhThu[0].TongDoanhThu,

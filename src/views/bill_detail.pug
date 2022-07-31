@@ -58,148 +58,103 @@ head
                         i.nc-icon.nc-button-power
                         p Log Out
     .main-panel    
-        nav.navbar.navbar-expand-lg.navbar-absolute.fixed-top.navbar-transparent
-            .container-fluid
-                .navbar-wrapper
-                    .navbar-toggle
-                    a.navbar-brand(href='javascript:;') Thông tin đơn hàng  
-        .content
-            .card
-                .card-body
-                    .container.mb-5.mt-3
-                        .row.d-flex.align-items-baseline
+        .container.mt-5.mb-5
+            .d-flex.justify-content-center.row
+                .col-md-10
+                    .receipt.bg-white.p-3.rounded
+                        img(src="https://res.cloudinary.com/cde/image/upload/v1659265119/Icon/logoc3_jtgw2m.png" width='120' height='40')
+                        .row.mt-2.d-flex.align-items-baseline
                             .col-xl-9
-                                h5.text-danger(style='font-size: 22px;')
-                                    | Hóa Đơn 
-                        .container
-                            .row
-                                .col-xl-8
-                                    ul.list-unstyled
-                                        li.text-muted
-                                            a(href="#") 
-                                                i.nc-icon.nc-badge(style='color: #000;font-size: 18px;')= "  Tên khách hàng: " + bill.user_name 
-                                        li.text-muted
-                                            i.nc-icon.nc-pin-3(style='color: #000;font-size: 18px;')= "  Địa chỉ: " + bill.address 
-                                        li.text-muted
-                                            i.nc-icon.nc-mobile(style='color: #000;font-size: 18px;')= "  Phone: "+bill.phone
-                                .col-xl-4
-                                    ul.list-unstyled
-                                        li.text-muted
-                                            i.nc-icon.nc-money-coins(style='color: #000;font-size: 18px;')= '  ID: #' +bill.bill_id
-                                        li.text-muted
-                                            i.nc-icon.nc-calendar-60(style='color: #000;font-size: 18px;')= '  Creation Date: ' +bill.created_at
-                                        li.text-muted
-                                            i.nc-icon.nc-delivery-fast(style='color: #000;font-size: 18px;')  Status:
-                                            if (bill.status == "Hoàn Thành")
-                                                span.badge.bg-success.fw-bold(style='color: #000; font-size: 14px;')= bill.status
-                                            if (bill.status == "Chờ Xác Nhận")
-                                                span.badge.bg-warning.fw-bold(style='color: #000; font-size: 14px;')= bill.status
-                                            if (bill.status == "Đã Hủy")
-                                                span.badge.bg-danger.fw-bold(style='color: #000; font-size: 14px;')= bill.status
-                            .row.my-2.mx-1.justify-content-center
-                                .col-md-2.mb-4.mb-md-0
-                                    .bg-image.ripple.rounded-5.mb-4.overflow-hidden.d-block(data-ripple-color='light')
-                                    img.w-100(src='https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/new/img(4).webp' height='100px' alt='Elegant shoes and shirt')
-                                    a(href='#!')
-                                        .hover-overlay
-                                        .mask(style='background-color: hsla(0, 0%, 98.4%, 0.2)')
-                                .col-md-7.mb-4.mb-md-0
-                                    p.fw-bold Custom suit
-                                    p.mb-1
-                                    span.text-muted.me-2 Size:
-                                    span 8.5
-                                    p
-                                    span.text-muted.me-2 Color:
-                                    span Gray
-                                .col-md-3.mb-4.mb-md-0
-                                    h5.mb-2
-                                    s.text-muted.me-2.small.align-middle $1500
-                                    span.align-middle $1050
-                                    p.text-danger
-                                    small You save 25%
-                                hr
-                                .row
-                                .col-xl-8
-                                    p.ms-3 Add additional notes and payment information
-                                .col-xl-3
-                                    ul.list-unstyled
-                                    li.text-muted.ms-3
-                                        span.text-black.me-4 SubTotal
-                                        | $1050
-                                    li.text-muted.ms-3.mt-2
-                                        span.text-black.me-4 Shipping
-                                        | $15
-                                    p.text-black.float-start
-                                    span.text-black.me-3  Total Amount
-                                    span(style='font-size: 25px;') $1065
+                                h5.text-danger(style='font-size: 22px;') Thông tin đơn hàng 
+                        .row
+                            .col-xl-8
+                                ul.list-unstyled
+                                    li.text-muted
+                                        a(href="#") 
+                                            i.nc-icon.nc-badge(style='color: #000;font-size: 18px;')= "  Tên khách hàng: " + bill.user_name 
+                                    li.text-muted
+                                        i.nc-icon.nc-pin-3(style='color: #000;font-size: 18px;')= "  Địa chỉ: " + bill.address 
+                                    li.text-muted
+                                        i.nc-icon.nc-mobile(style='color: #000;font-size: 18px;')= "  Phone: "+bill.phone
+                            .col-xl-4
+                                ul.list-unstyled
+                                    li.text-muted
+                                        i.nc-icon.nc-money-coins(style='color: #000;font-size: 18px;')= '  ID: #' +bill.bill_id
+                                    li.text-muted
+                                        i.nc-icon.nc-calendar-60(style='color: #000;font-size: 18px;')= '  Ngày đặt hàng: ' +bill.created_at
+                                    li.text-muted
+                                        i.nc-icon.nc-delivery-fast(style='color: #000;font-size: 18px;')  Status:
+                                        if (bill.status == "Hoàn Thành")
+                                            span.badge.bg-success.fw-bold(style='color: #000; font-size: 14px;')= bill.status
+                                        if (bill.status == "Chờ Xác Nhận")
+                                            span.badge.bg-warning.fw-bold(style='color: #000; font-size: 14px;')= bill.status
+                                        if (bill.status == "Đã Hủy")
+                                            span.badge.bg-danger.fw-bold(style='color: #000; font-size: 14px;')= bill.status
+                        hr
+                        each product in listProduct  
+                            .d-flex.justify-content-between.align-items-center.product-details
+                                .d-flex.flex-row.product-name-image
+                                    img.rounded(src=product.product_image, alt="" style='width:80px; height:80px;')
+                                    .d-flex.flex-column.justify-content-between.ml-2
+                                        div
+                                            span.d-block.font-weight-bold.p-name=product.product_name
+                                            span.fs-12="Size: "+product.size
+                                        span.fs-12="Số lượng: " +product.quantity
+                                .product-price
+                                    if(product.price_sale == "0")
+                                        h6.font-weight-bold= product.price + " đ"
+                                    else 
+                                        h6.font-weight-bold
+                                            del= product.price + " đ"
+                                        h6.font-weight-bold.text-danger= product.price_sale+ " đ"
+                        .mt-5.amount.row
+                            .d-flex.justify-content-center.col-md-6
+                            .col-md-6
+                                .billing
+                                    .d-flex.justify-content-between
+                                        span= "Tạm tính (x"+bill.total_product+" sp)"
+                                        span.font-weight-bold= total_price_no_voucher+ " đ"
+                                    .d-flex.justify-content-between.mt-2
+                                        span.text-success Giảm giá voucher
+                                        span.font-weight-bold.text-success= bill.discount_voucher_price + " đ"
+                                    .d-flex.justify-content-between.mt-2
+                                    .d-flex.justify-content-between.mt-2
+                                        span Thanh toán
+                                        if(bill.payment_status == "Đã thanh toán bằng Momo")
+                                            span.badge.bg-success.fw-bold(style='color: #000; font-size: 14px;')=  bill.payment_status
+                                        if(bill.payment_status == "Thanh toán khi nhận hàng")
+                                            span.badge.bg-warning.fw-bold(style='color: #000; font-size: 14px;')=  bill.payment_status
+                                    .d-flex.justify-content-between.mt-2
+                                    hr
+                                    .d-flex.justify-content-between.mt-1
+                                        span.font-weight-bold Thành tiền
+                                        span.font-weight-bold.text-primary= bill.total_price+ " đ"
+                        if(bill.updated_at != null)
+                            span.d-block Ngày giao hàng
+                            span.font-weight-bold.text-success= bill.updated_at
+                        hr
+                        .d-flex.justify-content-between.footer
+                            .col-md-5.column
+                                if(bill.feedback)
+                                    .column
+                                        span.d-block.font-weight-bold Đánh giá của khách hàng
+                                        span= bill.feedback
+                                if(bill.cancellation_reason)
+                                    .column
+                                        span.d-block.font-weight-bold Lý do hủy đơn 
+                                        span= bill.cancellation_reason 
+                                if(bill.return_request)
+                                    .column
+                                        span.d-block.font-weight-bold Lý do hoàn đơn 
+                                        span= bill.return_request
+                                if(bill.feedback_by_store)
+                                    .column
+                                        span.d-block.font-weight-bold Phản hồi từ shop
+                                        span= feedback_by_store
+                        hr
+                        btn.btn-primary Nhận
 
-                    .row
-                        .col-md-10.ml-auto.mr-auto
-                            .card.card-upgrade
-                                .card-header.text-center
-                                    h4.card-title= "Mã đơn: " + bill.bill_id
-                                .card-body
-                                    .row
-                                        .col-md-3.ml-auto.mr-auto
-                                            .row
-                                                h5 Tên khách hàng
-                                                p.form-control=bill.user_name
 
-                                        .col-md-3.px-1
-                                            .form-group
-                                                label Số Điện Thoại
-                                                input.form-control(type='text' disabled value=bill.phone)
-                    .row
-                        div
-                            p.text-sm.font-medium.text-gray-400 Tên Khách Hàng
-                            p= bill.user_name
-                        div
-                            p.text-sm.font-medium.text-gray-400 Số Điện Thoại
-                            p= bill.phone
-                        div
-                            p.text-sm.font-medium.text-gray-400 Ngày Đặt
-                            p= bill.created_at
-                        if (bill.status=="Đã Giao")
-                            div
-                                p.text-sm.font-medium.text-gray-400 Ngày Giao
-                                p= bill.updated_at
-                        div
-                            p.text-sm.font-medium.text-gray-400 Trạng Thái
-                            p= bill.status
-                            .border-b.border-gray-200.p-9
-                                p.text-sm.font-medium.text-gray-400 Lưu Ý
-                                p.text-sm Thank you for your order.
-                            table.w-full.border
-                                thead
-                                    tr.border-b.bg-gray-50
-                                        th
-                                            .flex.items-center.justify-center Sản phẩm
-                                        th
-                                            .flex.items-center.justify-center
-                                        th
-                                            .flex.items-center.justify-center Size
-                                        th
-                                            .flex.items-center.justify-center Số lượng
-                                        th
-                                            .flex.items-center.justify-center Giá tiền 
-                                tbody
-                                    each product in listProduct  
-                                        tr.border-b.bg-gray-100.text-center.text-sm.text-gray-600
-                                            td.border-r.p-2= product.product_name
-                                            td.border-r.p-2
-                                                img(src=product.product_image, alt="" style='width:80px; height:80px;')
-                                            td.border-r.p-2= product.size
-                                            td.border-r.p-2= product.quantity
-                                            td.border-r.p-2= product.price
-                            .border-b.border-gray-200.p-9
-                                .space-y-3
-                                .flex.justify-between
-                                    div
-                                    p.text-lg.font-bold.text-black Tổng Tiền
-                                    p.text-lg.font-bold.text-black= bill.total_price+ " Đ"
-    a.btn.btn-round.btn-default.disabled(href='#') Current Version
-
-    a.btn.btn-round.btn-primary(target='_blank' href='https://www.creative-tim.com/product/paper-dashboard-2-pro?ref=pd-free-upgrade-live') Upgrade to PRO    
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js

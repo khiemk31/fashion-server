@@ -75,7 +75,6 @@ head
                                         th Mã đơn
                                         th Tên người đặt
                                         th Số điện thoại
-                                        th Địa Chỉ
                                         th Tình trạng đơn
                                         th Tổng Tiền
                                         th Ngày đặt đơn 
@@ -83,28 +82,28 @@ head
                                     tbody
                                         each bill,index in listBill  
                                             tr
-                                                td= index+1
-                                                td
-                                                    a(href="/bill/getBillDetailWeb/"+bill.bill_id)= bill.bill_id
-                                                td=bill.user_name
-                                                td=bill.phone
-                                                td= bill.address
-                                                td= bill.status
-                                                td= bill.total_price +' đ'
-                                                td= bill.created_at
-                                                if (bill.status=="Yêu Cầu Hủy Đơn")
+                                                a(href="/bill/getBillDetailWeb/"+bill.bill_id)
+                                                    td= index+1
                                                     td
-                                                        a.btn.btn-primary(href='/bill/billCancelDone/'+bill.bill_id ) Đồng Ý
-                                                    td
-                                                        a.btn.btn-primarya(href='/bill/refuseToCancelBill/'+bill.bill_id ) Từ Chối 
-                                                if (bill.status=="Chờ Xác Nhận")
-                                                    td
-                                                        a.btn.btn-primary(href='/bill/billConfirm/'+bill.bill_id class='hover:shadow-lg') Nhận
-                                                    td
-                                                        a.btn.btn-primary(href='/bill/billCancel/'+bill.bill_id class='hover:shadow-lg') Từ Chối
-                                                if (bill.status=="Đang Giao")
-                                                    td
-                                                        a.btn.btn-primary(href='/bill/billDone/'+bill.bill_id class='hover:shadow-lg') Đã Giao
+                                                        a(href="/bill/getBillDetailWeb/"+bill.bill_id)= bill.bill_id
+                                                    td=bill.user_name
+                                                    td=bill.phone
+                                                    td= bill.status
+                                                    td= bill.total_price +' đ'
+                                                    td= bill.created_at
+                                                    if (bill.status=="Yêu Cầu Hủy Đơn")
+                                                        td
+                                                            a.btn.btn-primary(href='/bill/billCancelDone/'+bill.bill_id ) Đồng Ý
+                                                        td
+                                                            a.btn.btn-primarya(href='/bill/refuseToCancelBill/'+bill.bill_id ) Từ Chối 
+                                                    if (bill.status=="Chờ Xác Nhận")
+                                                        td
+                                                            a.btn.btn-primary(href='/bill/billConfirm/'+bill.bill_id class='hover:shadow-lg') Nhận
+                                                        td
+                                                            a.btn.btn-primary(href='/bill/billCancel/'+bill.bill_id class='hover:shadow-lg') Từ Chối
+                                                    if (bill.status=="Đang Giao")
+                                                        td
+                                                            a.btn.btn-primary(href='/bill/billDone/'+bill.bill_id class='hover:shadow-lg') Đã Giao
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js

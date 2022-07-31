@@ -31,7 +31,6 @@ const register = async (req, res) => {
         const connection = await getConnection(req);
         const lengthListUser = (await query(connection, userSQL.queryAllUser)).length;
         let id = 'USER' + (lengthListUser + 1);
-        console.log(id);
         const newPassword = await encodePassword(password);
         const newUser = {
             user_id: id,
@@ -78,7 +77,6 @@ const login = async (req, res) => {
 const recoveryPassword = async (req, res) => {
     try {
         const { password, phone } = req.body;
-        console.log(`Recovery password`, password, phone);
         const connection = await getConnection(req);
         const user = await query(connection, userSQL.getUserQuerySQL, [phone]);
         if (isEmpty(user)) {
@@ -143,7 +141,6 @@ const detail = async (req, res) => {
 };
 const userDetail = async (req, res) => {
     const user_id = req.query.user_id;
-    console.log(user_id);
     const connection = await getConnection(req);
     detailUserQuery = 'SELECT * FROM user WHERE user_id=?';
     queryDonDaDat = `SELECT COUNT(bill_id) AS soDon FROM bill WHERE (status="Đang Giao" OR status="Hoàn Thành" OR status="Chờ Xác Nhận") AND user_id=?`;
@@ -363,11 +360,9 @@ const getInsertUser = async (req, res) => {
 const postInsertUser = async (req, res) => {
     try {
         const data = req.body;
-        console.log(data);
         const connection = await getConnection(req);
         const user = await query(connection, userSQL.getUserQuerySQL, [data.phone]);
         const lengthListUser = (await query(connection, userSQL.getLengthListUser)).length;
-        console.log(lengthListUser);
         const id = 'USER' + (lengthListUser + 1);
         if (!isEmpty(user)) return res.status(409).json({ message: 'Số điện thoại đã được sử dụng !' });
         if (req.files.avatar.data) {
