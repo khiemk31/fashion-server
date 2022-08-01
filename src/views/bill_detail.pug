@@ -65,31 +65,42 @@ head
                         img(src="https://res.cloudinary.com/cde/image/upload/v1659265119/Icon/logoc3_jtgw2m.png" width='120' height='40')
                         .row.mt-2.d-flex.align-items-baseline
                             .col-xl-9
-                                h5.text-danger(style='font-size: 22px;') Thông tin đơn hàng 
+                                h6.text-danger Thông tin đơn hàng 
                         .row
                             .col-xl-8
                                 ul.list-unstyled
-                                    li.text-muted
-                                        a(href="#") 
-                                            i.nc-icon.nc-badge(style='color: #000;font-size: 18px;')= "  Tên khách hàng: " + bill.user_name 
-                                    li.text-muted
-                                        i.nc-icon.nc-pin-3(style='color: #000;font-size: 18px;')= "  Địa chỉ: " + bill.address 
-                                    li.text-muted
-                                        i.nc-icon.nc-mobile(style='color: #000;font-size: 18px;')= "  Phone: "+bill.phone
+                                    li.text-muted.row.ml-5
+                                        i.nc-icon.nc-badge.mr-2(style='color: #000;font-size: 18px;')
+                                        p.font-weight-bold.mr-2   Tên khách hàng:  
+                                        a(href="#")
+                                            p= bill.user_name 
+                                    li.text-muted.row.ml-5
+                                        i.nc-icon.nc-pin-3.mr-2(style='color: #000;font-size: 18px;')
+                                        p.font-weight-bold.mr-2  Địa chỉ: 
+                                        p=  bill.address 
+                                    li.text-muted.row.ml-5
+                                        i.nc-icon.nc-mobile.mr-2(style='color: #000;font-size: 18px;')
+                                        p.font-weight-bold.mr-2 Phone: 
+                                        p=  bill.phone
                             .col-xl-4
                                 ul.list-unstyled
-                                    li.text-muted
-                                        i.nc-icon.nc-money-coins(style='color: #000;font-size: 18px;')= '  ID: #' +bill.bill_id
-                                    li.text-muted
-                                        i.nc-icon.nc-calendar-60(style='color: #000;font-size: 18px;')= '  Ngày đặt hàng: ' +bill.created_at
-                                    li.text-muted
-                                        i.nc-icon.nc-delivery-fast(style='color: #000;font-size: 18px;')  Status:
-                                        if (bill.status == "Hoàn Thành")
-                                            span.badge.bg-success.fw-bold(style='color: #000; font-size: 14px;')= bill.status
-                                        if (bill.status == "Chờ Xác Nhận")
-                                            span.badge.bg-warning.fw-bold(style='color: #000; font-size: 14px;')= bill.status
-                                        if (bill.status == "Đã Hủy")
-                                            span.badge.bg-danger.fw-bold(style='color: #000; font-size: 14px;')= bill.status
+                                    li.text-muted.row
+                                        i.nc-icon.nc-money-coins.mr-2(style='color: #000;font-size: 18px;')
+                                        p.font-weight-bold.mr-2 ID: 
+                                        p=bill.bill_id
+                                    li.text-muted.row
+                                        i.nc-icon.nc-calendar-60.mr-2(style='color: #000;font-size: 18px;')
+                                        p.font-weight-bold.mr-2  Ngày đặt hàng: 
+                                        p=bill.created_at
+                                    li.text-muted.row
+                                        i.nc-icon.nc-delivery-fast.mr-2(style='color: #000;font-size: 18px;')
+                                        p.font-weight-bold.mr-4 Status:
+                                            if (bill.status == "Hoàn Thành")
+                                                span.badge.bg-success.fw-bold(style='color: #000; font-size: 14px;')= bill.status
+                                            if (bill.status == "Chờ Xác Nhận")
+                                                span.badge.bg-warning.fw-bold(style='color: #000; font-size: 14px;')= bill.status
+                                            if (bill.status == "Đã Hủy")
+                                                span.badge.bg-danger.fw-bold(style='color: #000; font-size: 14px;')= bill.status
                         hr
                         each product in listProduct  
                             .d-flex.justify-content-between.align-items-center.product-details
@@ -129,7 +140,7 @@ head
                                     .d-flex.justify-content-between.mt-1
                                         span.font-weight-bold Thành tiền
                                         span.font-weight-bold.text-primary= bill.total_price+ " đ"
-                        if(bill.updated_at != null)
+                        if( bill.updated_at)
                             span.d-block Ngày giao hàng
                             span.font-weight-bold.text-success= bill.updated_at
                         hr

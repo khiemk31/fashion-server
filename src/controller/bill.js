@@ -25,6 +25,7 @@ const add = async (req, res) => {
         if (isEmpty(user)) return res.status(404).json({ message: 'User not found' });
         const listID = await query(connection, billSQL.queryListID);
         const id = 'HD' + (listID.length + 1);
+        console.log(payment_status, 'Terang thaio thanh toan ');
         await query(connection, billSQL.insertBill, {
             bill_id: id,
             user_id: user_id,
@@ -82,8 +83,12 @@ const getBillDetail = async (req, res) => {
         if (isEmpty(bill)) {
             return res.status(404).json({ message: 'Bill not found' });
         }
-        if(bill[0].created_at){bill[0].created_at =moment(bill[0].created_at).format('DD-MM-YYYY')};
-        if(bill[0].updated_at){bill[0].updated_at=moment(bill[0].updated_at).format('DD-MM-YYYY')};
+        if (bill[0].created_at) {
+            bill[0].created_at = moment(bill[0].created_at).format('DD-MM-YYYY');
+        }
+        if (bill[0].updated_at) {
+            bill[0].updated_at = moment(bill[0].updated_at).format('DD-MM-YYYY');
+        }
         const listProduct = await query(connection, billSQL.queryBillDetailByBillID, [id]);
         return res.status(200).json({ bill, listProduct });
     } catch (e) {
@@ -144,15 +149,20 @@ const getBillDetailWeb = async (req, res) => {
     const connection = await getConnection(req);
     const bill = await query(connection, billSQL.queryBillByBillID, [bill_id]);
     const listProduct = await query(connection, billSQL.queryBillDetailByBillID, [bill_id]);
-    bill[0].created_at = moment(bill[0].created_at).format('DD-MM-YYYY');
-    if (bill[0].updated_at) bill[0].updated_at = moment(bill[0].updated_at).format('DD-MM-YYYY');
-    var total_price_no_voucher = bill[0].total_price + bill[0].discount_voucher_price;
-    bill[0].total_price = formatMoney(bill[0].total_price);
-    bill[0].discount_voucher_price = formatMoney(bill[0].discount_voucher_price);
-    total_price_no_voucher = formatMoney(total_price_no_voucher);
-    for (const p of listProduct) {
-        p.price = formatMoney(p.price);
-        p.price_sale = formatMoney(p.price_sale);
+    if (bill.length > 0) {
+        bill[0].created_at = moment(bill[0].created_at).format('DD-MM-YYYY');
+        if (bill[0].updated_at) {
+            bill[0].updated_at = moment(bill[0].updated_at).format('DD-MM-YYYY');
+        }
+
+        var total_price_no_voucher = bill[0].total_price + bill[0].discount_voucher_price;
+        bill[0].total_price = formatMoney(bill[0].total_price);
+        bill[0].discount_voucher_price = formatMoney(bill[0].discount_voucher_price);
+        total_price_no_voucher = formatMoney(total_price_no_voucher);
+        for (const p of listProduct) {
+            p.price = formatMoney(p.price);
+            p.price_sale = formatMoney(p.price_sale);
+        }
     }
     res.render('bill_detail', {
         bill: bill[0],

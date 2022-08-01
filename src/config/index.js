@@ -1,30 +1,28 @@
-const {v2: cloudinary} = require('cloudinary');
+const { v2: cloudinary } = require('cloudinary');
 
 const port = 5000;
 const mysqlConfig = {
-  host: 'localhost',
-  user: 'modelfashion',
-  password: 'WeT2LX4Xx2kFnkFZ',
-  port: 3306,
-  database: 'modelfashion',
+    host: 'localhost',
+    user: 'modelfashion',
+    password: 'WeT2LX4Xx2kFnkFZ',
+    port: 3306,
+    database: 'modelfashion',
 };
 cloudinary.config({
-  cloud_name: 'cde',
-  api_key: '537853312614449',
-  api_secret: '__Rb7zY3SQzgNSdlzh3PLP0Jz8Y',
+    cloud_name: 'cde',
+    api_key: '537853312614449',
+    api_secret: '__Rb7zY3SQzgNSdlzh3PLP0Jz8Y',
 });
 
-const accountSid = 'AC6831336a69e413ddda030af558579bc2';
-const messagingServiceSid = 'MG059e5c8e3ed10244b8ad968aabf85591';
-const authToken = '745e08515d9df8263764426ff49b6a63';
+const accountSid = 'ACebdc9b532637233357c572d949d63d46';
+const messagingServiceSid = 'MGb42c5ffe13027509ec12f596c3ef4971';
+const authToken = 'f1cc9f1bbbe4a71029c51ce4e7a701ff';
 
 const private_key = 'admin';
 //Twilio
-// ginhotaru282@gmail.com
-// dangtrungkien300197
 // khiemk31@gmail.com
 // nguyenduykhiem171098
 //Cloudinary
 // ginhotaru282@gmail.com
 // Matkhau123@
-module.exports = {port, mysqlConfig, cloudinary, private_key, accountSid, messagingServiceSid, authToken};
+module.exports = { port, mysqlConfig, cloudinary, private_key, accountSid, messagingServiceSid, authToken };
