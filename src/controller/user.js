@@ -302,7 +302,7 @@ const checkActive = async (req, res) => {
         if (user[0].active == 0) {
             return res.status(200).json({ active: true });
         } else {
-            return res.status(666).json({ active: false });
+            return res.status(200).json({ active: false });
         }
     } catch (error) {
         return res.json({ message: `${error}` });
