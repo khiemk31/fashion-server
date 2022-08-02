@@ -1,3 +1,16 @@
+// click form
+const addressbtn = document.querySelector('#address-form');
+const addressclose = document.querySelector('#address-close');
+const imgNumberLi = document.querySelectorAll('.slider-content-left-bottom li');
+
+addressbtn.addEventListener('click', function () {
+    document.querySelector('.address-form').style.display = 'flex';
+});
+
+addressclose.addEventListener('click', function () {
+    document.querySelector('.address-form').style.display = 'none';
+});
+
 // JavaScript code
 function searchUser() {
     var input, filter, table, tr, td, i, txtValue;
