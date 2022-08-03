@@ -77,19 +77,21 @@ module.exports = (router) => {
     router.get('/bill', middleware.requireAuth, bill.bill);
     router.get('/bill/getBillDetailWeb/:id', middleware.requireAuth, bill.getBillDetailWeb);
     router.get('/bill/getAll', middleware.requireAuth, bill.getAll);
-    router.get('/bill/getWaiting', middleware.requireAuth, bill.getWaiting);
-    router.get('/bill/getDelivering', middleware.requireAuth, bill.getDelivering);
-    router.get('/bill/getDelivered', middleware.requireAuth, bill.getDelivered);
-    router.get('/bill/getRequestCancellation', middleware.requireAuth, bill.getRequestCancellation);
-    router.get('/bill/getCancelled', middleware.requireAuth, bill.getCancelled);
-    router.get('/bill/getRefuse', middleware.requireAuth, bill.getRefuse);
     router.get('/bill/billConfirm/:id', middleware.requireAuth, bill.billConfirm);
+    //Giao Hàng Thành Công
     router.get('/bill/billDone/:id', middleware.requireAuth, bill.billDone);
-    router.get('/bill/billCancel/:id', middleware.requireAuth, bill.billCancel);
-    router.get('/bill/billCancelDone/:id', middleware.requireAuth, bill.billCancelDone);
-    router.get('/bill/refuseToCancelBill/:id', middleware.requireAuth, bill.refuseToCancelBill);
+    // Giao hàng thất bại
+    router.post('/bill/billFail', middleware.requireAuth, bill.billFail);
+    // Từ chối đơn hàng
+    router.post('/bill/billCancel', middleware.requireAuth, bill.billCancel);
+    //Đồng Ý cho Hủy
+    router.get('/bill/billCancellationConfirmation/:id', middleware.requireAuth, bill.billCancellationConfirmation);
+    // Từ Chối y/c Hủy
+    router.post('/bill/rejectCancellationRequest', middleware.requireAuth, bill.rejectCancellationRequest);
     //Web Profile
     router.get('/profile', profile.profile);
     router.get('/profile/edit', profile.edit);
     router.post('/profile/update', profile.update);
+    //TEST
+    router.post('/bill/checkSize', bill.checkSize);
 };
