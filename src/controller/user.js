@@ -4,7 +4,7 @@ const { isEmpty } = require('../utils/validate');
 const { uploadImage } = require('../utils/image');
 const { decodeOTP, encodeOTP, generateOTP, sendOTP } = require('../utils/otp');
 const moment = require('moment');
-var jwt = require('jsonwebtoken');
+let jwt = require('jsonwebtoken');
 const twilio = require('twilio');
 const { accountSid, authToken } = require('../config');
 const userSQL = require('../sql/userSQL');
@@ -310,10 +310,10 @@ const checkActive = async (req, res) => {
 };
 //WEB VIEW
 const getAll = async (req, res) => {
-    var { pageNumber } = req.query;
+    let { pageNumber } = req.query;
     const connection = await getConnection(req);
     if (pageNumber) {
-        var offset = 0;
+        let offset = 0;
         if (pageNumber == 1) {
             offset = 0;
         } else if (pageNumber > 1) {
@@ -322,9 +322,9 @@ const getAll = async (req, res) => {
         queryLimitUser = `SELECT * FROM user LIMIT 10  OFFSET  ${offset}`;
         const listUserLimit = await query(connection, queryLimitUser);
         const listUser = await query(connection, userSQL.queryAllUser);
-        var totalPage = getTotalPage(listUser.length, 10);
-        var listPage = [];
-        var i = 1;
+        let totalPage = getTotalPage(listUser.length, 10);
+        let listPage = [];
+        let i = 1;
         while (i <= totalPage) {
             listPage.push(i);
             i++;
@@ -332,7 +332,7 @@ const getAll = async (req, res) => {
         res.render('user', { listUser: listUserLimit, listPage: listPage, pageNumber: pageNumber });
     } else {
         pageNumber = 1;
-        var offset = 0;
+        let offset = 0;
         if (pageNumber == 1) {
             offset = 0;
         } else if (pageNumber > 1) {
@@ -341,9 +341,9 @@ const getAll = async (req, res) => {
         queryLimitUser = `SELECT * FROM user LIMIT 10  OFFSET  ${offset}`;
         const listUserLimit = await query(connection, queryLimitUser);
         const listUser = await query(connection, userSQL.queryAllUser);
-        var totalPage = getTotalPage(listUser.length, 10);
-        var listPage = [];
-        var i = 1;
+        let totalPage = getTotalPage(listUser.length, 10);
+        let listPage = [];
+        let i = 1;
         while (i <= totalPage) {
             listPage.push(i);
             i++;
@@ -366,7 +366,7 @@ const postInsertUser = async (req, res) => {
         const id = 'USER' + (lengthListUser + 1);
         if (!isEmpty(user)) return res.status(409).json({ message: 'Số điện thoại đã được sử dụng !' });
         if (req.files.avatar.data) {
-            var avatar = 'data:image/jpeg;base64,' + req.files.avatar.data.toString('base64');
+            let avatar = 'data:image/jpeg;base64,' + req.files.avatar.data.toString('base64');
             const upload = await uploadImage(avatar);
             avatar = upload.url;
         }
@@ -389,9 +389,9 @@ const postInsertUser = async (req, res) => {
         queryLimitUser = `SELECT * FROM user LIMIT 10  OFFSET  0`;
         const listUserLimit = await query(connection, queryLimitUser);
         const listUser = await query(connection, userSQL.queryAllUser);
-        var totalPage = getTotalPage(listUser.length, 10);
-        var listPage = [];
-        var i = 1;
+        let totalPage = getTotalPage(listUser.length, 10);
+        let listPage = [];
+        let i = 1;
         while (i <= totalPage) {
             listPage.push(i);
             i++;
@@ -463,10 +463,10 @@ const loginAdmin = async (req, res) => {
 };
 
 const getAllUser = async (req, res) => {
-    var { pageNumber } = req.query;
+    let { pageNumber } = req.query;
     const connection = await getConnection(req);
     if (pageNumber) {
-        var offset = 0;
+        let offset = 0;
         if (pageNumber == 1) {
             offset = 0;
         } else if (pageNumber > 1) {
@@ -475,9 +475,9 @@ const getAllUser = async (req, res) => {
         queryLimitUser = `SELECT * FROM user WHERE deleted_at is null AND permission='user' LIMIT 10  OFFSET  ${offset}`;
         const listUserLimit = await query(connection, queryLimitUser);
         const listUser = await query(connection, userSQL.queryListUser);
-        var totalPage = getTotalPage(listUser.length, 10);
-        var listPage = [];
-        var i = 1;
+        let totalPage = getTotalPage(listUser.length, 10);
+        let listPage = [];
+        let i = 1;
         while (i <= totalPage) {
             listPage.push(i);
             i++;
@@ -485,7 +485,7 @@ const getAllUser = async (req, res) => {
         res.render('user', { listUser: listUserLimit, listPage: listPage, pageNumber: pageNumber });
     } else {
         pageNumber = 1;
-        var offset = 0;
+        let offset = 0;
         if (pageNumber == 1) {
             offset = 0;
         } else if (pageNumber > 1) {
@@ -494,9 +494,9 @@ const getAllUser = async (req, res) => {
         queryLimitUser = `SELECT * FROM user WHERE deleted_at is null AND permission='user' LIMIT 10  OFFSET  ${offset}`;
         const listUserLimit = await query(connection, queryLimitUser);
         const listUser = await query(connection, userSQL.queryListUser);
-        var totalPage = getTotalPage(listUser.length, 10);
-        var listPage = [];
-        var i = 1;
+        let totalPage = getTotalPage(listUser.length, 10);
+        let listPage = [];
+        let i = 1;
         while (i <= totalPage) {
             listPage.push(i);
             i++;

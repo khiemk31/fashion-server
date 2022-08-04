@@ -4,6 +4,7 @@ const userSQL = require('../sql/userSQL');
 const billSQL = require('../sql/billSQL');
 const moment = require('moment');
 const { formatMoney } = require('../utils/formatMoney');
+const { demo } = require('../views/assets/demo/demo');
 //Bill API
 //Tạo hóa đơn
 const add = async (req, res) => {
@@ -29,6 +30,7 @@ const add = async (req, res) => {
             bill_id: id,
             user_id: user_id,
             status: 'Chờ Xác Nhận',
+            done: 0,
             total_price: total_price,
             total_product: product_list.length,
             address: address,
@@ -61,10 +63,10 @@ const getListBill = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
         const listBill = await query(connection, billSQL.queryListBillByUserID, [id]);
-        var listData = [];
-        for (var bill of listBill) {
+        let listData = [];
+        for (let bill of listBill) {
             bill.created_at = moment(bill.created_at).format('DD-MM-YYYY');
-            var product = await query(connection, billSQL.queryProductListBillUser, [bill.bill_id]);
+            let product = await query(connection, billSQL.queryProductListBillUser, [bill.bill_id]);
             bill = { ...bill, ...product[0] };
             listData.push(bill);
         }
@@ -134,39 +136,8 @@ const returnRequest = async (req, res) => {
         if (isEmpty(bill)) {
             return res.status(404).json({ message: 'Bill not found' });
         }
-        await query(connection, billSQL.updateReturnRequest, ['Yêu Cầu Trả Đơn', return_request, bill_id]);
+        await query(connection, billSQL.updateReturnRequest, ['Yêu Cầu Hoàn Đơn', return_request, bill_id]);
         return res.status(200).json({ message: 'success' });
-    } catch (error) {
-        return res.status(500).json({ message: `${error}` });
-    }
-};
-//CHECK SOLUONG
-const checkSize = async (req, res) => {
-    try {
-        const { id } = req.body;
-        console.log('DEOCOJ');
-        const connection = await getConnection(req);
-        queryListBillDetail = 'SELECT product_name ,size ,quantity FROM bill_detail WHERE bill_id=?';
-        const listBillDetail = await query(connection, queryListBillDetail, [id]);
-        const queryProduct = 'SELECT product_id ,quantity_sold FROM product WHERE product_name =?';
-        const querySize = 'SELECT size, quantity,size_id FROM size WHERE product_id=? AND size=?';
-        for (const billDetail of listBillDetail) {
-            const product = await query(connection, queryProduct, [billDetail.product_name]);
-            const size = await query(connection, querySize, [product[0].product_id, billDetail.size]);
-            if (size[0].quantity > 0) {
-                if (size[0].quantity >= billDetail.quantity) {
-                    return res.status(200).json({ message: 'Đặt ok đấy' });
-                } else {
-                    return res.status(404).json({
-                        message: `Số lượng hàng của size ${size[0].size} không đủ so với đặt hàng ! Còn ${size[0].quantity} sp size ${size[0].size}`,
-                    });
-                }
-            } else {
-                return res.status(404).json({
-                    message: `Size ${size[0].size} hết hàng`,
-                });
-            }
-        }
     } catch (error) {
         return res.status(500).json({ message: `${error}` });
     }
@@ -260,25 +231,127 @@ const bill = async (req, res) => {
 // Nhận đơn
 const billConfirm = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { page } = req.query;
+        const { id } = req.body;
         const connection = await getConnection(req);
-        const bill = await query(connection, billSQL.queryBillById, [id]);
-        if (isEmpty(bill)) return res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
-
-        // if (checkSize(req, res, connection, id)) {
-        //     await query(connection, billSQL.updateStatusBillWeb, ['Đang Giao', id]);
-        //     loadBill(req, res, connection, page, id);
-        // }
+        const queryListBillDetail = 'SELECT product_name ,size ,quantity FROM bill_detail WHERE bill_id=?';
+        const listBillDetail = await query(connection, queryListBillDetail, [id]);
+        const queryProduct = 'SELECT product_id ,quantity_sold FROM product WHERE product_name =?';
+        const querySize = 'SELECT size, quantity,size_id FROM size WHERE product_id=? AND size=?';
+        const updateSize = 'UPDATE size SET quantity=? WHERE size_id=?';
+        for (const billDetail of listBillDetail) {
+            const product = await query(connection, queryProduct, [billDetail.product_name]);
+            const size = await query(connection, querySize, [product[0].product_id, billDetail.size]);
+            if (size[0].quantity > 0) {
+                if (size[0].quantity >= billDetail.quantity) {
+                    const newSizeQuantity = size[0].quantity - billDetail.quantity;
+                    await query(connection, updateSize, [newSizeQuantity, size[0].size_id]);
+                } else {
+                    return res.status(300).json({
+                        message: `Số lượng hàng của size ${size[0].size} không đủ so với đặt hàng ! Còn ${size[0].quantity} sp size ${size[0].size}`,
+                    });
+                }
+            } else {
+                return res.status(404).json({
+                    message: `Size ${size[0].size} hết hàng`,
+                });
+            }
+        }
+        await query(connection, billSQL.updateStatusBillWeb, ['Đang Giao', id]);
+        return res.status(200).json({
+            message: `Đã xác nhận đơn`,
+        });
     } catch (error) {
         return res.status(500).json({ message: `${error}` });
     }
 };
+// Từ chối đơn
+const billCancel = async (req, res) => {
+    const { id, feedback_by_store, page } = req.body;
+    const connection = await getConnection(req);
+    const bill = await query(connection, billSQL.queryBillById, [id]);
+    if (isEmpty(bill)) return res.status(404).json({ message: 'Bill not found' });
+    await query(connection, billSQL.updateFeedBackStore, ['Từ Chối Đơn', [feedback_by_store], id]);
+    loadBill(req, res, connection, page, id);
+};
+//Đồng ý hủy
+const billCancellationConfirmation = async (req, res) => {
+    try {
+        const { id } = req.body;
+        const connection = await getConnection(req);
+        const queryListBillDetail = 'SELECT product_name ,size ,quantity FROM bill_detail WHERE bill_id=?';
+        const listBillDetail = await query(connection, queryListBillDetail, [id]);
+        const queryProduct = 'SELECT product_id ,quantity_sold FROM product WHERE product_name =?';
+        const querySize = 'SELECT size, quantity,size_id FROM size WHERE product_id=? AND size=?';
+        const updateSize = 'UPDATE size SET quantity=? WHERE size_id=?';
+        for (const billDetail of listBillDetail) {
+            const product = await query(connection, queryProduct, [billDetail.product_name]);
+            const size = await query(connection, querySize, [product[0].product_id, billDetail.size]);
+            const newSizeQuantity = size[0].quantity + billDetail.quantity;
+            console.log('SIZE Trả LẠI', newSizeQuantity);
+            await query(connection, updateSize, [newSizeQuantity, size[0].size_id]);
+        }
+        await query(connection, billSQL.updateStatusBillWeb, ['Đã Hủy', id]);
+        return res.status(200).json({
+            message: `Đã xác nhận yêu cầu hủy`,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: `${error}` });
+    }
+};
+//Từ Chối Hủy
+const rejectCancellationRequest = async (req, res) => {
+    const { id, feedback_by_store, page } = req.body;
+    const connection = await getConnection(req);
+    const bill = await query(connection, billSQL.queryBillById, [id]);
+    if (isEmpty(bill)) return res.status(404).json({ message: 'Bill not found' });
+    await query(connection, billSQL.updateFeedBackStore, ['Đang Giao', feedback_by_store, id]);
+    loadBill(req, res, connection, page, id);
+};
+//Đồng ý hoàn
+const confirmReturnRequest = async (req, res) => {
+    try {
+        const { id } = req.body;
+        const connection = await getConnection(req);
+        const bill = await query(connection, billSQL.queryBill, [id]);
+        const queryListBillDetail = 'SELECT product_name ,size ,quantity FROM bill_detail WHERE bill_id=?';
+        const listBillDetail = await query(connection, queryListBillDetail, [id]);
+        const queryProduct = 'SELECT product_id ,quantity_sold FROM product WHERE product_name =?';
+        const querySize = 'SELECT size, quantity,size_id FROM size WHERE product_id=? AND size=?';
+        const updateSize = 'UPDATE size SET quantity=? WHERE size_id=?';
+        const updateProduct = 'UPDATE product SET quantity_sold=? WHERE product_id=?';
+        for (const billDetail of listBillDetail) {
+            const product = await query(connection, queryProduct, [billDetail.product_name]);
+            const size = await query(connection, querySize, [product[0].product_id, billDetail.size]);
+            const newSizeQuantity = size[0].quantity + billDetail.quantity;
+            await query(connection, updateSize, [newSizeQuantity, size[0].size_id]);
+            if (bill[0].done == 0) {
+                const newQuantity = product[0].quantity_sold - billDetail.quantity;
+                await query(connection, updateProduct, [newQuantity, product[0].product_id]);
+            }
+        }
+        await query(connection, billSQL.updateStatusBillWeb, ['Đã Hoàn', id]);
+        return res.status(200).json({
+            message: `Đã xác nhận yêu cầu hoàn đơn`,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: `${error}` });
+    }
+};
+//Từ Chối Hoàn
+const rejectReturnRequest = async (req, res) => {
+    const { id, feedback_by_store, page } = req.body;
+    const connection = await getConnection(req);
+    const bill = await query(connection, billSQL.queryBillById, [id]);
+    if (isEmpty(bill)) return res.status(404).json({ message: 'Bill not found' });
+    bill[0].done == 1
+        ? await query(connection, billSQL.updateFeedBackStore, ['Hoàn Thành', feedback_by_store, id])
+        : await query(connection, billSQL.updateFeedBackStore, ['Đang Giao', feedback_by_store, id]);
+    loadBill(req, res, connection, page, id);
+};
 //Hoàn Thành
 const billDone = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { page } = req.query;
+        const { id } = req.body;
         const connection = await getConnection(req);
         const bill = await query(connection, billSQL.queryBillById, [id]);
         if (isEmpty(bill)) return res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
@@ -293,59 +366,18 @@ const billDone = async (req, res) => {
             const newQuantity = product[0].quantity_sold + billDetail.quantity;
             await query(connection, updateProduct, [newQuantity, product[0].product_id]);
             const size = await query(connection, querySize, [product[0].product_id, billDetail.size]);
-            if (size[0].quantity > 0) {
-                if (size[0].quantity >= billDetail.quantity) {
-                    const newSizeQuantity = size[0].quantity - billDetail.quantity;
-                    await query(connection, updateSize, [newSizeQuantity, size[0].size_id]);
-                } else {
-                    return res.status(404).json({
-                        message: `Số lượng hàng của size ${size[0].size} không đủ so với đặt hàng ! Còn ${size[0].quantity} sp size ${size[0].size}`,
-                    });
-                }
-            } else {
-                return res.status(404).json({
-                    message: `Size ${size[0].size} hết hàng`,
-                });
-            }
+            const newSizeQuantity = size[0].quantity - billDetail.quantity;
+            await query(connection, updateSize, [newSizeQuantity, size[0].size_id]);
         }
-        await query(connection, billSQL.updateStatusBillWeb, ['Hoàn Thành', id]);
-        const listBill = await query(connection, billSQL.queryAllBill);
-        for (const bill of listBill) {
-            bill.created_at = moment(bill.created_at).format('DD-MM-YYYY');
-            bill.total_price = formatMoney(bill.total_price);
-        }
-        res.render('bill', { listBill: listBill });
+        await query(connection, billSQL.updateBillDone, ['Hoàn Thành', 1, id]);
+        return res.status(200).json({
+            message: `Đã hoàn thành đơn`,
+        });
     } catch (error) {
         return res.status(500).json({ message: `${error}` });
     }
 };
-//Đồng ý hủy
-const billCancellationConfirmation = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { page } = req.query;
-        const connection = await getConnection(req);
-        const bill = await query(connection, billSQL.queryBillById, [id]);
-        if (isEmpty(bill)) return res.status(404).json({ message: 'Bill not found' });
-        await query(connection, billSQL.updateStatusBillWeb, ['Đã Hủy', id]);
-        loadBill(req, res, connection, page, id);
-    } catch (error) {
-        return res.status(500).json({ message: `${error}` });
-    }
-};
-//Từ Chối Hủy
-const rejectCancellationRequest = async (req, res) => {
-    try {
-        const { id, feedback_by_store, page } = req.body;
-        const connection = await getConnection(req);
-        const bill = await query(connection, billSQL.queryBillById, [id]);
-        if (isEmpty(bill)) return res.status(404).json({ message: 'Bill not found' });
-        await query(connection, billSQL.updateFeedBackStore, ['Đang Giao', feedback_by_store, id]);
-        loadBill(req, res, connection, page, id);
-    } catch (error) {
-        return res.status(500).json({ message: `${error}` });
-    }
-};
+
 // Giao hàng thất bại
 const billFail = async (req, res) => {
     try {
@@ -359,27 +391,15 @@ const billFail = async (req, res) => {
         return res.status(500).json({ message: `${error}` });
     }
 };
-// Từ chối đơn
-const billCancel = async (req, res) => {
-    try {
-        const { id, feedback_by_store, page } = req.body;
-        const connection = await getConnection(req);
-        const bill = await query(connection, billSQL.queryBillById, [id]);
-        if (isEmpty(bill)) return res.status(404).json({ message: 'Bill not found' });
-        await query(connection, billSQL.updateFeedBackStore, ['Từ Chối Đơn', [feedback_by_store], id]);
-        loadBill(req, res, connection, page, id);
-    } catch (error) {
-        return res.status(500).json({ message: `${e}` });
-    }
-};
 
 module.exports = {
-    checkSize,
     billConfirm,
-    billDone,
     billCancel,
+    billDone,
     billCancellationConfirmation,
     rejectCancellationRequest,
+    confirmReturnRequest,
+    rejectReturnRequest,
     bill,
     add,
     getListBill,

@@ -46,23 +46,23 @@ const add = async (req, res) => {
         const data = req.body;
         let { product_name, price, quantityS, quantityM, quantityL, quantityXL } = req.body;
         if (req.files.product_image.data) {
-            var productImage = 'data:image/jpeg;base64,' + req.files.product_image.data.toString('base64');
+            let productImage = 'data:image/jpeg;base64,' + req.files.product_image.data.toString('base64');
             const upload = await uploadImage(productImage);
             productImage = upload.url;
         }
         if (req.files.image_1.data) {
-            var image1 = 'data:image/jpeg;base64,' + req.files.image_1.data.toString('base64');
+            let image1 = 'data:image/jpeg;base64,' + req.files.image_1.data.toString('base64');
             const upload = await uploadImage(image1);
             image1 = upload.url;
         }
         if (req.files.image_2.data) {
-            var image2 = 'data:image/jpeg;base64,' + req.files.image_2.data.toString('base64');
+            let image2 = 'data:image/jpeg;base64,' + req.files.image_2.data.toString('base64');
             const upload = await uploadImage(image2);
             image2 = upload.url;
         }
 
         if (req.files.image_3.data) {
-            var image3 = 'data:image/jpeg;base64,' + req.files.image_3.data.toString('base64');
+            let image3 = 'data:image/jpeg;base64,' + req.files.image_3.data.toString('base64');
             const upload = await uploadImage(productImage);
             image3 = upload.url;
         }
@@ -210,7 +210,7 @@ const getAllProductDiscount = async (req, res) => {
     try {
         const { price1, price2, sortPrice, sortDiscount, pageNumber } = req.query;
         const connection = await getConnection(req);
-        var offset = 0;
+        let offset = 0;
         if (pageNumber == 1) {
             offset = 0;
         } else if (pageNumber > 1) {
@@ -246,7 +246,7 @@ const getProductByCategory = async (req, res) => {
     try {
         const { category_id, price1, price2, sortPrice, sortDiscount, pageNumber } = req.query;
         const connection = await getConnection(req);
-        var offset = 0;
+        let offset = 0;
         if (pageNumber == 1) {
             offset = 0;
         } else if (pageNumber > 1) {

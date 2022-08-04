@@ -104,6 +104,45 @@ head
                                                     if (bill.status=="Đang Giao")
                                                         td
                                                             a.btn.btn-primary(href='/bill/billDone/'+bill.bill_id class='hover:shadow-lg') Đã Giao
+                                            .address-form
+                                                .address-form-content
+                                                    if (bill.status=="Chờ Xác Nhận")
+                                                        h2 Nhập lý do từ chối đơn
+                                                            span#address-close X Đóng
+                                                        form(action='/bill/billCancel' method='POST' role='form')
+                                                            input(type='text' name='id'  hidden   value=bill.bill_id )
+                                                            input(type='text' name='page'  hidden   value="billDetail" )
+                                                            p Nhập lý do 
+                                                            input(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
+                                                            button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+                                                    if (bill.status=="Đang Giao")
+                                                        h2 Nhập lý do giao hàng thất bại
+                                                            span#address-close X Đóng
+                                                        form(action='/bill/billFail' method='POST' role='form')
+                                                            input(type='text' name='id'  hidden   value=bill.bill_id )
+                                                            input(type='text' name='page'  hidden   value="billDetail" )
+                                                            p Nhập lý do 
+                                                            input(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
+                                                            button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+                                                    if (bill.status=="Yêu Cầu Hủy Đơn")
+                                                        h2 Nhập lý do từ chối yêu cầu
+                                                            span#address-close X Đóng
+                                                        form(action='/bill/rejectCancellationRequest' method='POST' role='form')
+                                                            input(type='text' name='id'  hidden   value=bill.bill_id )
+                                                            input(type='text' name='page'  hidden   value="billDetail" )
+                                                            p Nhập lý do 
+                                                            input(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
+                                                            button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+                                                    if (bill.status=="Yêu Cầu Hoàn Đơn")
+                                                        h2 Nhập lý do từ chối yêu cầu
+                                                            span#address-close X Đóng
+                                                        form(action='/bill/rejectReturnRequest' method='POST' role='form')
+                                                            input(type='text' name='id'  hidden   value=bill.bill_id )
+                                                            input(type='text' name='page'  hidden   value="billDetail" )
+                                                            p Nhập lý do 
+                                                            input(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
+                                                            button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js

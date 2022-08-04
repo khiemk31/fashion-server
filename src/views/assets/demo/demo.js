@@ -1,20 +1,6 @@
-var axios = require('axios');
+const { data } = require('jquery');
 
 demo = {
-    initPickColor: function () {
-        $('.pick-class-label').click(function () {
-            var new_class = $(this).attr('new-class');
-            var old_class = $('#display-buttons').attr('data-class');
-            var display_div = $('#display-buttons');
-            if (display_div.length) {
-                var display_buttons = display_div.find('.btn');
-                display_buttons.removeClass(old_class);
-                display_buttons.addClass(new_class);
-                display_div.attr('data-class', new_class);
-            }
-        });
-    },
-
     initDocChart: function () {
         chartColor = '#FFFFFF';
 
@@ -228,9 +214,8 @@ demo = {
         });
     },
 
-    showNotification: function (from, align, message) {
-        color = 'primary';
-
+    showNotification: function (from, align, message, color) {
+        color = color;
         $.notify(
             {
                 icon: 'nc-icon nc-bell-55',
@@ -246,22 +231,36 @@ demo = {
             },
         );
     },
-    checkSize: function (id) {
-        console.log('ID NHAN VAO LÀ ', id);
-        var config = {
-            method: 'post',
-            url: 'http://localhost:5000/bill/checkSize',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: { id: id },
+    async callAPI(url, params, method) {
+        let myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
+        let requestOptions = {
+            method: method,
+            headers: myHeaders,
+            body: params,
+            redirect: 'follow',
         };
-        axios(config)
-            .then(function (response) {
-                console.log(JSON.stringify(response.data));
+        await fetch(url, requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
+                data = JSON.parse(result);
             })
-            .catch(function (error) {
-                console.log(error);
-            });
+            .catch((error) => console.log('error', error));
+        console.log('DU LIEU CUA DATA', data);
+        return data;
+    },
+
+    async confirmStatusBill(id, status) {
+        console.log(id, status);
+        let method = 'POST';
+        var params = JSON.stringify({
+            id: id,
+        });
+        let url = 'http://localhost:5000' + status;
+        const res = await this.callAPI(url, params, method);
+        this.showNotification('top', 'right', res.message);
+        setTimeout(function () {
+            document.location.reload();
+        }, 1500);
     },
 };
