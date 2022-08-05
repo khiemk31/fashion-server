@@ -1,5 +1,3 @@
-const { data } = require('jquery');
-
 demo = {
     initDocChart: function () {
         chartColor = '#FFFFFF';
@@ -246,7 +244,6 @@ demo = {
                 data = JSON.parse(result);
             })
             .catch((error) => console.log('error', error));
-        console.log('DU LIEU CUA DATA', data);
         return data;
     },
 

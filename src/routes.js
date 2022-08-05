@@ -2,13 +2,13 @@ const user = require('./controller/user');
 const category = require('./controller/category');
 const product = require('./controller/product');
 const bill = require('./controller/bill');
-const view = require('./controller/main');
+const main = require('./controller/main');
 const middleware = require('../src/utils/middleware/authenToken.middleware');
 const profile = require('./controller/profile');
 
 module.exports = (router) => {
     //Main Router
-    router.get('/main', middleware.requireAuth, view.main);
+    router.get('/main', middleware.requireAuth, main.main);
     //category API
     router.get('/category/getAll', category.getAll);
     //category Web View
@@ -38,6 +38,7 @@ module.exports = (router) => {
     router.get('/product/insertProduct', middleware.requireAuth, product.insertProduct);
     router.get('/product', middleware.requireAuth, product.product);
     router.get('/product/remove/:id', middleware.requireAuth, product.removeProduct);
+    router.get('/product/getAll', product.getAll);
     //User API
     router.get('/user/getUser', user.getUser);
     router.post('/user/checkActive', user.checkActive);
@@ -78,24 +79,18 @@ module.exports = (router) => {
     router.get('/bill/getBillDetailWeb/:id', middleware.requireAuth, bill.getBillDetailWeb);
     router.get('/bill/getAll', middleware.requireAuth, bill.getAll);
 
-    //Xác nhận đơn hàng
     router.post('/bill/billConfirm', middleware.requireAuth, bill.billConfirm);
-    // Từ chối đơn hàng
     router.post('/bill/billCancel', middleware.requireAuth, bill.billCancel);
-    //Đồng Ý cho Hủy
     router.post('/bill/billCancellationConfirmation', middleware.requireAuth, bill.billCancellationConfirmation);
-    // Từ Chối y/c Hủy
     router.post('/bill/rejectCancellationRequest', middleware.requireAuth, bill.rejectCancellationRequest);
-    //Đồng ý cho hoàn đơn
     router.post('/bill/confirmReturnRequest', middleware.requireAuth, bill.confirmReturnRequest);
-    //Từ chối y/c hoàn đơn
     router.post('/bill/rejectReturnRequest', middleware.requireAuth, bill.rejectReturnRequest);
-    //Giao Hàng Thành Công
     router.post('/bill/billDone', middleware.requireAuth, bill.billDone);
-    // Giao hàng thất bại
     router.post('/bill/billFail', middleware.requireAuth, bill.billFail);
     //Web Profile
     router.get('/profile', profile.profile);
     router.get('/profile/edit', profile.edit);
     router.post('/profile/update', profile.update);
+    //test
+    router.get('/test', main.test);
 };

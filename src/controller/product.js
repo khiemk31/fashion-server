@@ -9,6 +9,14 @@ const { getTotalPage } = require('../utils/index');
 const { formatMoney } = require('../utils/formatMoney');
 
 //Product Web View
+const getAll = async (req, res) => {
+    const connection = await getConnection(req);
+    const listProduct = await query(connection, productSQL.getAllProduct);
+    for (const product of listProduct) {
+        product.price = formatMoney(product.price);
+    }
+    return res.status(200).json(listProduct);
+};
 //getALL
 const product = async (req, res) => {
     const connection = await getConnection(req);
@@ -280,6 +288,7 @@ const getProductByCategory = async (req, res) => {
 };
 
 module.exports = {
+    getAll,
     getAllProductDiscount,
     getProductDiscount,
     update,
