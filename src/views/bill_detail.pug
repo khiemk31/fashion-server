@@ -89,17 +89,19 @@ head
                                         p.font-weight-bold.mr-2 ID: 
                                         p=bill.bill_id
                                     li.text-muted.row
-                                        i.nc-icon.nc-calendar-60.mr-2(style='color: #000;font-size: 18px;')
+                                        i.nc-icon.nc-calendar-60.mr-2(style='color: #000;font-size: 16px;')
                                         p.font-weight-bold.mr-2  Ngày đặt hàng: 
                                         p=bill.created_at
                                     li.text-muted.row
-                                        i.nc-icon.nc-delivery-fast.mr-2(style='color: #000;font-size: 18px;')
+                                        i.nc-icon.nc-delivery-fast.mr-2(style='color: #000;font-size: 16px;')
                                         p.font-weight-bold.mr-4 Status:
                                             if (bill.status == "Hoàn Thành")
                                                 span.badge.bg-success.fw-bold(style='color: #000; font-size: 14px;')= bill.status
-                                            if (bill.status == "Chờ Xác Nhận")
+                                            if (bill.status == "Chờ Xác Nhận"|| bill.status=="Đang Giao")
+                                                span.badge.bg-primary.fw-bold(style='color: #000; font-size: 14px;')= bill.status
+                                            if (bill.status == "Yêu Cầu Hủy Đơn"||bill.status == "Yêu Cầu Trả Đơn" )
                                                 span.badge.bg-warning.fw-bold(style='color: #000; font-size: 14px;')= bill.status
-                                            if (bill.status == "Đã Hủy")
+                                            if (bill.status == "Đã Hủy" || bill.status == "Đã Hoàn" || bill.status == "Từ Chối Đơn"|| bill.status == "Thất Bại" )
                                                 span.badge.bg-danger.fw-bold(style='color: #000; font-size: 14px;')= bill.status
                         hr
                         each product in listProduct  
@@ -117,7 +119,7 @@ head
                                     else 
                                         h6.font-weight-bold
                                             del= product.price + " đ"
-                                        h6.font-weight-bold.text-danger= product.price_sale+ " đ"
+                                        h6.font-weight-bold.text-danger= product.price_sale + " đ"
                         .mt-5.amount.row
                             .d-flex.justify-content-center.col-md-6
                             .col-md-6
@@ -144,28 +146,107 @@ head
                             span.d-block Ngày giao hàng
                             span.font-weight-bold.text-success= bill.updated_at
                         hr
-                        .d-flex.justify-content-between.footer
-                            .col-md-5.column
-                                if(bill.feedback)
-                                    .column
-                                        span.d-block.font-weight-bold Đánh giá của khách hàng
-                                        span= bill.feedback
-                                if(bill.cancellation_reason)
-                                    .column
-                                        span.d-block.font-weight-bold Lý do hủy đơn 
-                                        span= bill.cancellation_reason 
-                                if(bill.return_request)
-                                    .column
-                                        span.d-block.font-weight-bold Lý do hoàn đơn 
-                                        span= bill.return_request
-                                if(bill.feedback_by_store)
-                                    .column
-                                        span.d-block.font-weight-bold Phản hồi từ shop
-                                        span= feedback_by_store
+                        .col-md-5.column
+                            if(bill.feedback)
+                                .column
+                                    span.d-block.font-weight-bold Đánh giá của khách hàng
+                                    span= bill.feedback
+                            if(bill.cancellation_reason)
+                                .column
+                                    span.d-block.font-weight-bold Lý do hủy đơn 
+                                    span= bill.cancellation_reason 
+                            if(bill.return_request)
+                                .column
+                                    span.d-block.font-weight-bold Lý do hoàn đơn 
+                                    span= bill.return_request
+                            if(bill.feedback_by_store)
+                                .column
+                                    span.d-block.font-weight-bold Phản hồi từ shop
+                                    span= bill.feedback_by_store
                         hr
-                        btn.btn-primary Nhận
-
-
+                        .d-flex.justify-content-center.footer
+                            if (bill.status=="Chờ Xác Nhận")
+                                .column.text-center
+                                    span.font-weight-bold( style=' font-size : 16px ') Hãy xác nhận đơn hàng ?
+                                    .row.ml-3
+                                        button.btn.btn-outline-primary.btn-round(onclick=`demo.confirmStatusBill('${bill.bill_id}','/bill/billConfirm')`)
+                                            i.nc-icon.nc-check-2.mr-1(style= 'font-size : 16px ;')
+                                            | Đồng Ý
+                                        #address-form
+                                            button.btn.btn-outline-danger.btn-round
+                                                i.nc-icon.nc-simple-remove.mr-1(style= 'font-size : 16px ;')
+                                                | Từ Chối
+                            if (bill.status=="Yêu Cầu Hủy Đơn")
+                                .column.text-center
+                                    span.font-weight-bold(style=' font-size : 16px ') Khách hàng yêu cầu hủy đơn ?
+                                    .row.ml-3
+                                        button.btn.btn-outline-primary.btn-round(onclick=`demo.confirmStatusBill('${bill.bill_id}','/bill/billCancellationConfirmation')`)
+                                            i.nc-icon.nc-check-2.mr-1(style= 'font-size : 16px ;')
+                                            | Đồng  Ý
+                                        #address-form
+                                            button.btn.btn-outline-danger.btn-round
+                                                i.nc-icon.nc-simple-remove.mr-1(style= 'font-size : 16px ;')
+                                                | Từ Chối
+                            if (bill.status=="Yêu Cầu Hoàn Đơn")
+                                .column.text-center
+                                    span.font-weight-bold(style=' font-size : 16px ;') Khách hàng yêu cầu hoàn đơn ?
+                                    .row.ml-3
+                                        button.btn.btn-outline-primary.btn-round(onclick=`demo.confirmStatusBill('${bill.bill_id}','/bill/confirmReturnRequest')`)
+                                            i.nc-icon.nc-check-2.mr-1(style= 'font-size : 16px ;')
+                                            | Đồng  Ý
+                                        #address-form
+                                            button.btn.btn-outline-danger.btn-round
+                                                i.nc-icon.nc-simple-remove.mr-1(style= 'font-size : 16px ;')
+                                                | Từ Chối
+                            if (bill.status=="Đang Giao")
+                                .column.text-center
+                                    span.font-weight-bold(style=' font-size : 18px ') Cập nhật trạng thái đơn ?
+                                    .row.ml-3
+                                        button.btn.btn-outline-primary.btn-round(onclick=`demo.confirmStatusBill('${bill.bill_id}','/bill/billDone')`)
+                                            i.nc-icon.nc-check-2.mr-1(style= 'font-size : 16px ;')
+                                            | Giao hàng thành công
+                                        #address-form
+                                            button.btn.btn-outline-danger.btn-round
+                                                i.nc-icon.nc-simple-remove.mr-1(style= 'font-size : 16px ;')
+                                                | Giao hàng thất bại
+            .address-form
+                .address-form-content
+                    if (bill.status=="Chờ Xác Nhận")
+                        h2 Nhập lý do từ chối đơn
+                            span#address-close X Đóng
+                        form(action='/bill/billCancel' method='POST' role='form')
+                            input(type='text' name='id'  hidden   value=bill.bill_id )
+                            input(type='text' name='page'  hidden   value="billDetail" )
+                            p Nhập lý do 
+                            input(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
+                            button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+                    if (bill.status=="Đang Giao")
+                        h2 Nhập lý do giao hàng thất bại
+                            span#address-close X Đóng
+                        form(action='/bill/billFail' method='POST' role='form')
+                            input(type='text' name='id'  hidden   value=bill.bill_id )
+                            input(type='text' name='page'  hidden   value="billDetail" )
+                            p Nhập lý do 
+                            input(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
+                            button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+                    if (bill.status=="Yêu Cầu Hủy Đơn")
+                        h2 Nhập lý do từ chối yêu cầu
+                            span#address-close X Đóng
+                        form(action='/bill/rejectCancellationRequest' method='POST' role='form')
+                            input(type='text' name='id'  hidden   value=bill.bill_id )
+                            input(type='text' name='page'  hidden   value="billDetail" )
+                            p Nhập lý do 
+                            input(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
+                            button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+                    if (bill.status=="Yêu Cầu Hoàn Đơn")
+                        h2 Nhập lý do từ chối yêu cầu
+                            span#address-close X Đóng
+                        form(action='/bill/rejectReturnRequest' method='POST' role='form')
+                            input(type='text' name='id'  hidden   value=bill.bill_id )
+                            input(type='text' name='page'  hidden   value="billDetail" )
+                            p Nhập lý do 
+                            input(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
+                            button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js

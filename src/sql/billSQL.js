@@ -11,8 +11,10 @@ module.exports = {
     updateBill: 'UPDATE bill SET status = ? , cancellation_reason= ? WHERE bill_id= ? ',
     updateFeedBack: 'UPDATE bill SET  feedback = ? WHERE bill_id = ? ',
     updateReturnRequest: 'UPDATE bill SET  status = ? , return_request = ? WHERE bill_id = ? ',
+    updateFeedBackStore: 'UPDATE bill SET  status= ? , feedback_by_store= ? WHERE bill_id = ? ',
     queryAllBill:
         'SELECT  bill.bill_id, user.phone, user.user_name,bill.address,bill.total_price,bill.total_product,bill.status,bill.created_at  FROM bill,user WHERE bill.user_id=user.user_id  ORDER BY bill.status ASC',
     queryBillById: `SELECT *FROM bill where bill_id=?`,
-    updateStatusBillWeb: `UPDATE bill SET status= ? WHERE bill_id= ?`,
+    updateStatusBillWeb: `UPDATE bill SET status= ?  WHERE bill_id= ?`,
+    updateBillDone: `UPDATE bill SET status= ? ,done=? WHERE bill_id= ?`,
 };

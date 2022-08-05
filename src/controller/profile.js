@@ -1,4 +1,4 @@
-var jwt = require('jsonwebtoken');
+let jwt = require('jsonwebtoken');
 const { getConnection, query } = require('../utils/database');
 const moment = require('moment');
 const { uploadImage } = require('../utils/image');
@@ -75,14 +75,14 @@ const update = async (req, res) => {
         // }
 
         if (req.files?.avatar.data) {
-            var avatar = 'data:image/jpeg;base64,' + req.files.avatar.data.toString('base64');
+            let avatar = 'data:image/jpeg;base64,' + req.files.avatar.data.toString('base64');
             const upload = await uploadImage(avatar);
             newAvatar = upload.url;
         }
 
         const connection = await getConnection(req);
         detailUserQuery = 'SELECT * FROM user WHERE user_id=?';
-        var user = await query(connection, detailUserQuery, [user_id]);
+        let user = await query(connection, detailUserQuery, [user_id]);
         if (isEmpty(user)) return res.status(404).json({ message: 'Không tìm thấy User' });
         await query(connection, userSQL.updateUserSQL, [
             data.user_name || user[0].user_name || null,

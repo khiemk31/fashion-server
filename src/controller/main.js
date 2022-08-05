@@ -21,14 +21,18 @@ const main = async (req, res) => {
   GROUP BY user_id 
   ORDER BY COUNT(bill_id) DESC LIMIT 0,10`;
     res.render('main', {
-        ListDoanhThu: ListDoanhThu, 
+        ListDoanhThu: ListDoanhThu,
         tongDoanhThu: tongDoanhThu[0].TongDoanhThu,
         donDaGiao: donDaGiao[0].DonDaGiao,
         donDangXuLy: donDangXuLy[0].DonDangXuLy,
         donThatBai: donThatBai[0].DonThatBai,
     });
 };
+const test = async (req, res) => {
+    res.render('test');
+};
 
 module.exports = {
     main,
+    test,
 };
