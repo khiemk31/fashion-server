@@ -369,7 +369,7 @@ const billDone = async (req, res) => {
             const newSizeQuantity = size[0].quantity - billDetail.quantity;
             await query(connection, updateSize, [newSizeQuantity, size[0].size_id]);
         }
-        await query(connection, billSQL.updateBillDone, ['Hoàn Thành', 1, id]);
+        await query(connection, billSQL.updateBillDone, ['Hoàn Thành', 1, new Date(), id]);
         return res.status(200).json({
             message: `Đã hoàn thành đơn`,
         });

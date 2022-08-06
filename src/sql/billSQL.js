@@ -16,5 +16,6 @@ module.exports = {
         'SELECT  bill.bill_id, user.phone, user.user_name,bill.address,bill.total_price,bill.total_product,bill.status,bill.created_at  FROM bill,user WHERE bill.user_id=user.user_id  ORDER BY bill.status ASC',
     queryBillById: `SELECT *FROM bill where bill_id=?`,
     updateStatusBillWeb: `UPDATE bill SET status= ?  WHERE bill_id= ?`,
-    updateBillDone: `UPDATE bill SET status= ? ,done=? WHERE bill_id= ?`,
+    updateBillDone: `UPDATE bill SET status= ? ,done=? , updated_at= ? WHERE bill_id= ?`,
+    queryListRevenueByYear: `SELECT MONTH(created_at) AS Month, SUM(total_price) AS Revenue FROM bill WHERE status="Hoàn Thành" AND YEAR(created_at) = ? GROUP BY MONTH(created_at) ORDER BY MONTH(created_at) ASC`,
 };

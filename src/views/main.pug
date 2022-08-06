@@ -63,26 +63,7 @@ head
             .container-fluid
                 .navbar-wrapper
                     .navbar-toggle
-                        button.navbar-toggler(type='button')
-                            span.navbar-toggler-bar.bar1
-                            span.navbar-toggler-bar.bar2
-                            span.navbar-toggler-bar.bar3
                     a.navbar-brand(href='javascript:;') Thống Kê
-                button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navigation' aria-controls='navigation-index' aria-expanded='false' aria-label='Toggle navigation')
-                    span.navbar-toggler-bar.navbar-kebab
-                    span.navbar-toggler-bar.navbar-kebab
-                    span.navbar-toggler-bar.navbar-kebab
-                #navigation.collapse.navbar-collapse.justify-content-end
-                    ul.navbar-nav
-                        li.nav-item.btn-rotate.dropdown
-                            a#navbarDropdownMenuLink.nav-link.dropdown-toggle(href='#' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
-                                i.nc-icon.nc-bell-55
-                                p
-                                    span.d-lg-none.d-md-block Some Actions
-                            .dropdown-menu.dropdown-menu-right(aria-labelledby='navbarDropdownMenuLink')
-                                a.dropdown-item(href='#') Action
-                                a.dropdown-item(href='#') Another action
-                                a.dropdown-item(href='#') Something else here
         // End Navbar
         .content
             .row
@@ -156,7 +137,7 @@ head
                         .card-header
                             h5.card-title Thống Kế Doanh Số
                         .card-body
-                            canvas#chartHours(width='400' height='100')=ListDoanhThu
+                            canvas#chartHours(width='400' height='100')
                         .card-footer
                             hr
                             .stats
@@ -204,11 +185,6 @@ head
                             .card-stats
                                 i.fa.fa-check
                                 |  Data information certified
-        - var month7 = ListDoanhThu.month
-        - var DoanhThu = ListDoanhThu.DoanhThu
-        #data(hidden)
-            p=month7
-            p=DoanhThu
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js
@@ -227,10 +203,9 @@ script
 script
     include ./assets/demo/demo.js
 // Notifications Plugin
-script(src='')
 script.
     $(document).ready(function() {
-        console.log($('#data p:eq(0)').text());
-        console.log($('#data p:eq(1)').text());
-    demo.initChartsPages($('#data p[0]').text());
+    demo.test("cao siêu quá nhở");
+    demo.initChartsPages();
+    demo.chartRevenue();
     });
