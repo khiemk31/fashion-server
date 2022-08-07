@@ -22,24 +22,21 @@ demo = {
         var params = JSON.stringify({
             id: id,
         });
-        let url = 'http://localhost:5000' + status;
+        let url = 'http://modelfashion.store' + status;
         const res = await this.callAPI(url, params, method);
         this.showNotification('top', 'right', res.message);
         setTimeout(function () {
             document.location.reload();
         }, 1500);
     },
-    test(string) {
-        console.log(string);
-    },
     async chartRevenue() {
         var xValues = [];
-        var yValues = ['100.000.000'];
+        var yValues = [];
         let method = 'POST';
         var params = JSON.stringify({
             year: 2022,
         });
-        let url = 'http://localhost:5000/revenue';
+        let url = 'http://modelfashion.store/revenue';
         const res = await this.callAPI(url, params, method);
 
         const listRevenue = res.listRevenue;

@@ -10,7 +10,9 @@ const { accountSid, authToken } = require('../config');
 const userSQL = require('../sql/userSQL');
 const { formatMoney } = require('../utils/formatMoney');
 const { getTotalPage } = require('../utils');
+const billSQL = require('../sql/billSQL');
 const client = twilio(accountSid, authToken);
+const demo = require('../views/assets/demo/demo');
 
 //API checkUser
 const checkUser = async (req, res) => {
@@ -54,19 +56,13 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { phone, password } = req.body;
-
         const connection = await getConnection(req);
-        const userBlock = await query(connection, userSQL.getUserBlockQuerySQL, [phone]);
-        if (isEmpty(userBlock)) {
-            const user = await query(connection, userSQL.getUserQuerySQL, [phone]);
-            if (isEmpty(user)) {
-                return res.status(404).json({ message: 'Số điện thoại chưa được đăng ký' });
-            } else {
-                await comparePassword(user[0], password);
-                return res.status(200).json({ message: 'Đăng nhập thành công', data: user[0].user_id });
-            }
+        const user = await query(connection, userSQL.getUserQuerySQL, [phone]);
+        if (isEmpty(user)) {
+            return res.status(404).json({ message: 'Số điện thoại chưa được đăng ký' });
         } else {
-            return res.status(999).json({ message: 'Tài khoản của bạn đã bị khóa !' });
+            await comparePassword(user[0], password);
+            return res.status(200).json({ message: 'Đăng nhập thành công', data: user[0].user_id });
         }
     } catch (e) {
         return res.status(500).json({ message: `${e}` });
@@ -406,56 +402,38 @@ const loginAdmin = async (req, res) => {
     try {
         const data = req.body;
         const connection = await getConnection(req);
-        queryDoanhThu = `SELECT MONTH(created_at) as month ,SUM(total_price) as DoanhThu FROM bill WHERE status="Hoàn Thành" AND YEAR(created_at) = 2022 GROUP BY MONTH(created_at) ORDER BY MONTH(created_at) ASC`;
-        queryTongDoanhThu = `SELECT SUM(total_price) as TongDoanhThu FROM bill WHERE status="Hoàn Thành" `;
-        queryDonHoanThanh = `SELECT COUNT(bill_id) as DonDaGiao FROM bill WHERE status="Hoàn Thành" `;
-        queryDonDangXuLy = `SELECT COUNT(bill_id) as DonDangXuLy FROM bill WHERE status="Chờ Xác Nhận" OR status="Yêu Cầu Hủy Đơn" OR status="Yêu Cầu Trả Đơn" OR status="Đang Giao"`;
-        queryDonThatBai = `SELECT COUNT(bill_id) as DonThatBai FROM bill WHERE status="Đã Hủy" OR status="Đã Hoàn" OR status="Thất Bại" OR status="Từ Chối"`;
-        const ListDoanhThu = await query(connection, queryDoanhThu);
-        const tongDoanhThu = await query(connection, queryTongDoanhThu);
+        const tongDoanhThu = await query(connection, billSQL.queryTongDoanhThu);
         tongDoanhThu[0].TongDoanhThu = formatMoney(tongDoanhThu[0].TongDoanhThu);
-        const donDaGiao = await query(connection, queryDonHoanThanh);
-        const donDangXuLy = await query(connection, queryDonDangXuLy);
-        const donThatBai = await query(connection, queryDonThatBai);
-
-        queryTop10User = `SELECT user.user_name,bill.user_id , COUNT(bill.bill_id) as SoLuongDon 
-    FROM bill ,user 
-    WHERE user.user_id = bill.user_id AND status="Đã Giao"
-    GROUP BY user_id 
-    ORDER BY COUNT(bill_id) DESC LIMIT 0,10`;
-        const userBlock = await query(connection, userSQL.getUserBlockQuerySQL, [data.phone.trim()]);
-        if (isEmpty(userBlock)) {
-            const admin = await query(connection, userSQL.getUserAdminQuerySQL, [data.phone.trim()]);
-            const superAdmin = await query(connection, userSQL.getUserSupperAdminQuerySQL, [data.phone]);
-            if (isEmpty(data.phone.trim()) || isEmpty(data.password.trim()))
-                return res.status(500).json('Vui lòng nhập dữ liệu hợp lệ');
-            if (isEmpty(admin) && isEmpty(superAdmin)) {
-                return res.status(404).json('Số điện thoại chưa được đăng ký Admin');
-            } else if (isEmpty(superAdmin)) {
-                await comparePassword(admin[0], data.password);
-                const token = jwt.sign({ user_id: admin[0].user_id }, process.env.ACCESS_TOKEN_SECRET);
-                res.cookie('token', token);
-                res.render('main', {
-                    ListDoanhThu: ListDoanhThu,
-                    tongDoanhThu: tongDoanhThu[0].TongDoanhThu,
-                    donDaGiao: donDaGiao[0].DonDaGiao,
-                    donDangXuLy: donDangXuLy[0].DonDangXuLy,
-                    donThatBai: donThatBai[0].DonThatBai,
-                });
-            } else {
-                await comparePassword(superAdmin[0], data.password);
-                const token = jwt.sign({ user_id: superAdmin[0].user_id }, process.env.ACCESS_TOKEN_SECRET);
-                res.cookie('token', token);
-                res.render('main', {
-                    ListDoanhThu: ListDoanhThu,
-                    tongDoanhThu: tongDoanhThu[0].TongDoanhThu,
-                    donDaGiao: donDaGiao[0].DonDaGiao,
-                    donDangXuLy: donDangXuLy[0].DonDangXuLy,
-                    donThatBai: donThatBai[0].DonThatBai,
-                });
-            }
+        const donDaGiao = await query(connection, billSQL.queryDonHoanThanh);
+        const donDangXuLy = await query(connection, billSQL.queryDonDangXuLy);
+        const donThatBai = await query(connection, billSQL.queryDonThatBai);
+        const admin = await query(connection, userSQL.getUserAdminQuerySQL, [data.phone.trim()]);
+        const superAdmin = await query(connection, userSQL.getUserSupperAdminQuerySQL, [data.phone]);
+        if (isEmpty(data.phone.trim()) || isEmpty(data.password.trim())) {
+            return res.status(500).json('Vui lòng nhập dữ liệu hợp lệ');
+        }
+        if (isEmpty(admin) && isEmpty(superAdmin)) {
+            return res.status(404).json('Số điện thoại chưa được đăng ký Admin');
+        } else if (isEmpty(superAdmin)) {
+            await comparePassword(admin[0], data.password);
+            const token = jwt.sign({ user_id: admin[0].user_id }, process.env.ACCESS_TOKEN_SECRET);
+            res.cookie('token', token);
+            res.render('main', {
+                tongDoanhThu: tongDoanhThu[0].TongDoanhThu,
+                donDaGiao: donDaGiao[0].DonDaGiao,
+                donDangXuLy: donDangXuLy[0].DonDangXuLy,
+                donThatBai: donThatBai[0].DonThatBai,
+            });
         } else {
-            return res.status(999).json({ message: 'UserBlock Cút cmm đi' });
+            await comparePassword(superAdmin[0], data.password);
+            const token = jwt.sign({ user_id: superAdmin[0].user_id }, process.env.ACCESS_TOKEN_SECRET);
+            res.cookie('token', token);
+            res.render('main', {
+                tongDoanhThu: tongDoanhThu[0].TongDoanhThu,
+                donDaGiao: donDaGiao[0].DonDaGiao,
+                donDangXuLy: donDangXuLy[0].DonDangXuLy,
+                donThatBai: donThatBai[0].DonThatBai,
+            });
         }
     } catch (e) {
         return res.status(500).json({ message: `${e}` });
