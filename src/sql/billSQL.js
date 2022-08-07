@@ -16,5 +16,11 @@ module.exports = {
         'SELECT  bill.bill_id, user.phone, user.user_name,bill.address,bill.total_price,bill.total_product,bill.status,bill.created_at  FROM bill,user WHERE bill.user_id=user.user_id  ORDER BY bill.status ASC',
     queryBillById: `SELECT *FROM bill where bill_id=?`,
     updateStatusBillWeb: `UPDATE bill SET status= ?  WHERE bill_id= ?`,
-    updateBillDone: `UPDATE bill SET status= ? ,done=? WHERE bill_id= ?`,
+    updateBillDone: `UPDATE bill SET status= ? ,done=? , updated_at= ? WHERE bill_id= ?`,
+    queryListRevenueByYear: `SELECT MONTH(created_at) AS Month, SUM(total_price) AS Revenue FROM bill WHERE status="Hoàn Thành" AND YEAR(created_at) = ? GROUP BY MONTH(created_at) ORDER BY MONTH(created_at) ASC`,
+    queryTop10User: `SELECT user.user_name,bill.user_id , COUNT(bill.bill_id) as SoLuongDon FROM bill ,user WHERE user.user_id = bill.user_id AND status="Đã Giao"GROUP BY user_id ORDER BY COUNT(bill_id) DESC LIMIT 0,10`,
+    queryTongDoanhThu: `SELECT SUM(total_price) as TongDoanhThu FROM bill WHERE status="Hoàn Thành" `,
+    queryDonHoanThanh: `SELECT COUNT(bill_id) as DonDaGiao FROM bill WHERE status="Hoàn Thành" `,
+    queryDonDangXuLy: `SELECT COUNT(bill_id) as DonDangXuLy FROM bill WHERE status="Chờ Xác Nhận" OR status="Yêu Cầu Hủy Đơn" OR status="Yêu Cầu Trả Đơn" OR status="Đang Giao"`,
+    queryDonThatBai: `SELECT COUNT(bill_id) as DonThatBai FROM bill WHERE status="Đã Hủy" OR status="Đã Hoàn" OR status="Thất Bại" OR status="Từ Chối"`,
 };

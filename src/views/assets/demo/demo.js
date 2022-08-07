@@ -1,38 +1,76 @@
 demo = {
-    initDocChart: function () {
+    async callAPI(url, params, method) {
+        let myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
+        let requestOptions = {
+            method: method,
+            headers: myHeaders,
+            body: params,
+            redirect: 'follow',
+        };
+        await fetch(url, requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
+                data = JSON.parse(result);
+            })
+            .catch((error) => console.log('error', error));
+        return data;
+    },
+
+    async confirmStatusBill(id, status) {
+        let method = 'POST';
+        var params = JSON.stringify({
+            id: id,
+        });
+        let url = 'http://modelfashion.store' + status;
+        const res = await this.callAPI(url, params, method);
+        this.showNotification('top', 'right', res.message);
+        setTimeout(function () {
+            document.location.reload();
+        }, 1500);
+    },
+    async chartRevenue() {
+        var xValues = [];
+        var yValues = [];
+        let method = 'POST';
+        var params = JSON.stringify({
+            year: 2022,
+        });
+        let url = 'http://modelfashion.store/revenue';
+        const res = await this.callAPI(url, params, method);
+
+        const listRevenue = res.listRevenue;
         chartColor = '#FFFFFF';
 
         ctx = document.getElementById('chartHours').getContext('2d');
+        for (const revenue of listRevenue) {
+            xValues.push('Tháng ' + revenue.Month);
+            yValues.push(revenue.Revenue);
+        }
+
+        var barColors = [
+            '#ff0000',
+            '#ff8000',
+            '#ffff00',
+            '#80ff00',
+            '#00ff00',
+            '#00ff80',
+            '#00ffff',
+            '#0080ff',
+            '#0000ff',
+            '#8000ff',
+            '#ff00ff',
+            '#ff0080',
+        ];
 
         myChart = new Chart(ctx, {
-            type: 'line',
-
+            type: 'bar',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                labels: xValues,
                 datasets: [
                     {
-                        borderColor: '#6bd098',
-                        backgroundColor: '#6bd098',
-                        pointRadius: 0,
-                        pointHoverRadius: 0,
-                        borderWidth: 3,
-                        data: [300, 310, 316, 322, 330, 326, 333, 345, 338, 354],
-                    },
-                    {
-                        borderColor: '#f17e5d',
-                        backgroundColor: '#f17e5d',
-                        pointRadius: 0,
-                        pointHoverRadius: 0,
-                        borderWidth: 3,
-                        data: [320, 340, 365, 360, 370, 385, 390, 384, 408, 420],
-                    },
-                    {
-                        borderColor: '#fcc468',
-                        backgroundColor: '#fcc468',
-                        pointRadius: 0,
-                        pointHoverRadius: 0,
-                        borderWidth: 3,
-                        data: [370, 394, 415, 409, 425, 445, 460, 450, 478, 484],
+                        backgroundColor: barColors,
+                        data: yValues,
                     },
                 ],
             },
@@ -40,70 +78,17 @@ demo = {
                 legend: {
                     display: false,
                 },
-
                 tooltips: {
-                    enabled: false,
-                },
-
-                scales: {
-                    yAxes: [
-                        {
-                            ticks: {
-                                fontColor: '#9f9f9f',
-                                beginAtZero: false,
-                                maxTicksLimit: 5,
-                                //padding: 20
-                            },
-                            gridLines: {
-                                drawBorder: false,
-                                zeroLineColor: '#ccc',
-                                color: 'rgba(255,255,255,0.05)',
-                            },
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return tooltipItem.yLabel;
                         },
-                    ],
-
-                    xAxes: [
-                        {
-                            barPercentage: 1.6,
-                            gridLines: {
-                                drawBorder: false,
-                                color: 'rgba(255,255,255,0.1)',
-                                zeroLineColor: 'transparent',
-                                display: false,
-                            },
-                            ticks: {
-                                padding: 20,
-                                fontColor: '#9f9f9f',
-                            },
-                        },
-                    ],
+                    },
                 },
             },
         });
     },
-
-    initChartsPages: function (list) {
-        chartColor = '#FFFFFF';
-        console.log(list, 'truyen vao rooooooooo');
-        ctx = document.getElementById('chartHours').getContext('2d');
-
-        // var xValues = ListDoanhThu.month;
-        // var yValues = ListDoanhThu.DanhThu;
-        // var barColors = ['#ff0000', '#ff8000', '#ffff00', '#80ff00', '#00ff00', '#00ff80', '#00ffff', '#0080ff', '#0000ff', '#8000ff', '#ff00ff', '#ff0080'];
-
-        // myChart = new Chart(ctx, {
-        //   type: 'bar',
-        //   data: {
-        //     labels: xValues,
-        //     datasets: [
-        //       {
-        //         backgroundColor: barColors,
-        //         data: yValues,
-        //       },
-        //     ],
-        //   },
-        // });
-
+    async initChartsPages() {
         ctx = document.getElementById('chartEmail').getContext('2d');
 
         myChart = new Chart(ctx, {
@@ -228,36 +213,5 @@ demo = {
                 },
             },
         );
-    },
-    async callAPI(url, params, method) {
-        let myHeaders = new Headers();
-        myHeaders.append('Content-Type', 'application/json');
-        let requestOptions = {
-            method: method,
-            headers: myHeaders,
-            body: params,
-            redirect: 'follow',
-        };
-        await fetch(url, requestOptions)
-            .then((response) => response.text())
-            .then((result) => {
-                data = JSON.parse(result);
-            })
-            .catch((error) => console.log('error', error));
-        return data;
-    },
-
-    async confirmStatusBill(id, status) {
-        console.log(id, status);
-        let method = 'POST';
-        var params = JSON.stringify({
-            id: id,
-        });
-        let url = 'http://localhost:5000' + status;
-        const res = await this.callAPI(url, params, method);
-        this.showNotification('top', 'right', res.message);
-        setTimeout(function () {
-            document.location.reload();
-        }, 1500);
     },
 };

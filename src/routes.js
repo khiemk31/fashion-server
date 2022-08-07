@@ -9,6 +9,8 @@ const profile = require('./controller/profile');
 module.exports = (router) => {
     //Main Router
     router.get('/main', middleware.requireAuth, main.main);
+    //Main API
+    router.post('/revenue', main.listRevenueByYear);
     //category API
     router.get('/category/getAll', category.getAll);
     //category Web View
@@ -91,6 +93,4 @@ module.exports = (router) => {
     router.get('/profile', profile.profile);
     router.get('/profile/edit', profile.edit);
     router.post('/profile/update', profile.update);
-    //test
-    router.get('/test', main.test);
 };

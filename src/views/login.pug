@@ -1,4 +1,21 @@
-extends ../views/header
+doctype html
+head
+  meta(charset='utf-8')
+  link(rel='apple-touch-icon' sizes='76x76' href='https://res.cloudinary.com/cde/image/upload/v1658206315/Icon/logo_cdrkpi.png')
+  link(rel='icon' type='image/png' href='https://res.cloudinary.com/cde/image/upload/v1658206315/Icon/logo_cdrkpi.png')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
+  title Model Fashion
+  meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
+
+  link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700,200' rel='stylesheet')
+  link(href='https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' rel='stylesheet')
+  // CSS Files
+  style 
+    include ./assets/css/bootstrap.min.css
+  style 
+    include ./assets/css/paper-dashboard.css 
+  style 
+    include ./assets/demo/demo.css
 
 block content 
   title LOGIN
@@ -8,13 +25,13 @@ block content
         .card
           .card-header.bg-primary(style="background-image: linear-gradient(to left,#ffffff67,#0015f7);")
             .app-brand
-              span.brand-name(style="font-size:20px; color: #fff;") hệ thống model fashion
+              span.brand-name(style="font-size:20px; color: #fff;") Model Fashion 
           .card-body.p-5
             if errors 
               each err in errors
                 .alert.alert-danger(style="margin-bottom: 50px")= err
             else
-              h4.text-dark.mb-5 Chào mừng trở lại!
+              h4.text-dark.mb-5 Welcome back
             form(action='/login' method="post")
               .row
                 .form-group.col-md-12.mb-4
@@ -27,7 +44,6 @@ block content
                     p
                       a.text-blue(href='#') Quên mật khẩu?
                 input.btn.btn-lg.btn-primary.btn-block.mb-4(type='submit' value='ĐĂNG NHẬP' style="background-image: linear-gradient(to right,#ffffff67,#0015f7);")
-
     .copyright.pl-0
       p.text-center
         | &copy; 2022 Dự án tốt nghiệp "Hệ thống bán quần áo online".
