@@ -1,16 +1,13 @@
 // click form
-const addressbtn = document.querySelector('.address-form2');
+const addressbtn = document.querySelector('.address-form');
 const addressclose = document.querySelector('#address-close');
 
 addressbtn.addEventListener('click', function () {
     document.querySelector('.address-form').style.display = 'flex';
-    console.log('CLICK VÀO ');
 });
 
 addressclose.addEventListener('click', function () {
     document.querySelector('.address-form').style.display = 'none';
-    addressbtn = null;
-    console.log('Đẩy ra');
 });
 
 // JavaScript code

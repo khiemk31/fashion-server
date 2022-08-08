@@ -3,6 +3,7 @@ const category = require('./controller/category');
 const product = require('./controller/product');
 const bill = require('./controller/bill');
 const main = require('./controller/main');
+const voucher = require('./controller/voucher');
 const middleware = require('../src/utils/middleware/authenToken.middleware');
 const profile = require('./controller/profile');
 
@@ -10,19 +11,22 @@ module.exports = (router) => {
     //Main Router
     router.get('/main', middleware.requireAuth, main.main);
     //Main API
-    router.post('/revenue', main.listRevenueByYear);
+    router.post('/revenue', middleware.requireAuth, main.listRevenueByYear);
+    router.get('/billStatistics', middleware.requireAuth, main.billStatistics);
+    router.get('/billDetailStatistics', middleware.requireAuth, main.billDetailStatistics);
+    router.get('/top10User', middleware.requireAuth, main.queryTop10User);
     //category API
     router.get('/category/getAll', category.getAll);
     //category Web View
-    router.get('/category/', category.category);
-    router.get('/insertCategory', category.getAddCategory);
-    router.post('/addCategory', category.addCategory);
-    router.get('/category/update/:id', category.getUpdateCategory);
-    router.post('/category/update', category.update);
-    router.get('/category/remove/:id', category.removeCategory);
-    router.get('/category/deleted', category.getCategoryDeleted);
-    router.get('/category/updated', category.getCategoryUpdated);
-    router.get('/category/created', category.getCategoryCreated);
+    router.get('/category/', middleware.requireAuth, category.category);
+    router.get('/insertCategory', middleware.requireAuth, category.getAddCategory);
+    router.post('/addCategory', middleware.requireAuth, category.addCategory);
+    router.get('/category/update/:id', middleware.requireAuth, category.getUpdateCategory);
+    router.post('/category/update', middleware.requireAuth, category.update);
+    router.get('/category/remove/:id', middleware.requireAuth, category.removeCategory);
+    router.get('/category/deleted', middleware.requireAuth, category.getCategoryDeleted);
+    router.get('/category/updated', middleware.requireAuth, category.getCategoryUpdated);
+    router.get('/category/created', middleware.requireAuth, category.getCategoryCreated);
     //Product API
     router.get('/product/getAllProductByCategory', product.getAllProductByCategory);
     router.get('/product/getProductByCategory', product.getProductByCategory);
@@ -93,4 +97,7 @@ module.exports = (router) => {
     router.get('/profile', profile.profile);
     router.get('/profile/edit', profile.edit);
     router.post('/profile/update', profile.update);
+    //Voucher API
+    router.get('/getVoucherUser', voucher.getVoucherUser);
+    router.post('/useVoucher', voucher.useVoucher);
 };

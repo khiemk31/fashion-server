@@ -108,7 +108,6 @@ const add = async (req, res) => {
         const listProduct = await query(connection, productSQL.getAllProduct);
         res.render('product', { listProduct: listProduct });
     } catch (e) {
-        console.log(e);
         return res.status(500).json({ message: `${e}` });
     }
 };

@@ -71,10 +71,10 @@ head
                     .card.card-stats
                         .card-body
                             .row
-                                .col-5.col-md-4
+                                .col-4.col-md-2
                                     .icon-big.text-center.icon-warning
                                         i.nc-icon.nc-money-coins.text-warning
-                                .col-7.col-md-8
+                                .col-8.col-md-10
                                     .numbers
                                         p.card-category.text-danger Tổng Doanh Thu
                                         p.card-title.text-warning= tongDoanhThu +" đ"
@@ -135,9 +135,9 @@ head
                 .col-md-12
                     .card
                         .card-header
-                            h5.card-title Thống Kế Doanh Số
+                            h5.card-title Thống Kế Doanh Thu Từng Tháng
                         .card-body
-                            canvas#chartHours(width='400' height='100')
+                            canvas#chartRevenue(width='400' height='100')
                         .card-footer
                             hr
                             .stats
@@ -147,45 +147,37 @@ head
                                 a(href='/main')
                                     i.fa.fa-refresh   Update Now
             .row
-                .col-md-4
+                .col-md-6
                     .card
                         .card-header
-                            h5.card-title Email Statistics
-                            p.card-category Last Campaign Performance
+                            h5.card-title Thống kê đơn hàng
                         .card-body
-                            canvas#chartEmail
-                        .card-footer
-                            .legend
-                                i.fa.fa-circle.text-primary
-                                |  Opened
-                                i.fa.fa-circle.text-warning
-                                |  Read
-                                i.fa.fa-circle.text-danger
-                                |  Deleted
-                                i.fa.fa-circle.text-gray
-                                |  Unopened
+                            canvas#chartBill(height='100')
                             hr
                             .stats
-                                i.fa.fa-calendar
-                                |  Number of emails sent
-                .col-md-8
+                                a(href='/main')
+                                    i.fa.fa-refresh   Update Now
+                .col-md-6
+                    .card
+                        .card-header
+                            h5.card-title Top 10 khách hàng thân thiết
+                        .card-body
+                            .table-responsive
+                                table.table(height='200')
+                                    thead.header.text-primary
+                                        tr
+                                            th ID
+                                            th Tên 
+                                            th Số đơn đã đặt
+                                            th Số tiền đã chi tiêu
+                                    tbody#dataUser
+            .row
+                .col-md-12
                     .card.card-chart
                         .card-header
-                            h5.card-title NASDAQ: AAPL
-                            p.card-category Line Chart with Points
+                            h5.card-title Tăng trưởng đơn theo tháng
                         .card-body
                             canvas#speedChart(width='400' height='100')
-                        .card-footer
-                            .chart-legend
-                                i.fa.fa-circle.text-info
-                                |  Tesla Model S
-                                i.fa.fa-circle.text-warning
-                                |  BMW 5 Series
-                            hr
-                            .card-stats
-                                i.fa.fa-check
-                                |  Data information certified
-// Core JS Files
 script
     include ./assets/js/core/jquery.min.js
 script
@@ -202,9 +194,11 @@ script
     include ./assets/js/paper-dashboard.min.js
 script
     include ./assets/demo/demo.js
-// Notifications Plugin
+script
+    include ./assets/js/main.js
 script.
     $(document).ready(function() {
     demo.initChartsPages();
-    demo.chartRevenue();
+    demo.top10User();
     });
+

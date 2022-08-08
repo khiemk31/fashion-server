@@ -5,7 +5,6 @@ const { formatMoney } = require('../utils/formatMoney');
 const listRevenueByYear = async (req, res) => {
     try {
         const { year } = req.body;
-        console.log(req);
         const connection = await getConnection(req);
 
         var listRevenue = [
@@ -35,19 +34,188 @@ const listRevenueByYear = async (req, res) => {
         return res.status(500).json({ message: `${error}` });
     }
 };
+const billStatistics = async (req, res) => {
+    try {
+        const connection = await getConnection(req);
+        const billWaiting = await query(connection, billSQL.queryBillWaiting);
+        const billDelivering = await query(connection, billSQL.queryBillDelivering);
+        const billDone = await query(connection, billSQL.queryDonHoanThanh);
+        const billRequestCancellationORRefund = await query(connection, billSQL.queryBillRequestCancellationORRefund);
+        const billFail = await query(connection, billSQL.queryDonThatBai);
+        return res.status(200).json({
+            billWaiting: billWaiting[0].billWaiting,
+            billDelivering: billDelivering[0].billDelivering,
+            billDone: billDone[0].DonDaGiao,
+            billRequestCancellationORRefund: billRequestCancellationORRefund[0].billRequestCancellationORRefund,
+            billFail: billFail[0].DonThatBai,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: `${error}` });
+    }
+};
+const billDetailStatistics = async (req, res) => {
+    try {
+        const connection = await getConnection(req);
+        var listBillDetailStatistics = [
+            {
+                Month: 1,
+                billWaiting: 0,
+                billDelivering: 0,
+                billDone: 0,
+                billRequestCancellationORRefund: 0,
+                billFail: 0,
+            },
+            {
+                Month: 2,
+                billWaiting: 0,
+                billDelivering: 0,
+                billDone: 0,
+                billRequestCancellationORRefund: 0,
+                billFail: 0,
+            },
+            {
+                Month: 3,
+                billWaiting: 0,
+                billDelivering: 0,
+                billDone: 0,
+                billRequestCancellationORRefund: 0,
+                billFail: 0,
+            },
+            {
+                Month: 4,
+                billWaiting: 0,
+                billDelivering: 0,
+                billDone: 0,
+                billRequestCancellationORRefund: 0,
+                billFail: 0,
+            },
+            {
+                Month: 5,
+                billWaiting: 0,
+                billDelivering: 0,
+                billDone: 0,
+                billRequestCancellationORRefund: 0,
+                billFail: 0,
+            },
+            {
+                Month: 6,
+                billWaiting: 0,
+                billDelivering: 0,
+                billDone: 0,
+                billRequestCancellationORRefund: 0,
+                billFail: 0,
+            },
+            {
+                Month: 7,
+                billWaiting: 0,
+                billDelivering: 0,
+                billDone: 0,
+                billRequestCancellationORRefund: 0,
+                billFail: 0,
+            },
+            {
+                Month: 8,
+                billWaiting: 0,
+                billDelivering: 0,
+                billDone: 0,
+                billRequestCancellationORRefund: 0,
+                billFail: 0,
+            },
+            {
+                Month: 9,
+                billWaiting: 0,
+                billDelivering: 0,
+                billDone: 0,
+                billRequestCancellationORRefund: 0,
+                billFail: 0,
+            },
+            {
+                Month: 10,
+                billWaiting: 0,
+                billDelivering: 0,
+                billDone: 0,
+                billRequestCancellationORRefund: 0,
+                billFail: 0,
+            },
+            {
+                Month: 11,
+                billWaiting: 0,
+                billDelivering: 0,
+                billDone: 0,
+                billRequestCancellationORRefund: 0,
+                billFail: 0,
+            },
+            {
+                Month: 12,
+                billWaiting: 0,
+                billDelivering: 0,
+                billDone: 0,
+                billRequestCancellationORRefund: 0,
+                billFail: 0,
+            },
+        ];
+        const listBillWaiting = await query(connection, billSQL.queryListBillWaitingByMonth);
+        const listBillDelivering = await query(connection, billSQL.queryListBillDeliveringByMonth);
+        const listBillDone = await query(connection, billSQL.queryListBillDoneByMonth);
+        const listBillRequestCancellationORRefund = await query(
+            connection,
+            billSQL.queryListBillRequestCancellationORRefundByMonth,
+        );
+        const listBillFail = await query(connection, billSQL.queryListBillFailByMonth);
 
+        for (const billDetailStatistics of listBillDetailStatistics) {
+            for (const billWaiting of listBillWaiting) {
+                if (billDetailStatistics.Month == billWaiting.Month) {
+                    billDetailStatistics.billWaiting = billWaiting.billWaiting;
+                }
+            }
+            for (const billDelivering of listBillDelivering) {
+                if (billDetailStatistics.Month == billDelivering.Month) {
+                    billDetailStatistics.billDelivering = billDelivering.billDelivering;
+                }
+            }
+            for (const billDone of listBillDone) {
+                if (billDetailStatistics.Month == billDone.Month) {
+                    billDetailStatistics.billDone = billDone.billDone;
+                }
+            }
+            for (const billRequestCancellationORRefund of listBillRequestCancellationORRefund) {
+                if (billDetailStatistics.Month == billRequestCancellationORRefund.Month) {
+                    billDetailStatistics.billRequestCancellationORRefund =
+                        billRequestCancellationORRefund.billRequestCancellationORRefund;
+                }
+            }
+            for (const billFail of listBillFail) {
+                if (billDetailStatistics.Month == billFail.Month) {
+                    billDetailStatistics.billFail = billFail.billFail;
+                }
+            }
+        }
+        return res.status(200).json({ listBillDetailStatistics: listBillDetailStatistics });
+    } catch (error) {
+        return res.status(500).json({ message: `${error}` });
+    }
+};
+const queryTop10User = async (req, res) => {
+    try {
+        const connection = await getConnection(req);
+        const listUser = await query(connection, billSQL.queryTop10User);
+        for (user of listUser) {
+            user.totalAmountSpent = formatMoney(user.totalAmountSpent) + 'đ';
+        }
+        return res.status(200).json({ listUser: listUser });
+    } catch (error) {
+        return res.status(500).json({ message: `${error}` });
+    }
+};
 //WEB VIEW
 const main = async (req, res) => {
     const connection = await getConnection(req);
-    queryTongDoanhThu = `SELECT SUM(total_price) as TongDoanhThu FROM bill WHERE status="Hoàn Thành" `;
-    queryDonHoanThanh = `SELECT COUNT(bill_id) as DonDaGiao FROM bill WHERE status="Hoàn Thành" `;
-    queryDonDangXuLy = `SELECT COUNT(bill_id) as DonDangXuLy FROM bill WHERE status="Chờ Xác Nhận" OR status="Yêu Cầu Hủy Đơn" OR status="Yêu Cầu Trả Đơn" OR status="Đang Giao"`;
-    queryDonThatBai = `SELECT COUNT(bill_id) as DonThatBai FROM bill WHERE status="Đã Hủy" OR status="Đã Hoàn" OR status="Thất Bại" OR status="Từ Chối"`;
-    const tongDoanhThu = await query(connection, queryTongDoanhThu);
+    const tongDoanhThu = await query(connection, billSQL.queryTongDoanhThu);
     tongDoanhThu[0].TongDoanhThu = formatMoney(tongDoanhThu[0].TongDoanhThu);
-    const donDaGiao = await query(connection, queryDonHoanThanh);
-    const donDangXuLy = await query(connection, queryDonDangXuLy);
-    const donThatBai = await query(connection, queryDonThatBai);
+    const donDaGiao = await query(connection, billSQL.queryDonHoanThanh);
+    const donDangXuLy = await query(connection, billSQL.queryDonDangXuLy);
+    const donThatBai = await query(connection, billSQL.queryDonThatBai);
 
     res.render('main', {
         tongDoanhThu: tongDoanhThu[0].TongDoanhThu,
@@ -60,4 +228,7 @@ const main = async (req, res) => {
 module.exports = {
     main,
     listRevenueByYear,
+    billStatistics,
+    billDetailStatistics,
+    queryTop10User,
 };

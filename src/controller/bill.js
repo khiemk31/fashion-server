@@ -287,7 +287,6 @@ const billCancellationConfirmation = async (req, res) => {
             const product = await query(connection, queryProduct, [billDetail.product_name]);
             const size = await query(connection, querySize, [product[0].product_id, billDetail.size]);
             const newSizeQuantity = size[0].quantity + billDetail.quantity;
-            console.log('SIZE Trả LẠI', newSizeQuantity);
             await query(connection, updateSize, [newSizeQuantity, size[0].size_id]);
         }
         await query(connection, billSQL.updateStatusBillWeb, ['Đã Hủy', id]);

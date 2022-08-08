@@ -41,7 +41,6 @@ const addCategory = async (req, res) => {
             res.render('category', { listCategory: listCategory });
         }
     } catch (e) {
-        console.log(e);
         return res.status(500).json({ message: `${e}` });
     }
 };

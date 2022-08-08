@@ -117,7 +117,6 @@ const update = async (req, res) => {
             doanhThu: doanhThu[0].doanhThu,
         });
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: `${error}` });
     }
 };

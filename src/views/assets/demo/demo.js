@@ -29,7 +29,26 @@ demo = {
             document.location.reload();
         }, 1500);
     },
-    async chartRevenue() {
+    async top10User() {
+        let method = 'GET';
+        var params;
+        let url = 'http://modelfashion.store/top10User';
+        const res = await this.callAPI(url, params, method);
+        console.log(res.listUser);
+        if (res.listUser.length > 0) {
+            var temp = '';
+            res.listUser.forEach((user) => {
+                temp += '<tr>';
+                temp += '<td>' + user.user_id + '</td>';
+                temp += '<td>' + user.user_name + '</td>';
+                temp += '<td>' + user.billCount + '</td>';
+                temp += '<td>' + user.totalAmountSpent + '</td></tr>';
+            });
+            document.getElementById('dataUser').innerHTML = temp;
+        }
+    },
+    async initChartsPages() {
+        //Biểu đồ doanh thu theo tháng
         var xValues = [];
         var yValues = [];
         let method = 'POST';
@@ -42,7 +61,7 @@ demo = {
         const listRevenue = res.listRevenue;
         chartColor = '#FFFFFF';
 
-        ctx = document.getElementById('chartHours').getContext('2d');
+        ctx = document.getElementById('chartRevenue').getContext('2d');
         for (const revenue of listRevenue) {
             xValues.push('Tháng ' + revenue.Month);
             yValues.push(revenue.Revenue);
@@ -78,113 +97,131 @@ demo = {
                 legend: {
                     display: false,
                 },
-                tooltips: {
-                    callbacks: {
-                        label: function (tooltipItem) {
-                            return tooltipItem.yLabel;
-                        },
-                    },
-                },
             },
         });
-    },
-    async initChartsPages() {
-        ctx = document.getElementById('chartEmail').getContext('2d');
+        //Biểu đồ tổng các đơn theo trạng thái
+        ctx = document.getElementById('chartBill').getContext('2d');
+        let method2 = 'GET';
+        var params2;
+        let url2 = 'http://modelfashion.store/billStatistics';
+        const res2 = await this.callAPI(url2, params2, method2);
 
         myChart = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: [1, 2, 3],
+                labels: ['Chờ xác nhận', 'Đang giao', 'Hoàn thành', 'Yêu cầu hủy,hoàn', 'Đã hủy,hoàn'],
                 datasets: [
                     {
-                        label: 'Emails',
-                        pointRadius: 0,
-                        pointHoverRadius: 0,
-                        backgroundColor: ['#e3e3e3', '#4acccd', '#fcc468', '#ef8157'],
-                        borderWidth: 0,
-                        data: [342, 480, 530, 120],
+                        label: 'My First Dataset',
+                        data: [
+                            res2.billWaiting,
+                            res2.billDelivering,
+                            res2.billDone,
+                            res2.billRequestCancellationORRefund,
+                            res2.billFail,
+                        ],
+                        backgroundColor: ['#00ffff', '#0080ff', '#00ff00', '#ffff00', '#ff0000'],
+                        hoverOffset: 4,
                     },
                 ],
             },
-
-            options: {
-                legend: {
-                    display: false,
-                },
-
-                pieceLabel: {
-                    render: 'percentage',
-                    fontColor: ['white'],
-                    precision: 2,
-                },
-
-                tooltips: {
-                    enabled: false,
-                },
-
-                scales: {
-                    yAxes: [
-                        {
-                            ticks: {
-                                display: false,
-                            },
-                            gridLines: {
-                                drawBorder: false,
-                                zeroLineColor: 'transparent',
-                                color: 'rgba(255,255,255,0.05)',
-                            },
-                        },
-                    ],
-
-                    xAxes: [
-                        {
-                            barPercentage: 1.6,
-                            gridLines: {
-                                drawBorder: false,
-                                color: 'rgba(255,255,255,0.1)',
-                                zeroLineColor: 'transparent',
-                            },
-                            ticks: {
-                                display: false,
-                            },
-                        },
-                    ],
-                },
-            },
         });
-
+        //Biểu đồ thống kê đơn theo tháng
         var speedCanvas = document.getElementById('speedChart');
-
-        var dataFirst = {
-            data: [0, 19, 15, 20, 30, 40, 40, 50, 25, 30, 50, 70],
+        let method3 = 'GET';
+        var params3;
+        let url3 = 'http://modelfashion.store/billDetailStatistics';
+        const res3 = await this.callAPI(url3, params3, method3);
+        const listBillDetailStatistics = res3.listBillDetailStatistics;
+        var listBillWaiting = [];
+        var listBillDelivering = [];
+        var listBillDone = [];
+        var listBillRequestCancellationORRefund = [];
+        var listBillFail = [];
+        for (const billDetailStatistics of listBillDetailStatistics) {
+            listBillWaiting.push(billDetailStatistics.billWaiting);
+            listBillDelivering.push(billDetailStatistics.billDelivering);
+            listBillDone.push(billDetailStatistics.billDone);
+            listBillRequestCancellationORRefund.push(billDetailStatistics.billRequestCancellationORRefund);
+            listBillFail.push(billDetailStatistics.billFail);
+        }
+        var data1 = {
+            label: 'Chờ xác nhận',
+            data: listBillWaiting,
             fill: false,
-            borderColor: '#fbc658',
+            borderColor: '#00ffff',
             backgroundColor: 'transparent',
-            pointBorderColor: '#fbc658',
+            pointBorderColor: '#00ffff',
             pointRadius: 4,
             pointHoverRadius: 4,
             pointBorderWidth: 8,
         };
 
-        var dataSecond = {
-            data: [0, 5, 10, 12, 20, 27, 30, 34, 42, 45, 55, 63],
+        var data2 = {
+            label: 'Đang giao',
+            data: listBillDelivering,
             fill: false,
-            borderColor: '#51CACF',
+            borderColor: '#0080ff',
             backgroundColor: 'transparent',
-            pointBorderColor: '#51CACF',
+            pointBorderColor: '#0080ff',
+            pointRadius: 4,
+            pointHoverRadius: 4,
+            pointBorderWidth: 8,
+        };
+        var data3 = {
+            label: 'Hoàn thành',
+            data: listBillDone,
+            fill: false,
+            borderColor: '#00ff00',
+            backgroundColor: 'transparent',
+            pointBorderColor: '#00ff00',
+            pointRadius: 4,
+            pointHoverRadius: 4,
+            pointBorderWidth: 8,
+        };
+        var data4 = {
+            label: 'Yêu cầu hủy,hoàn',
+            data: listBillRequestCancellationORRefund,
+            fill: false,
+            borderColor: '#ffff00',
+            backgroundColor: 'transparent',
+            pointBorderColor: '#ffff00',
+            pointRadius: 4,
+            pointHoverRadius: 4,
+            pointBorderWidth: 8,
+        };
+        var data5 = {
+            label: 'Đã hủy,hoàn',
+            data: listBillFail,
+            fill: false,
+            borderColor: '#ff0000',
+            backgroundColor: 'transparent',
+            pointBorderColor: '#ff0000',
             pointRadius: 4,
             pointHoverRadius: 4,
             pointBorderWidth: 8,
         };
 
         var speedData = {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [dataFirst, dataSecond],
+            labels: [
+                'Tháng 1',
+                'Tháng 2',
+                'Tháng 3',
+                'Tháng 4',
+                'Tháng 5',
+                'Tháng 6',
+                'Tháng 7',
+                'Tháng 8',
+                'Tháng 9',
+                'Tháng 10',
+                'Tháng 11',
+                'Tháng 12',
+            ],
+            datasets: [data1, data2, data3, data4, data5],
         };
 
         var chartOptions = {
             legend: {
-                display: false,
                 position: 'top',
             },
         };
