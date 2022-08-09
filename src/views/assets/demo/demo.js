@@ -34,7 +34,6 @@ demo = {
         var params;
         let url = 'http://modelfashion.store/top10User';
         const res = await this.callAPI(url, params, method);
-        console.log(res.listUser);
         if (res.listUser.length > 0) {
             var temp = '';
             res.listUser.forEach((user) => {
@@ -45,6 +44,25 @@ demo = {
                 temp += '<td>' + user.totalAmountSpent + '</td></tr>';
             });
             document.getElementById('dataUser').innerHTML = temp;
+        }
+    },
+    async top10Product() {
+        let method = 'GET';
+        var params;
+        let url = 'http://modelfashion.store/top10Product';
+        const res = await this.callAPI(url, params, method);
+        console.log(res.listProduct);
+        if (res.listProduct.length > 0) {
+            var temp = '';
+            res.listProduct.forEach((product) => {
+                temp += '<tr>';
+                temp += '<td>' + product.product_id + '</td>';
+                temp += '<td>' + product.product_name + '</td>';
+                temp += '<td>' + product.category_name + '</td>';
+                temp += '<td>' + product.quantity_sold + '</td>';
+                temp += '<td>' + product.quantity_stock + '</td></tr>';
+            });
+            document.getElementById('dataProduct').innerHTML = temp;
         }
     },
     async initChartsPages() {

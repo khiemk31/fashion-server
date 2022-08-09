@@ -1,7 +1,9 @@
 const billSQL = require('../sql/billSQL');
+const productSQL = require('../sql/productSQL');
 const { getConnection, query } = require('../utils/database');
 const { formatMoney } = require('../utils/formatMoney');
 //API THONG KE
+
 const listRevenueByYear = async (req, res) => {
     try {
         const { year } = req.body;
@@ -208,6 +210,15 @@ const queryTop10User = async (req, res) => {
         return res.status(500).json({ message: `${error}` });
     }
 };
+const queryTop10Product = async (req, res) => {
+    try {
+        const connection = await getConnection(req);
+        const listProduct = await query(connection, productSQL.queryTop10Product);
+        return res.status(200).json({ listProduct: listProduct });
+    } catch (error) {
+        return res.status(500).json({ message: `${error}` });
+    }
+};
 //WEB VIEW
 const main = async (req, res) => {
     const connection = await getConnection(req);
@@ -224,11 +235,16 @@ const main = async (req, res) => {
         donThatBai: donThatBai[0].DonThatBai,
     });
 };
+const test = async (req, res) => {
+    res.render('test/main');
+};
 
 module.exports = {
+    test,
     main,
     listRevenueByYear,
     billStatistics,
     billDetailStatistics,
     queryTop10User,
+    queryTop10Product,
 };

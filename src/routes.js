@@ -15,6 +15,9 @@ module.exports = (router) => {
     router.get('/billStatistics', middleware.requireAuth, main.billStatistics);
     router.get('/billDetailStatistics', middleware.requireAuth, main.billDetailStatistics);
     router.get('/top10User', middleware.requireAuth, main.queryTop10User);
+    router.get('/top10Product', middleware.requireAuth, main.queryTop10Product);
+    //
+    router.get('/test', main.test);
     //category API
     router.get('/category/getAll', category.getAll);
     //category Web View
