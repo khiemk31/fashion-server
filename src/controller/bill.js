@@ -259,6 +259,7 @@ const billConfirm = async (req, res) => {
         await query(connection, billSQL.updateStatusBillWeb, ['Đang Giao', id]);
         return res.status(200).json({
             message: `Đã xác nhận đơn`,
+            result: true,
         });
     } catch (error) {
         return res.status(500).json({ message: `${error}` });
@@ -292,6 +293,7 @@ const billCancellationConfirmation = async (req, res) => {
         await query(connection, billSQL.updateStatusBillWeb, ['Đã Hủy', id]);
         return res.status(200).json({
             message: `Đã xác nhận yêu cầu hủy`,
+            result: true,
         });
     } catch (error) {
         return res.status(500).json({ message: `${error}` });
@@ -331,6 +333,7 @@ const confirmReturnRequest = async (req, res) => {
         await query(connection, billSQL.updateStatusBillWeb, ['Đã Hoàn', id]);
         return res.status(200).json({
             message: `Đã xác nhận yêu cầu hoàn đơn`,
+            result: true,
         });
     } catch (error) {
         return res.status(500).json({ message: `${error}` });
@@ -371,6 +374,7 @@ const billDone = async (req, res) => {
         await query(connection, billSQL.updateBillDone, ['Hoàn Thành', 1, new Date(), id]);
         return res.status(200).json({
             message: `Đã hoàn thành đơn`,
+            result: true,
         });
     } catch (error) {
         return res.status(500).json({ message: `${error}` });

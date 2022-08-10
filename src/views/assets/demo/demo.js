@@ -16,23 +16,38 @@ demo = {
             .catch((error) => console.log('error', error));
         return data;
     },
-
+    onClickForm(status, bill_id) {
+        console.log('adsfasdfdfasd');
+        document.querySelector('.feedback-form').style.display = 'flex';
+        addressclose.addEventListener('click', function () {
+            document.querySelector('.feedback-form').style.display = 'none';
+        });
+        // if (status == 'Chờ Xác Nhận') {
+        // } else if (status == 'Yêu Cầu Hủy Đơn') {
+        // } else if (status == 'Yêu Cầu Hoàn Đơn') {
+        // } else if (status == 'Đang Giao') {
+        // }
+    },
     async confirmStatusBill(id, status) {
         let method = 'POST';
         var params = JSON.stringify({
             id: id,
         });
-        let url = 'http://modelfashion.store' + status;
+        let url = 'http://localhost:5000' + status;
         const res = await this.callAPI(url, params, method);
-        this.showNotification('top', 'right', res.message);
-        setTimeout(function () {
+        if (res.result) {
+            this.showNotification('top', 'right', res.message);
             document.location.reload();
-        }, 1500);
+        }
+
+        // setTimeout(function () {
+        //     document.location.reload();
+        // }, 1500);
     },
     async top10User() {
         let method = 'GET';
         var params;
-        let url = 'http://modelfashion.store/top10User';
+        let url = 'http://localhost:5000/top10User';
         const res = await this.callAPI(url, params, method);
         if (res.listUser.length > 0) {
             var temp = '';
@@ -49,9 +64,9 @@ demo = {
     async top10Product() {
         let method = 'GET';
         var params;
-        let url = 'http://modelfashion.store/top10Product';
+        let url = 'http://localhost:5000/top10Product';
         const res = await this.callAPI(url, params, method);
-        console.log(res.listProduct);
+
         if (res.listProduct.length > 0) {
             var temp = '';
             res.listProduct.forEach((product) => {
@@ -73,7 +88,7 @@ demo = {
         var params = JSON.stringify({
             year: 2022,
         });
-        let url = 'http://modelfashion.store/revenue';
+        let url = 'http://localhost:5000/revenue';
         const res = await this.callAPI(url, params, method);
 
         const listRevenue = res.listRevenue;
@@ -121,7 +136,7 @@ demo = {
         ctx = document.getElementById('chartBill').getContext('2d');
         let method2 = 'GET';
         var params2;
-        let url2 = 'http://modelfashion.store/billStatistics';
+        let url2 = 'http://localhost:5000/billStatistics';
         const res2 = await this.callAPI(url2, params2, method2);
 
         myChart = new Chart(ctx, {
@@ -148,7 +163,7 @@ demo = {
         var speedCanvas = document.getElementById('speedChart');
         let method3 = 'GET';
         var params3;
-        let url3 = 'http://modelfashion.store/billDetailStatistics';
+        let url3 = 'http://localhost:5000/billDetailStatistics';
         const res3 = await this.callAPI(url3, params3, method3);
         const listBillDetailStatistics = res3.listBillDetailStatistics;
         var listBillWaiting = [];

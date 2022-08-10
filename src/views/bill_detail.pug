@@ -172,7 +172,7 @@ head
                                         button.btn.btn-outline-primary.btn-round(onclick=`demo.confirmStatusBill('${bill.bill_id}','/bill/billConfirm')`)
                                             i.nc-icon.nc-check-2.mr-1(style= 'font-size : 16px ;')
                                             | Đồng Ý
-                                        #address-form
+                                        #feedback-form
                                             button.btn.btn-outline-danger.btn-round
                                                 i.nc-icon.nc-simple-remove.mr-1(style= 'font-size : 16px ;')
                                                 | Từ Chối
@@ -183,7 +183,7 @@ head
                                         button.btn.btn-outline-primary.btn-round(onclick=`demo.confirmStatusBill('${bill.bill_id}','/bill/billCancellationConfirmation')`)
                                             i.nc-icon.nc-check-2.mr-1(style= 'font-size : 16px ;')
                                             | Đồng  Ý
-                                        #address-form
+                                        #feedback-form
                                             button.btn.btn-outline-danger.btn-round
                                                 i.nc-icon.nc-simple-remove.mr-1(style= 'font-size : 16px ;')
                                                 | Từ Chối
@@ -194,7 +194,7 @@ head
                                         button.btn.btn-outline-primary.btn-round(onclick=`demo.confirmStatusBill('${bill.bill_id}','/bill/confirmReturnRequest')`)
                                             i.nc-icon.nc-check-2.mr-1(style= 'font-size : 16px ;')
                                             | Đồng  Ý
-                                        #address-form
+                                        #feedback-form
                                             button.btn.btn-outline-danger.btn-round
                                                 i.nc-icon.nc-simple-remove.mr-1(style= 'font-size : 16px ;')
                                                 | Từ Chối
@@ -205,15 +205,15 @@ head
                                         button.btn.btn-outline-primary.btn-round(onclick=`demo.confirmStatusBill('${bill.bill_id}','/bill/billDone')`)
                                             i.nc-icon.nc-check-2.mr-1(style= 'font-size : 16px ;')
                                             | Giao hàng thành công
-                                        #address-form
+                                        #feedback-form
                                             button.btn.btn-outline-danger.btn-round
                                                 i.nc-icon.nc-simple-remove.mr-1(style= 'font-size : 16px ;')
                                                 | Giao hàng thất bại
-            .address-form
-                .address-form-content
+            .feedback-form
+                .feedback-form-content
                     if (bill.status=="Chờ Xác Nhận")
                         h2 Nhập lý do từ chối đơn
-                            span#address-close X Đóng
+                            span#feedback-close X Đóng
                         form(action='/bill/billCancel' method='POST' role='form')
                             input(type='text' name='id'  hidden   value=bill.bill_id )
                             input(type='text' name='page'  hidden   value="billDetail" )
@@ -222,7 +222,7 @@ head
                             button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
                     if (bill.status=="Đang Giao")
                         h2 Nhập lý do giao hàng thất bại
-                            span#address-close X Đóng
+                            span#feedback-close X Đóng
                         form(action='/bill/billFail' method='POST' role='form')
                             input(type='text' name='id'  hidden   value=bill.bill_id )
                             input(type='text' name='page'  hidden   value="billDetail" )
@@ -231,7 +231,7 @@ head
                             button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
                     if (bill.status=="Yêu Cầu Hủy Đơn")
                         h2 Nhập lý do từ chối yêu cầu
-                            span#address-close X Đóng
+                            span#feedback-close X Đóng
                         form(action='/bill/rejectCancellationRequest' method='POST' role='form')
                             input(type='text' name='id'  hidden   value=bill.bill_id )
                             input(type='text' name='page'  hidden   value="billDetail" )
@@ -240,7 +240,7 @@ head
                             button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
                     if (bill.status=="Yêu Cầu Hoàn Đơn")
                         h2 Nhập lý do từ chối yêu cầu
-                            span#address-close X Đóng
+                            span#feedback-close X Đóng
                         form(action='/bill/rejectReturnRequest' method='POST' role='form')
                             input(type='text' name='id'  hidden   value=bill.bill_id )
                             input(type='text' name='page'  hidden   value="billDetail" )
