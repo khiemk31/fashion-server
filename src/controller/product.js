@@ -242,11 +242,13 @@ const getAllProductDiscount = async (req, res) => {
         const getAllProductDiscount = `SELECT product.product_id ,product.product_name, product.price , product.product_image , product.discount
     FROM product , category 
     WHERE product.category_id=category.category_id  
+    AND product.discount BETWEEN 1 AND 100
     AND product.price BETWEEN ${price1}  AND ${price2} AND product.deleted_at IS null AND category.deleted_at IS null 
     ORDER BY product.discount ${sortDiscount} ,product.price ${sortPrice}`;
         const getProductLimit = `SELECT product.product_id ,product.product_name, product.price , product.product_image , product.discount
     FROM product , category 
     WHERE product.category_id=category.category_id  
+     AND product.discount BETWEEN 1 AND 100
     AND product.price BETWEEN ${price1}  AND ${price2} AND product.deleted_at IS null AND category.deleted_at IS null 
     ORDER BY product.discount ${sortDiscount} ,product.price ${sortPrice}
     LIMIT  10
