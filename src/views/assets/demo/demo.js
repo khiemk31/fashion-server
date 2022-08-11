@@ -28,24 +28,12 @@ demo = {
         // } else if (status == 'Đang Giao') {
         // }
     },
-    async checkAddProduct() {
-        let method = 'POST';
-        var params = JSON.stringify({
-            product_name: product_name,
-            price: price,
-            quantityS: quantityS,
-            quantityM: quantityM,
-            quantityL: quantityL,
-            quantityXL: quantityXL,
-            discount: discount,
-        });
-    },
     async confirmStatusBill(id, status) {
         let method = 'POST';
         var params = JSON.stringify({
             id: id,
         });
-        let url = 'http://localhost:5000' + status;
+        let url = 'http://modelfashion.store' + status;
         const res = await this.callAPI(url, params, method);
         if (res.result) {
             this.showNotification('top', 'right', res.message);
@@ -56,10 +44,46 @@ demo = {
         //     document.location.reload();
         // }, 1500);
     },
+    async getListProduct() {
+        let method = 'GET';
+        var params;
+        let url = 'http://modelfashion.store/getListProduct';
+        const res = await this.callAPI(url, params, method);
+        if (res.listProduct.length > 0) {
+            var p = '';
+            res.listProduct.forEach((product) => {
+                p += '<div class="col-md-3 pl-2" > ';
+                p += '<div class="card" style="width: 17.5rem; height : 30rem ;">';
+                p +=
+                    '<img src="' +
+                    product.product_image +
+                    '" class="card-img-top mb-2" style="width: 16rem; height: 300px;"/> ';
+                if (product.discount) {
+                    p += '<div class="note on-sale">Đang sale ' + product.discount + '%</div>';
+                }
+                p += '<card-body class="text-center"> <a href="#"> ';
+                p +=
+                    '<p class="card-title p-1 text-info" style=" height: 2.5rem ; font-size:16px"></p></a>' +
+                    product.product_name;
+                if (product.sale_price) {
+                    p += '<p class="card-text mt-2 mb-2  font-weight-bold">Giá: <del>' + product.price + 'đ<del/></p> ';
+                    p +=
+                        '<p class="card-text mt-2 mb-2 text-danger font-weight-bold"> Giảm giá: ' +
+                        product.sale_price +
+                        'đ</p> ';
+                } else {
+                    p += '  <p class="card-text mt-4 mb-4 font-weight-bold">Giá: ' + product.price + 'đ</p> ';
+                }
+
+                p += ' </card-body> </div> </div>';
+            });
+            document.getElementById('dataAllProduct').innerHTML = p;
+        }
+    },
     async top10User() {
         let method = 'GET';
         var params;
-        let url = 'http://localhost:5000/top10User';
+        let url = 'http://modelfashion.store/top10User';
         const res = await this.callAPI(url, params, method);
         if (res.listUser.length > 0) {
             var temp = '';
@@ -76,7 +100,7 @@ demo = {
     async top10Product() {
         let method = 'GET';
         var params;
-        let url = 'http://localhost:5000/top10Product';
+        let url = 'http://modelfashion.store/top10Product';
         const res = await this.callAPI(url, params, method);
 
         if (res.listProduct.length > 0) {
@@ -100,7 +124,7 @@ demo = {
         var params = JSON.stringify({
             year: 2022,
         });
-        let url = 'http://localhost:5000/revenue';
+        let url = 'http://modelfashion.store/revenue';
         const res = await this.callAPI(url, params, method);
 
         const listRevenue = res.listRevenue;
@@ -148,7 +172,7 @@ demo = {
         ctx = document.getElementById('chartBill').getContext('2d');
         let method2 = 'GET';
         var params2;
-        let url2 = 'http://localhost:5000/billStatistics';
+        let url2 = 'http://modelfashion.store/billStatistics';
         const res2 = await this.callAPI(url2, params2, method2);
 
         myChart = new Chart(ctx, {
@@ -175,7 +199,7 @@ demo = {
         var speedCanvas = document.getElementById('speedChart');
         let method3 = 'GET';
         var params3;
-        let url3 = 'http://localhost:5000/billDetailStatistics';
+        let url3 = 'http://modelfashion.store/billDetailStatistics';
         const res3 = await this.callAPI(url3, params3, method3);
         const listBillDetailStatistics = res3.listBillDetailStatistics;
         var listBillWaiting = [];

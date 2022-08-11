@@ -12,7 +12,6 @@ const { formatMoney } = require('../utils/formatMoney');
 const { getTotalPage } = require('../utils');
 const billSQL = require('../sql/billSQL');
 const client = twilio(accountSid, authToken);
-const demo = require('../views/assets/demo/demo');
 
 //API checkUser
 const checkUser = async (req, res) => {

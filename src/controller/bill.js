@@ -4,7 +4,7 @@ const userSQL = require('../sql/userSQL');
 const billSQL = require('../sql/billSQL');
 const moment = require('moment');
 const { formatMoney } = require('../utils/formatMoney');
-const { demo } = require('../views/assets/demo/demo');
+
 //Bill API
 //Tạo hóa đơn
 const add = async (req, res) => {

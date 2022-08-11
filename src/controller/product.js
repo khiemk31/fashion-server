@@ -7,6 +7,7 @@ const { uploadImage } = require('../utils/image');
 const moment = require('moment');
 const { getTotalPage } = require('../utils/index');
 const { formatMoney } = require('../utils/formatMoney');
+const { render } = require('pug');
 
 //Product Web View
 const getAll = async (req, res) => {
@@ -18,13 +19,23 @@ const getAll = async (req, res) => {
     return res.status(200).json(listProduct);
 };
 //getALL
-const product = async (req, res) => {
-    const connection = await getConnection(req);
-    const listProduct = await query(connection, productSQL.getAllProduct);
-    for (const product of listProduct) {
-        product.price = formatMoney(product.price);
+const getListProduct = async (req, res) => {
+    try {
+        const connection = await getConnection(req);
+        var listProduct = await query(connection, productSQL.getAllProduct);
+        for (var product of listProduct) {
+            if (product.discount > 0) {
+                product.sale_price = product.price - product.price * (product.discount / 100);
+                product.sale_price = formatMoney(product.sale_price);
+            }
+
+            product.price = formatMoney(product.price);
+        }
+        console.log(listProduct);
+        return res.status(200).json({ listProduct: listProduct });
+    } catch (error) {
+        return res.status(500).json({ message: `${error}` });
     }
-    res.render('product', { listProduct: listProduct });
 };
 //delete
 const removeProduct = async (req, res) => {
@@ -53,7 +64,6 @@ const add = async (req, res) => {
     try {
         const data = req.body;
         let { product_name, price, quantityS, quantityM, quantityL, quantityXL, discount } = req.body;
-        console.log(req.files.product_image.data);
         if (req.files.product_image.data) {
             var productImage = 'data:image/jpeg;base64,' + req.files.product_image.data.toString('base64');
             const upload = await uploadImage(productImage);
@@ -108,7 +118,7 @@ const add = async (req, res) => {
         }
 
         const listProduct = await query(connection, productSQL.getAllProduct);
-        await res.render('product', { listProduct: listProduct });
+        res.render('product', { listProduct: listProduct });
     } catch (e) {
         return res.status(500).json({ message: `${e}` });
     }
@@ -168,6 +178,9 @@ const update = async (req, res) => {
 };
 
 // API MOBILE
+const product = async (req, res) => {
+    res.render('product');
+};
 const getAllProductByCategory = async (req, res) => {
     try {
         const connection = await getConnection(req);
@@ -289,6 +302,7 @@ const getProductByCategory = async (req, res) => {
 };
 
 module.exports = {
+    product,
     getAll,
     getAllProductDiscount,
     getProductDiscount,
@@ -303,6 +317,6 @@ module.exports = {
     search,
     listProductDeleted,
     productDetail,
-    product,
+    getListProduct,
     removeProduct,
 };

@@ -455,4 +455,15 @@ button.sort.desc .caret {
   font-size: 16px;
   line-height: inherit;
 }
+.note {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 4px 8px;
+  font-size: 0.9em;
+}
 
+.note.on-sale {
+  background: #00ba2f;
+  color: #fff;
+}

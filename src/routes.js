@@ -46,6 +46,7 @@ module.exports = (router) => {
     router.post('/product/addProduct', middleware.requireAuth, product.add);
     router.get('/product/insertProduct', middleware.requireAuth, product.insertProduct);
     router.get('/product', middleware.requireAuth, product.product);
+    router.get('/getListProduct', middleware.requireAuth, product.getListProduct);
     router.get('/product/remove/:id', middleware.requireAuth, product.removeProduct);
     router.get('/product/getAll', product.getAll);
     //User API
