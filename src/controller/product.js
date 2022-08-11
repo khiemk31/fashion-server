@@ -52,25 +52,26 @@ const insertProduct = async (req, res) => {
 const add = async (req, res) => {
     try {
         const data = req.body;
-        let { product_name, price, quantityS, quantityM, quantityL, quantityXL } = req.body;
+        let { product_name, price, quantityS, quantityM, quantityL, quantityXL, discount } = req.body;
+        console.log(req.files.product_image.data);
         if (req.files.product_image.data) {
-            let productImage = 'data:image/jpeg;base64,' + req.files.product_image.data.toString('base64');
+            var productImage = 'data:image/jpeg;base64,' + req.files.product_image.data.toString('base64');
             const upload = await uploadImage(productImage);
             productImage = upload.url;
         }
         if (req.files.image_1.data) {
-            let image1 = 'data:image/jpeg;base64,' + req.files.image_1.data.toString('base64');
+            var image1 = 'data:image/jpeg;base64,' + req.files.image_1.data.toString('base64');
             const upload = await uploadImage(image1);
             image1 = upload.url;
         }
         if (req.files.image_2.data) {
-            let image2 = 'data:image/jpeg;base64,' + req.files.image_2.data.toString('base64');
+            var image2 = 'data:image/jpeg;base64,' + req.files.image_2.data.toString('base64');
             const upload = await uploadImage(image2);
             image2 = upload.url;
         }
 
         if (req.files.image_3.data) {
-            let image3 = 'data:image/jpeg;base64,' + req.files.image_3.data.toString('base64');
+            var image3 = 'data:image/jpeg;base64,' + req.files.image_3.data.toString('base64');
             const upload = await uploadImage(productImage);
             image3 = upload.url;
         }
@@ -78,7 +79,7 @@ const add = async (req, res) => {
         const categoryQueryID = 'SELECT category_id FROM category WHERE category_name=?';
         const category = await query(connection, categoryQueryID, [data.category_name]);
         const product = await query(connection, productSQL.productQuery, [product_name]);
-        if (!isEmpty(product)) return res.status(409).json({ message: 'Sản Phẩm Đã TỒn Tại' });
+        if (!isEmpty(product)) return res.status(409).json({ message: 'Sản phẩm đã tồn tại' });
         const lengthListProduct = (await query(connection, productSQL.getLengthListProduct)).length;
         const id = 'SP' + (lengthListProduct + 1);
         await query(connection, productSQL.insertProductQuery, {
@@ -91,6 +92,7 @@ const add = async (req, res) => {
             product_bgr1: image1,
             product_bgr2: image2,
             product_bgr3: image3,
+            discount: discount || null,
             created_at: new Date(),
         });
 
@@ -106,7 +108,7 @@ const add = async (req, res) => {
         }
 
         const listProduct = await query(connection, productSQL.getAllProduct);
-        res.render('product', { listProduct: listProduct });
+        await res.render('product', { listProduct: listProduct });
     } catch (e) {
         return res.status(500).json({ message: `${e}` });
     }
@@ -201,7 +203,7 @@ const getProductDiscount = async (req, res) => {
         const connection = await getConnection(req);
         const getProductDiscount = `SELECT product.product_id ,product.product_name, product.price , product.product_image , product.discount
     FROM product , category 
-    WHERE product.category_id=category.category_id  AND product.discount BETWEEN 0  AND 99 AND product.deleted_at IS null AND category.deleted_at IS null 
+    WHERE product.category_id=category.category_id  AND product.discount BETWEEN 1  AND 100 AND product.deleted_at IS null AND category.deleted_at IS null 
     ORDER BY product.discount DESC `;
         const listProductDiscount = await query(connection, getProductDiscount);
         return res.status(200).json({

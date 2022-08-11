@@ -28,6 +28,18 @@ demo = {
         // } else if (status == 'Đang Giao') {
         // }
     },
+    async checkAddProduct() {
+        let method = 'POST';
+        var params = JSON.stringify({
+            product_name: product_name,
+            price: price,
+            quantityS: quantityS,
+            quantityM: quantityM,
+            quantityL: quantityL,
+            quantityXL: quantityXL,
+            discount: discount,
+        });
+    },
     async confirmStatusBill(id, status) {
         let method = 'POST';
         var params = JSON.stringify({
