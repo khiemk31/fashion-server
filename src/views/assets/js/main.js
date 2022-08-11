@@ -1,13 +1,13 @@
 // click form
-const addressbtn = document.querySelector('.address-form');
-const addressclose = document.querySelector('#address-close');
+const addressbtn = document.querySelector('#feedback-form');
+const addressclose = document.querySelector('#feedback-close');
 
 addressbtn.addEventListener('click', function () {
-    document.querySelector('.address-form').style.display = 'flex';
+    document.querySelector('.feedback-form').style.display = 'flex';
 });
 
 addressclose.addEventListener('click', function () {
-    document.querySelector('.address-form').style.display = 'none';
+    document.querySelector('.feedback-form').style.display = 'none';
 });
 
 // JavaScript code

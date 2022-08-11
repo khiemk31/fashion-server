@@ -233,8 +233,8 @@ body {
   margin-top: 13px;
 }
 
-/* address form */
-.address-form {
+/* feedback form */
+.feedback-form {
   position: fixed;
   width: 100vw;
   height: 100vh;
@@ -249,22 +249,22 @@ body {
   display: none;
   z-index: 999;
 }
-.address-form-content {
+.feedback-form-content {
   width: 450px;
   height: 450px;
   background-color: white;
   border-radius: 5px;
 }
-.address-form-content form {
+.feedback-form-content form {
   padding: 12px 40px;
 }
-.address-form-content h2 {
+.feedback-form-content h2 {
   font-size: 14px;
   padding: 18px 0;
   border-bottom: 1px solid #ddd;
   position: relative;
 }
-.address-form-content h2 span {
+.feedback-form-content h2 span {
   display: block;
   position: absolute;
   height: 30px;
@@ -278,11 +278,11 @@ body {
   color: #333;
   border-radius: 5px;
 }
-.address-form-content form p {
+.feedback-form-content form p {
   font-size: 16px;
   padding: 10px;
 }
-.address-form-content form input, select {
+.feedback-form-content form input, select {
   height: 45px;
   display: block;
   width: 100%;
@@ -291,7 +291,7 @@ body {
   padding: 6px;
   border-radius: 5px;
 }
-.address-form-content form button {
+.feedback-form-content form button {
   margin-top: 20px;
   height: 40px;
   width: 80%;

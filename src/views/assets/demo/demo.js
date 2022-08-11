@@ -16,7 +16,30 @@ demo = {
             .catch((error) => console.log('error', error));
         return data;
     },
-
+    onClickForm(status, bill_id) {
+        console.log('adsfasdfdfasd');
+        document.querySelector('.feedback-form').style.display = 'flex';
+        addressclose.addEventListener('click', function () {
+            document.querySelector('.feedback-form').style.display = 'none';
+        });
+        // if (status == 'Chờ Xác Nhận') {
+        // } else if (status == 'Yêu Cầu Hủy Đơn') {
+        // } else if (status == 'Yêu Cầu Hoàn Đơn') {
+        // } else if (status == 'Đang Giao') {
+        // }
+    },
+    async checkAddProduct() {
+        let method = 'POST';
+        var params = JSON.stringify({
+            product_name: product_name,
+            price: price,
+            quantityS: quantityS,
+            quantityM: quantityM,
+            quantityL: quantityL,
+            quantityXL: quantityXL,
+            discount: discount,
+        });
+    },
     async confirmStatusBill(id, status) {
         let method = 'POST';
         var params = JSON.stringify({
@@ -24,10 +47,14 @@ demo = {
         });
         let url = 'http://localhost:5000' + status;
         const res = await this.callAPI(url, params, method);
-        this.showNotification('top', 'right', res.message);
-        setTimeout(function () {
+        if (res.result) {
+            this.showNotification('top', 'right', res.message);
             document.location.reload();
-        }, 1500);
+        }
+
+        // setTimeout(function () {
+        //     document.location.reload();
+        // }, 1500);
     },
     async top10User() {
         let method = 'GET';
@@ -51,7 +78,7 @@ demo = {
         var params;
         let url = 'http://localhost:5000/top10Product';
         const res = await this.callAPI(url, params, method);
-        console.log(res.listProduct);
+
         if (res.listProduct.length > 0) {
             var temp = '';
             res.listProduct.forEach((product) => {
