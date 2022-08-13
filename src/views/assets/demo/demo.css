@@ -458,7 +458,8 @@ button.sort.desc .caret {
 .note {
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;
+  border-radius: 20px;
   padding: 4px 8px;
   font-size: 0.9em;
 }
@@ -466,4 +467,17 @@ button.sort.desc .caret {
 .note.on-sale {
   background: #00ba2f;
   color: #fff;
+}
+
+.product {
+  margin-bottom: 30px;
+}
+
+.product-inner {
+  box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+  padding: 10px;
+}
+
+.product img {
+  margin-bottom: 10px;
 }

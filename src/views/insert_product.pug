@@ -34,16 +34,16 @@ head
                     a(href='/user')
                         i.nc-icon.nc-circle-10
                         p User
-                li.active
+                li
                     a(href='/category')
                         i.nc-icon.nc-bullet-list-67
                         p Category
-                li
+                li.active
                     a(href='/product')
                         i.nc-icon.nc-align-left-2
                         p Product
                 li
-                    a(href='#')
+                    a(href='/voucher')
                         i.nc-icon.nc-money-coins
                         p Voucher
                 li
@@ -55,92 +55,172 @@ head
                         i.nc-icon.nc-single-02
                         p Profile
                 li.active-pro
-                    a(href='#')
+                    a(href='/user/logout')
                         i.nc-icon.nc-user-run
                         p Log Out
     .main-panel
         nav.navbar.navbar-expand-lg.navbar-absolute.fixed-top.navbar-transparent
             .container-fluid
                 .navbar-wrapper
-                    a.navbar-brand(href='#') Thêm sản phẩm
+                    if(update)
+                        a.navbar-brand(href='#')
+                    else
+                        a.navbar-brand(href='#') Thêm sản phẩm
         .content.d-flex.justify-content-center
-            .col-md-6
-                .card.card-user
-                    .card-header
-                        h5.card-title  Nhập thông tin sản phẩm
-                    .card-body
-                        form.was-validated(action='/product/addProduct' method='post' enctype='multipart/form-data' role='form')
-                            .row
-                                .col-md-8.pr-1
-                                    .form-group
-                                        label.text-dark.font-weight-bold Tên sản phẩm
-                                        input.form-control(type='text' placeholder='Nhập tên sản phẩm ...' name='product_name' required='')
-                                        .invalid-feedback Chưa nhập tên
-                            .row
-                                .col-md-8.pr-1
-                                    .form-group
-                                        label.text-dark.font-weight-bold Giá bán
-                                        input.form-control(type='number' placeholder='Nhập giá bán ...' min='10000' name='price' required='')
-                                        .invalid-feedback Chưa nhập giá
-                            .row
-                                .col-md-4.pr-1
-                                    .form-group
-                                        label.text-dark.font-weight-bold Thể loại
-                                        select.custom-select(name="category_name" class='w-[150px] h-[40px]' required='')
-                                            option(value="") Chọn thể loại
-                                            each i in  listCategory 
-                                                option( value=i.category_name name="category_name")=i.category_name
-                                        .invalid-feedback Chưa chọn thể loại
-                                .col-md-6
-                                    .form-group
-                                        label.text-dark.font-weight-bold.mb-3 Khuyến mãi
-                                        input.form-control(type='number' placeholder='% Khuyến mãi ' min='0' max='100' name='discount') 
-                            .row
-                                .col-md-10.pr-1    
-                                    .form-group
-                                        table
-                                            thead.header.text-primary
-                                                tr
-                                                    th.text-center(style='width: 125px ; margin-left : 20px ;')
-                                                        |Size
-                                                    th.text-center(style='width: 125px ; margin-left : 20px ;') 
-                                                        |S
-                                                    th.text-center(style='width: 125px ; margin-left : 20px ;') 
-                                                        |M
-                                                    th.text-center(style='width: 125px ; margin-left : 20px ;') 
-                                                        |L
-                                                    th.text-center(style='width: 125px ; margin-left : 20px ;') 
-                                                        |XL
-                                            tbody
-                                                tr 
-                                                    td
-                                                        |Số lượng
-                                                    td 
-                                                        input( placeholder="Nhập số lượng" type='number' min='0' max='1000' name='quantityS' style='width: 120px ; margin-left : 5px ;' required='')
-                                                    td 
-                                                        input( placeholder="Nhập số lượng" type='number' min='0' max='1000' name='quantityM' style='width: 120px ; margin-left : 5px ;' required='' )
-                                                    td 
-                                                        input( placeholder="Nhập số lượng" type='number' min='0' max='1000' name='quantityL' style='width: 120px ; margin-left : 5px ;' required='')
-                                                    td 
-                                                        input( placeholder="Nhập số lượng" type='number' min='0' max='1000' name='quantityXL' style='width: 120px ; margin-left : 5px ;' required='')
-                            .row    
-                                .col-md-5.pr-1.pb-3.align-self-center
-                                    .form-group
-                                        label Ảnh sản phẩm
-                                    .flex.justify-between.mb-6
-                                        .flex
-                                            input#fileToUpload1(type='file' name='product_image' required='')
-                            .row    
-                                .col-md-12.pr-1.pb-3.align-self-center
-                                    .form-group
-                                        label Ảnh minh họa
-                                    .flex.justify-between.mb-6
-                                        .flex
-                                            input#fileToUpload2(type='file' name='image_1')
-                                        .flex.justify-center
-                                            input#fileToUpload3(type='file' name='image_2')
-                                        .flex
-                                            input#fileToUpload3(type='file' name='image_3')
-                            .row
-                                .update.ml-auto.mr-auto
-                                    button.btn.btn-primary(type='submit' value='Tạo sản phẩm' name='submit') Thêm sản phẩm
+            if(update)
+                .col-md-6
+                    .card.card-user
+                        .card-header
+                            h5.card-title  Cập nhập thông tin sản phẩm
+                        .card-body
+                            form.was-validated(action='/product/update' method='POST' enctype='multipart/form-data' role='form')
+                                input.form-control.disable(type='hidden' name='product_id' value=product.product_id )
+                                .row
+                                    .col-md-8.pr-1
+                                        .form-group
+                                            label.text-dark.font-weight-bold Tên sản phẩm
+                                            input.form-control(type='text' disabled name='product_name' value=product.product_name)
+                                .row
+                                    .col-md-8.pr-1
+                                        .form-group
+                                            label.text-dark.font-weight-bold Giá bán
+                                            input.form-control(type='number' placeholder='Nhập giá bán ...' min='10000' name='price' value=product.price)
+                                            .invalid-feedback Chưa nhập giá
+                                .row
+                                    .col-md-4.pr-1
+                                        .form-group
+                                            label.text-dark.font-weight-bold Thể loại
+                                            input.form-control(type='text' disabled   value=product.category_name)
+                                    .col-md-6
+                                        .form-group
+                                            label.text-dark.font-weight-bold Khuyến mãi
+                                            input.form-control(type='number' placeholder='% Khuyến mãi ' min='0' max='100' name='discount' value=product.discount) 
+                                .row
+                                    .col-md-10.pr-1    
+                                        .form-group
+                                            table.table.table-striped
+                                                thead
+                                                    tr.text-center
+                                                        th Loại size
+                                                        th Số lượng
+                                                each size in listSize
+                                                    tbody
+                                                        tr
+                                                            td.text-center
+                                                                label.text-dark.font-weight-bold= size.size
+                                                            td
+                                                                input.form-control(type='number' placeholder='Số lượng' min='0' max='1000' name='quantity' value=size.quantity)
+                                .row    
+                                    .col-md-5.mr-5.pb-3.align-self-center
+                                        .form-group
+                                            label Ảnh sản phẩm mới 
+                                        .flex.justify-between.mb-6
+                                            .flex
+                                                input#fileToUpload1(type='file' name='product_image')
+                                .row    
+                                    .col-md-12.pr-1.pb-3.align-self-center
+                                        .form-group
+                                            label Ảnh minh họa mới
+                                        .flex.justify-between.mb-6
+                                            .flex
+                                                input#fileToUpload2(type='file' name='image_1')
+                                            .flex.justify-center
+                                                input#fileToUpload3(type='file' name='image_2')
+                                            .flex
+                                                input#fileToUpload3(type='file' name='image_3')
+                                .row
+                                    .update.ml-auto.mr-auto
+                                        button.btn.btn-primary(type='submit' value='Cập nhật thông tin' name='submit') Cập nhật thông tin
+                .col-sm-6
+                    h5.card-title.text-center.mt-2 Ảnh đại diện
+                    .card(style="width:17rem;")
+                        img.card-img-top(src=product.product_image )
+                    h5.card-title.text-center.mt-2 Ảnh minh họa
+                    .card-deck
+                        .card(style="width:17rem;")
+                            img.card-img-top(src=product.product_bgr1 )
+                        .card(style="width:17rem;") 
+                            img.card-img-top(src=product.product_bgr2 )
+                        .card(style="width:17rem;")
+                            img.card-img-top(src=product.product_bgr3 )
+            else
+                .col-md-6
+                    .card.card-user
+                        .card-header
+                            h5.card-title  Nhập thông tin sản phẩm
+                        .card-body
+                            form.was-validated(action='/product/addProduct' method='POST' enctype='multipart/form-data' role='form')
+                                .row
+                                    .col-md-8.pr-1
+                                        .form-group
+                                            label.text-dark.font-weight-bold Tên sản phẩm
+                                            input.form-control(type='text' placeholder='Nhập tên sản phẩm ...' name='product_name' required='')
+                                            .invalid-feedback Chưa nhập tên
+                                .row
+                                    .col-md-8.pr-1
+                                        .form-group
+                                            label.text-dark.font-weight-bold Giá bán
+                                            input.form-control(type='number' placeholder='Nhập giá bán ...' min='10000' name='price' required='')
+                                            .invalid-feedback Chưa nhập giá
+                                .row
+                                    .col-md-4.pr-1
+                                        .form-group
+                                            label.text-dark.font-weight-bold Thể loại
+                                            select.custom-select(name="category_name" class='w-[150px] h-[40px]' required='')
+                                                option(value="") Chọn thể loại
+                                                each i in  listCategory 
+                                                    option( value=i.category_name name="category_name")=i.category_name
+                                            .invalid-feedback Chưa chọn thể loại
+                                    .col-md-6
+                                        .form-group
+                                            label.text-dark.font-weight-bold.mb-3 Khuyến mãi
+                                            input.form-control(type='number' placeholder='% Khuyến mãi ' min='0' max='100' name='discount') 
+                                .row
+                                    .col-md-10.pr-1    
+                                        .form-group
+                                            table
+                                                thead.header.text-primary
+                                                    tr
+                                                        th.text-center(style='width: 125px ; margin-left : 20px ;')
+                                                            |Size
+                                                        th.text-center(style='width: 125px ; margin-left : 20px ;') 
+                                                            |S
+                                                        th.text-center(style='width: 125px ; margin-left : 20px ;') 
+                                                            |M
+                                                        th.text-center(style='width: 125px ; margin-left : 20px ;') 
+                                                            |L
+                                                        th.text-center(style='width: 125px ; margin-left : 20px ;') 
+                                                            |XL
+                                                tbody
+                                                    tr 
+                                                        td
+                                                            |Số lượng
+                                                        td 
+                                                            input( placeholder="Nhập số lượng" type='number' min='0' max='1000' name='quantityS' style='width: 120px ; margin-left : 5px ;' required='')
+                                                        td 
+                                                            input( placeholder="Nhập số lượng" type='number' min='0' max='1000' name='quantityM' style='width: 120px ; margin-left : 5px ;' required='' )
+                                                        td 
+                                                            input( placeholder="Nhập số lượng" type='number' min='0' max='1000' name='quantityL' style='width: 120px ; margin-left : 5px ;' required='')
+                                                        td 
+                                                            input( placeholder="Nhập số lượng" type='number' min='0' max='1000' name='quantityXL' style='width: 120px ; margin-left : 5px ;' required='')
+                                .row    
+                                    .col-md-5.pr-1.pb-3.align-self-center
+                                        .form-group
+                                            label Ảnh sản phẩm
+                                        .flex.justify-between.mb-6
+                                            .flex
+                                                input#fileToUpload1(type='file' name='product_image' required='')
+                                .row    
+                                    .col-md-12.pr-1.pb-3.align-self-center
+                                        .form-group
+                                            label Ảnh minh họa
+                                        .flex.justify-between.mb-6
+                                            .flex
+                                                input#fileToUpload2(type='file' name='image_1')
+                                            .flex.justify-center
+                                                input#fileToUpload3(type='file' name='image_2')
+                                            .flex
+                                                input#fileToUpload3(type='file' name='image_3')
+                                .row
+                                    .update.ml-auto.mr-auto
+                                        button.btn.btn-primary(type='submit' value='Tạo sản phẩm' name='submit') Thêm sản phẩm

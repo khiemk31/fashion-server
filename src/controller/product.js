@@ -31,7 +31,6 @@ const getListProduct = async (req, res) => {
 
             product.price = formatMoney(product.price);
         }
-        console.log(listProduct);
         return res.status(200).json({ listProduct: listProduct });
     } catch (error) {
         return res.status(500).json({ message: `${error}` });
@@ -123,55 +122,79 @@ const add = async (req, res) => {
         return res.status(500).json({ message: `${e}` });
     }
 };
-const search = async (req, res) => {
-    const data = req.body;
-    const connection = await getConnection(req);
-    const search = 'select *  from product where deleted_at is null and product_name=? ';
-    const listProduct = await query(connection, search, [data.product_name]);
-    res.render('product', { listProduct: listProduct });
-};
 
-const listProductCreated = async (req, res) => {
-    const connection = await getConnection(req);
-    const listProduct = await query(connection, productSQL.getNewProduct);
-    res.render('product', { listProduct: listProduct });
-};
-
-const listProductDeleted = async (req, res) => {
-    const connection = await getConnection(req);
-    const listProduct = await query(connection, productSQL.getProductDeleted);
-    res.render('product', { listProduct: listProduct });
-};
 const productDetail = async (req, res) => {
-    const product_id = req.params.id;
+    const { product_id } = req.params;
     const connection = await getConnection(req);
-    const detailProductQuery = 'select *  from product where  product_id=?';
-    const sizeQuery = 'SELECT *FROM size WHERE product_id=?';
-    const product = await query(connection, detailProductQuery, [product_id]);
-    const listSize = await query(connection, sizeQuery, [product_id]);
-    if (product[0].created_at) {
+    const product = await query(connection, productSQL.getDetailProductWeb, [product_id]);
+    const listSize = await query(connection, sizeSQL.queryListSizeByProductId, [product_id]);
+    if (product.length > 0) {
+        if (product[0].discount > 0) {
+            product[0].sale_price = product[0].price - product[0].price * (product[0].discount / 100);
+            product[0].sale_price = formatMoney(product[0].sale_price);
+        }
+        product[0].price = formatMoney(product[0].price);
         product[0].created_at = moment(product[0].created_at).format('DD-MM-YYYY');
     }
     res.render('detail_product', { product: product[0], listSizeProduct: listSize });
 };
 
 const getUpdate = async (req, res) => {
-    const data = req.params;
+    const product_id = req.params.id;
     const connection = await getConnection(req);
-    const search = 'select *  from product where  product_id=?';
-    const querySize = 'select *from size where product_id=?';
-    const product = await query(connection, search, [data.id]);
-    const listSize = await query(connection, querySize, [data.id]);
-    res.render('update_product', { product: product[0], listSize: listSize });
+    const listCategory = await query(connection, categorySQL.listNameCategoryQuerySQL);
+    const product = await query(connection, productSQL.getDetailProductWeb, [product_id]);
+    const listSize = await query(connection, sizeSQL.queryListSizeByProductId, [product_id]);
+    res.render('insert_product', { product: product[0], listSize: listSize, update: true });
 };
 
 const update = async (req, res) => {
     const data = req.body;
+    console.log(data);
+    let product_image = null;
+    let product_bgr1 = null;
+    let product_bgr2 = null;
+    let product_bgr3 = null;
     const connection = await getConnection(req);
+    if (req.files.product_image?.data) {
+        let newProductImage = 'data:image/jpeg;base64,' + req.files.product_image.data.toString('base64');
+        const upload = await uploadImage(newProductImage);
+        product_image = upload.url;
+    }
+    console.log(req.files);
+    if (req.files.image_1?.data) {
+        let newProductBgr1 = 'data:image/jpeg;base64,' + req.files.image_1.data.toString('base64');
+        const upload = await uploadImage(newProductBgr1);
+        product_bgr1 = upload.url;
+    }
+
+    if (req.files.image_2?.data) {
+        let newProductBgr2 = 'data:image/jpeg;base64,' + req.files.image_2.data.toString('base64');
+        const upload = await uploadImage(newProductBgr2);
+        product_bgr2 = upload.url;
+    }
+
+    if (req.files.image_3?.data) {
+        let newProductBgr3 = 'data:image/jpeg;base64,' + req.files.image_3.data.toString('base64');
+        const upload = await uploadImage(newProductBgr3);
+        product_bgr3 = upload.url;
+    }
+
+    const product = await query(connection, productSQL.productIDQuery, [data.product_id]);
+    console.log(product[0]);
+    await query(connection, productSQL.updateProduct, [
+        data.price || product[0].price,
+        data.discount || product[0].discount || null,
+        product_image || product[0].product_image,
+        product_bgr1 || product[0].product_bgr1,
+        product_bgr2 || product[0].product_bgr2,
+        product_bgr3 || product[0].product_bgr3,
+        new Date(),
+        data.product_id,
+    ]);
     const listSize = ['S', 'M', 'L', 'XL'];
-    const updateSizeProduct = 'UPDATE size SET quantity=? where size=? and product_id=?';
     for (const [index, size] of listSize.entries()) {
-        await query(connection, updateSizeProduct, [data.quantity[index], size, data.product_id]);
+        await query(connection, sizeSQL.updateSizeProduct, [data.quantity[index], size, data.product_id]);
     }
     const listProduct = await query(connection, productSQL.getAllProduct);
     res.render('product', { listProduct: listProduct });
@@ -310,14 +333,11 @@ module.exports = {
     getProductDiscount,
     update,
     getUpdate,
-    listProductCreated,
     insertProduct,
     add,
     getAllProductByCategory,
     getProductByCategory,
     getProductDetail,
-    search,
-    listProductDeleted,
     productDetail,
     getListProduct,
     removeProduct,

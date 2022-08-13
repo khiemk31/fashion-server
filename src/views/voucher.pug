@@ -1,0 +1,192 @@
+doctype html
+head
+    meta(charset='utf-8')
+    link(rel='apple-touch-icon' sizes='76x76' href='https://res.cloudinary.com/cde/image/upload/v1658206315/Icon/logo_cdrkpi.png')
+    link(rel='icon' type='image/png' href='https://res.cloudinary.com/cde/image/upload/v1658206315/Icon/logo_cdrkpi.png')
+    meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
+    title Model Fashion
+    meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
+    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3' crossorigin='anonymous')
+    link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700,200' rel='stylesheet')
+    link(href='https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' rel='stylesheet')
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p' crossorigin='anonymous')
+    script(src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js' integrity='sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB' crossorigin='anonymous')
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js' integrity='sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13' crossorigin='anonymous')
+    // CSS Files
+    style 
+        include ./assets/css/bootstrap.min.css
+    style 
+        include ./assets/css/paper-dashboard.css 
+    style 
+        include ./assets/demo/demo.css
+    style 
+        include  ./assets/css/voucher.css
+.wrapper
+    .sidebar(data-color='white' data-active-color='danger')
+        .logo
+            a.simple-text.logo-mini(href='/main')
+                .logo-image-small
+                    img(src="https://res.cloudinary.com/cde/image/upload/v1658206315/Icon/logo_cdrkpi.png")
+            a.simple-text.logo-normal(href='/main')
+                | Model Fashion
+        .sidebar-wrapper
+            ul.nav
+                li
+                    a(href='/main')
+                        i.nc-icon.nc-chart-pie-36
+                        p Dashboard
+                li
+                    a(href='/user')
+                        i.nc-icon.nc-circle-10
+                        p User
+                li
+                    a(href='/category')
+                        i.nc-icon.nc-bullet-list-67
+                        p Category
+                li
+                    a(href='/product')
+                        i.nc-icon.nc-align-left-2
+                        p Product
+                li
+                    a(href='/voucher')
+                        i.nc-icon.nc-money-coins
+                        p Voucher
+                li
+                    a(href='/bill')
+                        i.nc-icon.nc-delivery-fast
+                        p Bill
+                li
+                    a(href='/profile')
+                        i.nc-icon.nc-single-02
+                        p Profile
+                li.active-pro
+                    a(href='/user/logout')
+                        i.nc-icon.nc-user-run
+                        p Log Out
+    .main-panel
+        nav.navbar.navbar-expand-lg.navbar-absolute.fixed-top.navbar-transparent
+            .container-fluid
+                .navbar-wrapper
+                    a.navbar-brand(href='javascript:;') Tạo voucher
+
+        .content.d-flex.justify-content-center
+            .card.card-user
+                .card-header
+                    ul#myTab.nav.nav-tabs(role='tablist')
+                        li.nav-item(role='presentation')
+                            button#home-tab.nav-link.active(data-bs-toggle='tab' data-bs-target='#home' type='button' role='tab' aria-controls='home' aria-selected='true') Khuyến mãi riêng từng khách hàng
+                        li.nav-item(role='presentation')
+                            button#profile-tab.nav-link(data-bs-toggle='tab' data-bs-target='#profile' type='button' role='tab' aria-controls='profile' aria-selected='false') Khuyến mãi chung
+                        li.nav-item(role='presentation')
+                            button#msessages-tab.nav-link(data-bs-toggle='tab' data-bs-target='#messages' type='button' role='tab' aria-controls='messages' aria-selected='false') Khuyến mãi cho 10 khách hàng thân thiết
+                .card-body
+                    .col-md-12
+                        .tab-content
+                            #home.tab-pane.active(role='tabpanel' aria-labelledby='home-tab')
+                                form.was-validated.mt-3(action='/addVoucher' method='POST' autocomplete="off" role='form')
+                                    .autocomplete
+                                        .row
+                                            .col-md-3
+                                                .form-group
+                                                    label ID người dùng
+                                                    input#myInput(type='text' name='user_id' required='')
+                                        .row
+                                            .col-md-6
+                                                .form-group
+                                                    label Tiêu Đề
+                                                    input(type='text' name='title' maxlength="100" required='')
+                                            .col-md-3
+                                                .form-group
+                                                    label Code
+                                                    input#inputCode(type='text' name='code' maxlength="10" required='' )
+                                            .col-md-3
+                                                .form-group
+                                                    button.btn.btn-info(style="margin-top : 22px" onclick="makeid(9)") Random
+                                        .row    
+                                            .col-md-4
+                                                .form-group
+                                                    label Số tiền khuyến mãi
+                                                    input(type='number' name='price_discount' min=5000  required='')
+                                        .row
+                                            .col-md-4
+                                                .form-group
+                                                    label Hạn sử dụng 
+                                                    input(type='date' name='expired' required='')
+                                        .row
+                                            .update.ml-auto.mr-auto
+                                                button.btn.btn-primary( type='submit' value='Tạo voucher' name='submit') Tạo voucher
+                            #profile.tab-pane(role='tabpanel' aria-labelledby='profile-tab')
+                                form.was-validated.mt-3(action='/addVoucherAll' method='POST' autocomplete="off" role='form')
+                                    .autocomplete
+                                        .row
+                                            .col-md-6
+                                                .form-group
+                                                    label Tiêu Đề
+                                                    input(type='text' name='title' maxlength="100" required='')
+                                            .col-md-3
+                                                .form-group
+                                                    label Code
+                                                    input#inputCode2(type='text' name='code' maxlength="10" required='' )
+                                            .col-md-3
+                                                .form-group
+                                                    button.btn.btn-info(style="margin-top : 22px" onclick="makeid(9)") Random
+                                        .row    
+                                            .col-md-4
+                                                .form-group
+                                                    label Số tiền khuyến mãi
+                                                    input(type='number' name='price_discount' min=5000  required='')
+                                        .row
+                                            .col-md-4
+                                                .form-group
+                                                    label Hạn sử dụng 
+                                                    input(type='date' name='expired' required='')
+                                        .row
+                                            .update.ml-auto.mr-auto
+                                                button.btn.btn-primary( type='submit' value='Tạo voucher' name='submit') Tạo voucher
+                            #messages.tab-pane(role='tabpanel' aria-labelledby='messages-tab')
+                                form.was-validated.mt-3(action='/addVoucherTop10User' method='POST' autocomplete="off" role='form')
+                                    .autocomplete
+                                        .row
+                                            .col-md-6
+                                                .form-group
+                                                    label Tiêu Đề
+                                                    input(type='text' name='title' maxlength="100" required='')
+                                            .col-md-3
+                                                .form-group
+                                                    label Code
+                                                    input#inputCode3(type='text' name='code' maxlength="10" required='' )
+                                            .col-md-3
+                                                .form-group
+                                                    button.btn.btn-info(style="margin-top : 22px" onclick="makeid(9)") Random
+                                        .row    
+                                            .col-md-4
+                                                .form-group
+                                                    label Số tiền khuyến mãi
+                                                    input(type='number' name='price_discount' min=5000  required='')
+                                        .row
+                                            .col-md-4
+                                                .form-group
+                                                    label Hạn sử dụng 
+                                                    input(type='date' name='expired' required='')
+                                        .row
+                                            .update.ml-auto.mr-auto
+                                                button.btn.btn-primary( type='submit' value='Tạo voucher' name='submit') Tạo voucher
+// Core JS Files
+script
+    include ./assets/js/core/jquery.min.js
+script
+    include ./assets/js/core/popper.min.js
+script
+    include ./assets/js/core/bootstrap.min.js
+script
+    include ./assets/js/plugins/perfect-scrollbar.jquery.min.js
+script
+    include ./assets/js/plugins/chartjs.min.js
+script
+    include ./assets/js/plugins/bootstrap-notify.js
+script
+    include ./assets/js/paper-dashboard.min.js
+script
+    include ./assets/demo/demo.js
+script
+    include ./assets/js/voucher.js

@@ -49,11 +49,13 @@ demo = {
         var params;
         let url = 'http://modelfashion.store/getListProduct';
         const res = await this.callAPI(url, params, method);
+        console.log(res.listProduct);
         if (res.listProduct.length > 0) {
             var p = '';
             res.listProduct.forEach((product) => {
                 p += '<div class="col-md-3 pl-2" > ';
                 p += '<div class="card" style="width: 17.5rem; height : 30rem ;">';
+                p += '<h6 class="card-header">' + product.product_id + '</h6>';
                 p +=
                     '<img src="' +
                     product.product_image +
@@ -61,10 +63,14 @@ demo = {
                 if (product.discount) {
                     p += '<div class="note on-sale">Đang sale ' + product.discount + '%</div>';
                 }
-                p += '<card-body class="text-center"> <a href="#"> ';
+                p += '<card-body class="text-center">';
                 p +=
-                    '<p class="card-title p-1 text-info" style=" height: 2.5rem ; font-size:16px"></p></a>' +
-                    product.product_name;
+                    '<a href="/product/productDetail/' +
+                    product.product_id +
+                    '">' +
+                    '<p class="card-title p-1 text-info" style=" height: 2.5rem ; font-size:16px">' +
+                    product.product_name +
+                    '</p> </a>';
                 if (product.sale_price) {
                     p += '<p class="card-text mt-2 mb-2  font-weight-bold">Giá: <del>' + product.price + 'đ<del/></p> ';
                     p +=
@@ -77,6 +83,7 @@ demo = {
 
                 p += ' </card-body> </div> </div>';
             });
+
             document.getElementById('dataAllProduct').innerHTML = p;
         }
     },

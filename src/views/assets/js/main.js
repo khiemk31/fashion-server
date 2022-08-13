@@ -1,15 +1,3 @@
-// click form
-const addressbtn = document.querySelector('#feedback-form');
-const addressclose = document.querySelector('#feedback-close');
-
-addressbtn.addEventListener('click', function () {
-    document.querySelector('.feedback-form').style.display = 'flex';
-});
-
-addressclose.addEventListener('click', function () {
-    document.querySelector('.feedback-form').style.display = 'none';
-});
-
 // JavaScript code
 function searchUser() {
     var input, filter, table, tr, td, i, txtValue;

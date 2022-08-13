@@ -39,10 +39,7 @@ module.exports = (router) => {
     //Product Web View
     router.get('/updateProduct/:id', middleware.requireAuth, product.getUpdate);
     router.post('/product/update', middleware.requireAuth, product.update);
-    router.post('/product/search', middleware.requireAuth, product.search);
-    router.get('/product/productDetail/:id', middleware.requireAuth, product.productDetail);
-    router.get('/product/listProductCreated', middleware.requireAuth, product.listProductCreated);
-    router.get('/product/listProductDeleted', middleware.requireAuth, product.listProductDeleted);
+    router.get('/product/productDetail/:product_id', middleware.requireAuth, product.productDetail);
     router.post('/product/addProduct', middleware.requireAuth, product.add);
     router.get('/product/insertProduct', middleware.requireAuth, product.insertProduct);
     router.get('/product', middleware.requireAuth, product.product);
@@ -101,6 +98,12 @@ module.exports = (router) => {
     router.get('/profile', profile.profile);
     router.get('/profile/edit', profile.edit);
     router.post('/profile/update', profile.update);
+    //Voucher Web
+    router.get('/voucher/getAllUserID', middleware.requireAuth, voucher.getAllUserID);
+    router.get('/voucher', middleware.requireAuth, voucher.voucher);
+    router.post('/addVoucher', middleware.requireAuth, voucher.addVoucher);
+    router.post('/addVoucherAll', middleware.requireAuth, voucher.addVoucherAll);
+    router.post('/addVoucherTop10User', middleware.requireAuth, voucher.addVoucherTop10User);
     //Voucher API
     router.get('/getVoucherUser', voucher.getVoucherUser);
     router.post('/useVoucher', voucher.useVoucher);

@@ -359,7 +359,8 @@ const postInsertUser = async (req, res) => {
         const lengthListUser = (await query(connection, userSQL.getLengthListUser)).length;
         const id = 'USER' + (lengthListUser + 1);
         if (!isEmpty(user)) return res.status(409).json({ message: 'Số điện thoại đã được sử dụng !' });
-        if (req.files.avatar.data) {
+        var avatar;
+        if (req.files?.avatar.data) {
             let avatar = 'data:image/jpeg;base64,' + req.files.avatar.data.toString('base64');
             const upload = await uploadImage(avatar);
             avatar = upload.url;
@@ -371,10 +372,10 @@ const postInsertUser = async (req, res) => {
             password: newPassword,
             user_name: data.user_name,
             gender: data.gender,
-            address: data.address,
+            address: data?.address || null,
             permission: data.permission,
-            date_of_birth: data.date_of_birth,
-            avatar: avatar,
+            date_of_birth: data?.date_of_birth || new Date(),
+            avatar: avatar || null,
             active: 0,
             created_at: new Date(),
         };
