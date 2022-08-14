@@ -88,9 +88,9 @@ const getVoucherUser = async (req, res) => {
     try {
         const { id } = req.query;
         const connection = await getConnection(req);
-        const listVoucher = await query(connection, voucherSQL.queryVoucherByUser, [id]);
+        var listVoucher = await query(connection, voucherSQL.queryVoucherByUser, [id]);
         if (listVoucher.length > 0) {
-            for (voucher of listVoucher) {
+            for (const voucher of listVoucher) {
                 voucher.expired = moment(voucher.expired).format('DD-MM-YY');
             }
         }
