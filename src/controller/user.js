@@ -349,7 +349,7 @@ const loginWeb = async (req, res) => {
     res.render('login');
 };
 const getInsertUser = async (req, res) => {
-    res.render('insert_user');
+    res.render('user/insert_user');
 };
 const postInsertUser = async (req, res) => {
     try {
@@ -482,23 +482,6 @@ const getAllUser = async (req, res) => {
     }
 };
 
-const getAllAdmin = async (req, res) => {
-    const connection = await getConnection(req);
-    const listAdmin = await query(connection, userSQL.queryListAdmin);
-    res.render('user', { listUser: listAdmin });
-};
-
-const getSupperAdmin = async (req, res) => {
-    const connection = await getConnection(req);
-    const supperAdmin = await query(connection, userSQL.getSupperAdmin);
-    res.render('user', { listUser: supperAdmin });
-};
-
-const getUserBlock = async (req, res) => {
-    const connection = await getConnection(req);
-    const listUser = await query(connection, userSQL.getAllUserBlock);
-    res.render('user', { listUser: listUser });
-};
 const getLogOut = async (req, res) => {
     res.clearCookie('token');
     res.render('login');
@@ -524,9 +507,6 @@ module.exports = {
     checkUser,
     activeUser,
     loginWeb,
-    getUserBlock,
-    getSupperAdmin,
-    getAllAdmin,
     getAll,
     getAllUser,
     loginAdmin,

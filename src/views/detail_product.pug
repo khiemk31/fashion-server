@@ -15,7 +15,7 @@ head
     style 
         include ./assets/css/paper-dashboard.css 
     style 
-        include ./assets/demo/demo.css
+        include ./assets/css/main.css
 .wrapper
     .sidebar(data-color='white' data-active-color='danger')
         .logo
@@ -79,6 +79,9 @@ head
                             else
                                 p.card-text.text-primary(style= "font-size: 1.1rem ; font-weight: bold;")="Giá: "+product.price+"đ" 
                             p.card-text(style= "font-size: 1rem ; font-weight: bold;") Bảng size sản phẩm
+                            p.card-text(style= "font-size: 1rem ; font-weight: bold;")="Ngày đăng bán: "+product.created_at
+                            if(product.updated_at)
+                                p.card-text(style= "font-size: 1rem ; font-weight: bold;")="Ngày cập nhật mới: "+product.updated_at
                             table.table.table-striped
                                 thead
                                     tr
@@ -114,8 +117,8 @@ script
     include ./assets/js/plugins/bootstrap-notify.js
 script
     include ./assets/js/paper-dashboard.min.js
-script
-    include ./assets/demo/demo.js
+script 
+    include ./assets/js/product.js
 script.
     $(document).ready(function() {
     });

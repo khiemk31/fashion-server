@@ -15,7 +15,7 @@ head
     style 
         include ./assets/css/paper-dashboard.css 
     style 
-        include ./assets/demo/demo.css
+        include ./assets/css/main.css
 .wrapper
     .sidebar(data-color='white' data-active-color='danger')
         .logo
@@ -113,25 +113,7 @@ head
                                                             span.sr-only Toggle Dropdown
                                                         .dropdown-menu
                                                             a.dropdown-item(href='/category/update/'+category.category_id) Sửa thể loại
-                                                            a.dropdown-item(href='#') Xóa thể loại
-                            //- nav.d-flex.justify-content-end(aria-label='...')
-                            //-     ul.pagination
-                            //-         li.page-item
-                            //-             -var number1=parseInt(pageNumber)-1
-                            //-             if(number1>0)
-                            //-                 a.page-link(href='/user/?pageNumber='+number1 ) Previous
-                            //-         each page,index in listCategory
-                            //-             if(page==pageNumber)
-                            //-                 li.page-item.active
-                            //-                     a.page-link(href='/user/?pageNumber='+page)=page
-                            //-                     span.sr-only (current)
-                            //-             else 
-                            //-                 li.page-item
-                            //-                     a.page-link(href='/user/?pageNumber='+page)= page
-                            //-         li.page-item
-                            //-             -var number2= parseInt(pageNumber)+1
-                            //-             if(number2 <= listPage.length)
-                            //-                 a.page-link(href='/user/?pageNumber='+number2) Next      
+                                                            a.dropdown-item(href='#') Xóa thể loại   
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js
@@ -148,7 +130,5 @@ script
 script
     include ./assets/js/paper-dashboard.min.js
 script
-    include ./assets/demo/demo.js
-script
-    include ./assets/js/main.js
+    include ./assets/js/category.js
 

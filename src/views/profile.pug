@@ -15,7 +15,7 @@ head
     style 
         include ./assets/css/paper-dashboard.css 
     style 
-        include ./assets/demo/demo.css
+        include ./assets/css/main.css
 .wrapper
     .sidebar(data-color='white' data-active-color='danger')
         .logo
@@ -187,9 +187,6 @@ head
                                             button.btn.btn-primary(type='submit') Update Profile
                                         else 
                                             a.btn.btn-primary(href='/profile/edit/?edit='+true role='button' ) Edit Profile
-
-
-
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js
@@ -200,10 +197,6 @@ script
 script
     include ./assets/js/plugins/perfect-scrollbar.jquery.min.js
 script
-    include ./assets/js/plugins/chartjs.min.js
-script
     include ./assets/js/plugins/bootstrap-notify.js
 script
     include ./assets/js/paper-dashboard.min.js
-script
-    include ./assets/demo/demo.js

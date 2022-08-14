@@ -15,7 +15,7 @@ head
     style 
         include ./assets/css/paper-dashboard.css 
     style 
-        include ./assets/demo/demo.css
+        include ./assets/css/main.css
 .wrapper
     .sidebar(data-color='white' data-active-color='danger')
         .logo
@@ -134,7 +134,6 @@ head
                                         -var number2= parseInt(pageNumber)+1
                                         if(number2 <= listPage.length)
                                             a.page-link(href='/user/?pageNumber='+number2) Next  
-
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js
@@ -151,7 +150,7 @@ script
 script
     include ./assets/js/paper-dashboard.min.js
 script
-    include ./assets/demo/demo.js
+    include ./assets/js/user.js
 script
     include ./assets/js/main.js
 

@@ -71,9 +71,6 @@ module.exports = (router) => {
     router.get('/user/userDetail', middleware.requireAuth, user.userDetail);
     router.get('/user', middleware.requireAuth, user.getAll);
     router.get('/getUser', middleware.requireAuth, user.getAllUser);
-    router.get('/getAllAdmin', middleware.requireAuth, user.getAllAdmin);
-    router.get('/getSupperAdmin', middleware.requireAuth, user.getSupperAdmin);
-    router.get('/getUserBlock', middleware.requireAuth, user.getUserBlock);
     //Bill API
     router.post('/bill/add', bill.add);
     router.get('/bill/getListBill/:id', bill.getListBill);

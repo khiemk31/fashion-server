@@ -142,7 +142,6 @@ const productDetail = async (req, res) => {
 const getUpdate = async (req, res) => {
     const product_id = req.params.id;
     const connection = await getConnection(req);
-    const listCategory = await query(connection, categorySQL.listNameCategoryQuerySQL);
     const product = await query(connection, productSQL.getDetailProductWeb, [product_id]);
     const listSize = await query(connection, sizeSQL.queryListSizeByProductId, [product_id]);
     res.render('insert_product', { product: product[0], listSize: listSize, update: true });
@@ -156,25 +155,25 @@ const update = async (req, res) => {
     let product_bgr2 = null;
     let product_bgr3 = null;
     const connection = await getConnection(req);
-    if (req.files.product_image?.data) {
+    if (req.files?.product_image?.data) {
         let newProductImage = 'data:image/jpeg;base64,' + req.files.product_image.data.toString('base64');
         const upload = await uploadImage(newProductImage);
         product_image = upload.url;
     }
     console.log(req.files);
-    if (req.files.image_1?.data) {
+    if (req.files?.image_1?.data) {
         let newProductBgr1 = 'data:image/jpeg;base64,' + req.files.image_1.data.toString('base64');
         const upload = await uploadImage(newProductBgr1);
         product_bgr1 = upload.url;
     }
 
-    if (req.files.image_2?.data) {
+    if (req.files?.image_2?.data) {
         let newProductBgr2 = 'data:image/jpeg;base64,' + req.files.image_2.data.toString('base64');
         const upload = await uploadImage(newProductBgr2);
         product_bgr2 = upload.url;
     }
 
-    if (req.files.image_3?.data) {
+    if (req.files?.image_3?.data) {
         let newProductBgr3 = 'data:image/jpeg;base64,' + req.files.image_3.data.toString('base64');
         const upload = await uploadImage(newProductBgr3);
         product_bgr3 = upload.url;
@@ -196,8 +195,18 @@ const update = async (req, res) => {
     for (const [index, size] of listSize.entries()) {
         await query(connection, sizeSQL.updateSizeProduct, [data.quantity[index], size, data.product_id]);
     }
-    const listProduct = await query(connection, productSQL.getAllProduct);
-    res.render('product', { listProduct: listProduct });
+    const newProduct = await query(connection, productSQL.getDetailProductWeb, [data.product_id]);
+    const newListSize = await query(connection, sizeSQL.queryListSizeByProductId, [data.product_id]);
+    if (newProduct.length > 0) {
+        if (newProduct[0].discount > 0) {
+            newProduct[0].sale_price = newProduct[0].price - newProduct[0].price * (newProduct[0].discount / 100);
+            newProduct[0].sale_price = formatMoney(newProduct[0].sale_price);
+        }
+        newProduct[0].price = formatMoney(newProduct[0].price);
+        newProduct[0].created_at = moment(newProduct[0].created_at).format('DD-MM-YYYY');
+        newProduct[0].updated_at = moment(newProduct[0].updated_at).format('DD-MM-YYYY');
+    }
+    res.render('detail_product', { product: newProduct[0], listSizeProduct: newListSize });
 };
 
 // API MOBILE

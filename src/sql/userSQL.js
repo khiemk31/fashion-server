@@ -11,10 +11,6 @@ module.exports = {
     getAddressUserById: `SELECT address FROM user WHERE user_id=? `,
     updateAddressUser: `update user set address=? where user_id=?`,
     queryAllUser: `SELECT *FROM user `,
-    queryListUser: `SELECT * FROM user WHERE deleted_at is null AND permission='user'`,
-    queryListAdmin: `SELECT * FROM user WHERE deleted_at is null AND permission='admin' OR permission='super admin'`,
-    getSupperAdmin: `SELECT * FROM user WHERE deleted_at is null AND  permission='super admin'`,
-    getAllUserBlock: `SELECT * FROM user WHERE deleted_at = 1`,
     getLengthListUser: `SELECT * FROM user`,
     queryAllUserId: `SELECT user_id FROM user WHERE deleted_at IS null`,
 };
