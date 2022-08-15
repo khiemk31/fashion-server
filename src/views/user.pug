@@ -9,6 +9,8 @@ head
 
     link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700,200' rel='stylesheet')
     link(href='https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' rel='stylesheet')
+    link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' rel='stylesheet')
+
     // CSS Files
     style 
         include ./assets/css/bootstrap.min.css
@@ -16,6 +18,8 @@ head
         include ./assets/css/paper-dashboard.css 
     style 
         include ./assets/css/main.css
+    style 
+        include ./assets/css/paginationTable.css
 .wrapper
     .sidebar(data-color='white' data-active-color='danger')
         .logo
@@ -66,7 +70,7 @@ head
         .content
             .container-fluid
                 .row
-                    .col-md-6
+                    .col-md-4
                         form.ml-2.mb-2.align-self-center
                             .input-group.no-border
                                 input#myInput.form-control(onkeyup='searchUser()' type='text' name='search' placeholder='Search...')
@@ -89,19 +93,20 @@ head
                             h4.card-title  Danh sách người dùng
                         .card-body
                             .table-responsive
-                                table#myTable
+                                table#myTable.table.table-striped.table-class
                                     thead.header.text-primary
                                         th STT
-                                        th(onclick='sortTable(0)') Tên
+                                        th(onclick='sortTable(0)') ID
+                                        th Tên
                                         th Số Điện Thoại
                                         th Giới Tính
                                         th Loại Tài Khoản
                                         th Tình Trạng
-                                        th Xem chi tiết
                                     tbody
                                         each user,index in listUser  
-                                            tr
+                                            tr  
                                                 td= index+1
+                                                td= user.user_id
                                                 td
                                                     a.text-dark(href='/user/userDetail/?user_id='+user.user_id )= user.user_name
                                                 td= user.phone
@@ -113,27 +118,28 @@ head
                                                 if (user.active===0)
                                                     td Hoạt Động
                                                 else  
-                                                    td Bị Khóa
-                                                td
-                                                    a.btn.btn-primary(href='/user/userDetail/?user_id='+user.user_id ) Xem chi tiết
-                            nav.d-flex.justify-content-end(aria-label='...')
-                                ul.pagination
-                                    li.page-item
-                                        -var number1=parseInt(pageNumber)-1
-                                        if(number1>0)
-                                            a.page-link(href='/user/?pageNumber='+number1 ) Previous
-                                    each page in listPage
-                                        if(page==pageNumber)
-                                            li.page-item.active
-                                                a.page-link(href='/user/?pageNumber='+page)=page
-                                                span.sr-only (current)= index
-                                        else 
-                                            li.page-item
-                                                a.page-link(href='/user/?pageNumber='+page)= page
-                                    li.page-item
-                                        -var number2= parseInt(pageNumber)+1
-                                        if(number2 <= listPage.length)
-                                            a.page-link(href='/user/?pageNumber='+number2) Next  
+                                                    td Bị Khóa  
+                                .col-md-4
+                                    .row
+                                        .form-group
+                                            h5 Chọn số bản ghi
+                                            select#maxRows.form-control(name='state')
+                                                option(value='5000') Xem toàn bộ
+                                                option(value='5') 5
+                                                option(value='10') 10
+                                                option(value='15') 15
+                                                option(value='20') 20
+                                    .row
+
+                                        .pagination-container
+                                            nav
+                                                ul.pagination
+                                                    li(data-page='prev')
+                                                        span &lt; 
+                                                            span.sr-only (current)
+                                                    li#prev(data-page='next')
+                                                        span &gt; 
+                                                            span.sr-only (current)           
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js
@@ -153,6 +159,9 @@ script
     include ./assets/js/user.js
 script
     include ./assets/js/main.js
+script
+    include ./assets/js/paginationTable.js
+
 
 
 

@@ -107,7 +107,7 @@ var requestOptions = {
     method: 'GET',
     redirect: 'follow',
 };
-fetch('http://localhost:5000/voucher/getAllUserID', requestOptions)
+fetch('http://modelfashion.store/voucher/getAllUserID', requestOptions)
     .then((response) => response.text())
     .then((result) => {
         data = JSON.parse(result);

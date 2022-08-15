@@ -169,7 +169,7 @@ head
                                 .column.text-center
                                     span.font-weight-bold( style=' font-size : 16px ') Hãy xác nhận đơn hàng ?
                                     .row.ml-3
-                                        button.btn.btn-outline-primary.btn-round(onclick=`demo.confirmStatusBill('${bill.bill_id}','/bill/billConfirm')`)
+                                        button.btn.btn-outline-primary.btn-round(onclick=`bill.confirmStatusBill('${bill.bill_id}','/bill/billConfirm')`)
                                             i.nc-icon.nc-check-2.mr-1(style= 'font-size : 16px ;')
                                             | Đồng Ý
                                         #feedback-form
@@ -180,7 +180,7 @@ head
                                 .column.text-center
                                     span.font-weight-bold(style=' font-size : 16px ') Khách hàng yêu cầu hủy đơn ?
                                     .row.ml-3
-                                        button.btn.btn-outline-primary.btn-round(onclick=`demo.confirmStatusBill('${bill.bill_id}','/bill/billCancellationConfirmation')`)
+                                        button.btn.btn-outline-primary.btn-round(onclick=`bill.confirmStatusBill('${bill.bill_id}','/bill/billCancellationConfirmation')`)
                                             i.nc-icon.nc-check-2.mr-1(style= 'font-size : 16px ;')
                                             | Đồng  Ý
                                         #feedback-form
@@ -191,7 +191,7 @@ head
                                 .column.text-center
                                     span.font-weight-bold(style=' font-size : 16px ;') Khách hàng yêu cầu hoàn đơn ?
                                     .row.ml-3
-                                        button.btn.btn-outline-primary.btn-round(onclick=`demo.confirmStatusBill('${bill.bill_id}','/bill/confirmReturnRequest')`)
+                                        button.btn.btn-outline-primary.btn-round(onclick=`bill.confirmStatusBill('${bill.bill_id}','/bill/confirmReturnRequest')`)
                                             i.nc-icon.nc-check-2.mr-1(style= 'font-size : 16px ;')
                                             | Đồng  Ý
                                         #feedback-form
@@ -202,7 +202,7 @@ head
                                 .column.text-center
                                     span.font-weight-bold(style=' font-size : 18px ') Cập nhật trạng thái đơn ?
                                     .row.ml-3
-                                        button.btn.btn-outline-primary.btn-round(onclick=`demo.confirmStatusBill('${bill.bill_id}','/bill/billDone')`)
+                                        button.btn.btn-outline-primary.btn-round(onclick=`bill.confirmStatusBill('${bill.bill_id}','/bill/billDone')`)
                                             i.nc-icon.nc-check-2.mr-1(style= 'font-size : 16px ;')
                                             | Giao hàng thành công
                                         #feedback-form
@@ -219,7 +219,7 @@ head
                             input(type='text' name='page'  hidden   value="billDetail" )
                             p Nhập lý do 
                             input(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
-                            button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+                            button.btn.btn-warning.btn-round(onclick="bill.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
                     if (bill.status=="Đang Giao")
                         h2 Nhập lý do giao hàng thất bại
                             span#feedback-close X Đóng
@@ -228,7 +228,7 @@ head
                             input(type='text' name='page'  hidden   value="billDetail" )
                             p Nhập lý do 
                             input(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
-                            button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+                            button.btn.btn-warning.btn-round(onclick="bill.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
                     if (bill.status=="Yêu Cầu Hủy Đơn")
                         h2 Nhập lý do từ chối yêu cầu
                             span#feedback-close X Đóng
@@ -237,7 +237,7 @@ head
                             input(type='text' name='page'  hidden   value="billDetail" )
                             p Nhập lý do 
                             input(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
-                            button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+                            button.btn.btn-warning.btn-round(onclick="bill.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
                     if (bill.status=="Yêu Cầu Hoàn Đơn")
                         h2 Nhập lý do từ chối yêu cầu
                             span#feedback-close X Đóng
@@ -246,7 +246,7 @@ head
                             input(type='text' name='page'  hidden   value="billDetail" )
                             p Nhập lý do 
                             input(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
-                            button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+                            button.btn.btn-warning.btn-round(onclick="bill.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js
@@ -266,3 +266,5 @@ script
     include ./assets/js/main.js
 script
     include ./assets/js/bill.js
+script
+    include ./assets/js/bill_detail.js

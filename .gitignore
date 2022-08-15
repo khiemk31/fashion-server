@@ -1,3 +1,4 @@
 /node_modules
 /.well-known
 /.htaccess
+/src/.config

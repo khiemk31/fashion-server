@@ -9,6 +9,7 @@ head
 
     link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700,200' rel='stylesheet')
     link(href='https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' rel='stylesheet')
+    link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' rel='stylesheet')
     // CSS Files
     style 
         include ./assets/css/bootstrap.min.css
@@ -69,7 +70,7 @@ head
                     .card
                         .card-body
                             .table-responsive   
-                                table#myTable
+                                table#myTable.table.table-striped.table-class
                                     thead.text-primary
                                         th STT
                                         th Mã đơn
@@ -93,82 +94,51 @@ head
                                                     td
                                                         if (bill.status=="Chờ Xác Nhận")
                                                             .row
-                                                                button.btn.btn-outline-primary.btn-round(onclick=`demo.confirmStatusBill('${bill.bill_id}','/bill/billConfirm')`)
+                                                                button.btn.btn-outline-primary.btn-round(onclick=`bill.confirmStatusBill('${bill.bill_id}','/bill/billConfirm')`)
                                                                     i.nc-icon.nc-check-2(style= 'font-size : 14px ;')
-                                                                button.btn.btn-outline-danger.btn-round(onclick="demo.onClickForm();")
+                                                                button.btn.btn-outline-danger.btn-round(onclick=`bill.onClickForm('Chờ Xác Nhận','${bill.bill_id}');`)
                                                                     i.nc-icon.nc-simple-remove(style= 'font-size : 14px ;')
-                                                        if (bill.status=="Yêu Cầu Hủy Đơn ?")
-                                                            .row
-                                                                button.btn.btn-outline-primary.btn-round(onclick=`demo.confirmStatusBill('${bill.bill_id}','/bill/billCancellationConfirmation')`)
-                                                                    i.nc-icon.nc-check-2(style= 'font-size : 14px ;')
-                                                                button.btn.btn-outline-danger.btn-round(onclick="demo.onClickForm();")
-                                                                    i.nc-icon.nc-simple-remove(style= 'font-size : 14px ;')
-                                                        if (bill.status=="Yêu Cầu Hoàn Đơn")
-                                                            .row
-                                                                button.btn.btn-outline-primary.btn-round(onclick=`demo.confirmStatusBill('${bill.bill_id}','/bill/confirmReturnRequest')`)
-                                                                    i.nc-icon.nc-check-2(style= 'font-size : 14px ;')
-                                                                button.btn.btn-outline-danger.btn-round(onclick="demo.onClickForm();")
-                                                                    i.nc-icon.nc-simple-remove(style= 'font-size : 14px ;')
-                                                        if (bill.status=="Đang Giao")
-                                                            .row
-                                                                button.btn.btn-outline-primary.btn-round(onclick=`demo.confirmStatusBill('${bill.bill_id}','/bill/billDone')`) 
-                                                                    i.nc-icon.nc-check-2(style= 'font-size : 14px ;')
-                                                                button.btn.btn-outline-danger.btn-round(onclick="demo.onClickForm();")
-                                                                    i.nc-icon.nc-simple-remove(style= 'font-size : 14px ;')
-                                                .feedback-form(style="display : none ;")
-                                                    .feedback-form-content
-                                                        if (bill.status=="Chờ Xác Nhận")
-                                                            .feedback-form(style="display : none ;")
-                                                                .feedback-form-content
-                                                            h2 Nhập lý do từ chối đơn
-                                                                span#feedback-close X Đóng
-                                                            .card-body
-                                                                form(action='/bill/billCancel' method='POST' role='form')
-                                                                    input(type='text' name='id'  hidden   value=bill.bill_id )
-                                                                    input(type='text' name='page'  hidden   value="bill" )
-                                                                    .row
-                                                                        .col-md-12.mh-2
-                                                                            .form-group
-                                                                                input.form-control(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
-                                                                    button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
                                                         if (bill.status=="Yêu Cầu Hủy Đơn")
-                                                            h2 Nhập lý do từ chối yêu cầu
-                                                                span#feedback-close X Đóng
-                                                            .card-body
-                                                                form(action='/bill/rejectCancellationRequest' method='POST' role='form')
-                                                                    input(type='text' name='id'  hidden   value=bill.bill_id )
-                                                                    input(type='text' name='page'  hidden   value="bill" )
-                                                                    .row
-                                                                        .col-md-12.mh-2
-                                                                            .form-group
-                                                                                input.form-control(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
-                                                                    button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+                                                            .row
+                                                                button.btn.btn-outline-primary.btn-round(onclick=`bill.confirmStatusBill('${bill.bill_id}','/bill/billCancellationConfirmation')`)
+                                                                    i.nc-icon.nc-check-2(style= 'font-size : 14px ;')
+                                                                button.btn.btn-outline-danger.btn-round(onclick=`bill.onClickForm('Yêu Cầu Hủy Đơn','${bill.bill_id}');`)
+                                                                    i.nc-icon.nc-simple-remove(style= 'font-size : 14px ;')
                                                         if (bill.status=="Yêu Cầu Hoàn Đơn")
-                                                            h2 Nhập lý do từ chối yêu cầu
-                                                                span#feedback-close X Đóng
-                                                            .card-body
-                                                                form(action='/bill/rejectReturnRequest' method='POST' role='form')
-                                                                    input(type='text' name='id'  hidden   value=bill.bill_id )
-                                                                    input(type='text' name='page'  hidden   value="bill" )
-                                                                    .row
-                                                                        .col-md-12.mh-2
-                                                                            .form-group
-                                                                                input.form-control(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
-                                                                    button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+                                                            .row
+                                                                button.btn.btn-outline-primary.btn-round(onclick=`bill.confirmStatusBill('${bill.bill_id}','/bill/confirmReturnRequest')`)
+                                                                    i.nc-icon.nc-check-2(style= 'font-size : 14px ;')
+                                                                button.btn.btn-outline-danger.btn-round(onclick=`bill.onClickForm('Yêu Cầu Hoàn Đơn','${bill.bill_id}');`)
+                                                                    i.nc-icon.nc-simple-remove(style= 'font-size : 14px ;')
                                                         if (bill.status=="Đang Giao")
-                                                            h2 Nhập lý do giao hàng thất bại
-                                                                span#feedback-close X Đóng
-                                                            .card-body
-                                                                form(action='/bill/billFail' method='POST' role='form')
-                                                                    input(type='text' name='id'  hidden   value=bill.bill_id )
-                                                                    input(type='text' name='page'  hidden   value="bill" )
-                                                                    .row
-                                                                        .col-md-12.mh-2
-                                                                            .form-group
-                                                                                input.form-control(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
-                                                                    button.btn.btn-warning.btn-round(onclick="demo.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
-
-
+                                                            .row
+                                                                button.btn.btn-outline-primary.btn-round(onclick=`bill.confirmStatusBill('${bill.bill_id}','/bill/billDone')`) 
+                                                                    i.nc-icon.nc-check-2(style= 'font-size : 14px ;')
+                                                                button.btn.btn-outline-danger.btn-round(onclick=`bill.onClickForm('Đang Giao','${bill.bill_id}');`)
+                                                                    i.nc-icon.nc-simple-remove(style= 'font-size : 14px ;')
+                                                .feedback-form
+                                                    .feedback-form-content
+                                                        #formFeedback
+                                .col-md-4
+                                    .row
+                                        .form-group
+                                            h6 Chọn số bản ghi
+                                            select#maxRows.form-control(name='state')
+                                                option(value='5000') Xem toàn bộ
+                                                option(value='5') 5
+                                                option(value='10') 10
+                                                option(value='15') 15
+                                                option(value='20') 20
+                                    .row
+                                        .pagination-container
+                                            nav
+                                                ul.pagination
+                                                    li(data-page='prev')
+                                                        span &lt; 
+                                                            span.sr-only (current)
+                                                    li#prev(data-page='next')
+                                                        span &gt; 
+                                                            span.sr-only (current)     
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js
@@ -186,8 +156,6 @@ script
     include ./assets/js/paper-dashboard.min.js
 script
     include ./assets/js/bill.js
-script.
-    $(document).ready(function() {
-
-    });
+script
+    include ./assets/js/paginationTable.js
 

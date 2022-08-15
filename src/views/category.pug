@@ -6,9 +6,10 @@ head
     meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
     title Model Fashion
     meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
-
     link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700,200' rel='stylesheet')
     link(href='https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' rel='stylesheet')
+    link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' rel='stylesheet')
+
     // CSS Files
     style 
         include ./assets/css/bootstrap.min.css
@@ -86,7 +87,7 @@ head
                     .card
                         .card-body
                             .table-responsive   
-                                table#myTable
+                                table#myTable.table.table-striped.table-class
                                     thead.text-primary
                                         th ID
                                         th Tên thể loại
@@ -113,7 +114,28 @@ head
                                                             span.sr-only Toggle Dropdown
                                                         .dropdown-menu
                                                             a.dropdown-item(href='/category/update/'+category.category_id) Sửa thể loại
-                                                            a.dropdown-item(href='#') Xóa thể loại   
+                                                            a.dropdown-item(href='#') Ẩn toàn bộ thể loại
+                            .col-md-4
+                                .row
+                                    .form-group
+                                        h6 Chọn số bản ghi
+                                        select#maxRows.form-control(name='state')
+                                            option(value='5000') Xem toàn bộ
+                                            option(value='5') 5
+                                            option(value='10') 10
+                                            option(value='15') 15
+                                            option(value='20') 20
+                                .row
+                                    .pagination-container
+                                        nav(aria-label='...')
+                                            ul.pagination
+                                                li(data-page='prev')
+                                                    span &lt; 
+                                                        span.sr-only (current)
+
+                                                li#prev.page-item.active(aria-current='page')(data-page='next')
+                                                    span &gt; 
+                                                        span.sr-only (current)   
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js
@@ -131,4 +153,6 @@ script
     include ./assets/js/paper-dashboard.min.js
 script
     include ./assets/js/category.js
+script
+    include ./assets/js/paginationTable.js
 

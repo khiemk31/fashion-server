@@ -12,8 +12,7 @@ const { formatMoney } = require('../utils/formatMoney');
 const { getTotalPage } = require('../utils');
 const billSQL = require('../sql/billSQL');
 const client = twilio(accountSid, authToken);
-
-//API checkUser
+//MOBILE API
 const checkUser = async (req, res) => {
     try {
         const { phone } = req.body;
@@ -25,7 +24,6 @@ const checkUser = async (req, res) => {
         return res.status(500).json({ message: `${error}` });
     }
 };
-//API  registerUser
 const register = async (req, res) => {
     try {
         const { phone, password, user_name } = req.body;
@@ -51,7 +49,6 @@ const register = async (req, res) => {
     }
 };
 
-//API loginUser
 const login = async (req, res) => {
     try {
         const { phone, password } = req.body;
@@ -68,7 +65,6 @@ const login = async (req, res) => {
     }
 };
 
-//API recovery password
 const recoveryPassword = async (req, res) => {
     try {
         const { password, phone } = req.body;
@@ -85,7 +81,6 @@ const recoveryPassword = async (req, res) => {
         return res.status(500).json({ message: `${e}` });
     }
 };
-//API update profile user :
 const update = async (req, res) => {
     try {
         let { user_name, date_of_birth, avatar, gender, address } = req.body;
@@ -114,14 +109,11 @@ const update = async (req, res) => {
         return res.status(500).json({ message: `${error}` });
     }
 };
-
-// API get Detail
 const detail = async (req, res) => {
     try {
         const user_id = req.params.id;
         const connection = await getConnection(req);
-        const detailUserQuery = 'select *  from user where deleted_at is null and user_id=?';
-        const user = await query(connection, detailUserQuery, [user_id]);
+        const user = await query(connection, userSQL.queryDetailUserByID, [user_id]);
         if (isEmpty(user)) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -133,41 +125,7 @@ const detail = async (req, res) => {
         return res.status(500).json({ message: `${e}` });
     }
 };
-const userDetail = async (req, res) => {
-    const user_id = req.query.user_id;
-    const connection = await getConnection(req);
-    detailUserQuery = 'SELECT * FROM user WHERE user_id=?';
-    queryDonDaDat = `SELECT COUNT(bill_id) AS soDon FROM bill WHERE (status="Đang Giao" OR status="Hoàn Thành" OR status="Chờ Xác Nhận") AND user_id=?`;
-    queryDonDaHuy = `SELECT COUNT(bill_id) AS soDon FROM bill WHERE (status="Đã Hủy" OR status="Đã Hoàn") AND user_id=?`;
-    queryDoanhThu = `SELECT SUM(total_price) AS doanhThu FROM bill WHERE status="Hoàn Thành" AND user_id=?`;
-    const donDaDat = await query(connection, queryDonDaDat, [user_id]);
-    const donDaHuy = await query(connection, queryDonDaHuy, [user_id]);
-    const doanhThu = await query(connection, queryDoanhThu, [user_id]);
-    const user = await query(connection, detailUserQuery, [user_id]);
-    if (user[0]?.date_of_birth) {
-        user[0].date_of_birth = moment(user[0].date_of_birth).format('DD-MM-YYYY');
-    }
-    if (user[0].created_at) {
-        user[0].created_at = moment(user[0].created_at).format('DD-MM-YYYY');
-    }
-    if (doanhThu[0].doanhThu) {
-        doanhThu[0].doanhThu = formatMoney(doanhThu[0].doanhThu);
-    }
-    res.render('detail_user', {
-        user: user[0],
-        donDaDat: donDaDat[0].soDon,
-        donDaHuy: donDaHuy[0].soDon,
-        doanhThu: doanhThu[0].doanhThu,
-    });
-};
 
-const searchUser = async (req, res) => {
-    const data = req.body;
-    const connection = await getConnection(req);
-    const searchUser = 'select *  from user where  user_name=?';
-    const user = await query(connection, searchUser, [data.user_name]);
-    res.render('user', { listUser: user });
-};
 // API delete
 const blockUser = async (req, res) => {
     try {
@@ -304,46 +262,10 @@ const checkActive = async (req, res) => {
 };
 //WEB VIEW
 const getAll = async (req, res) => {
-    let { pageNumber } = req.query;
     const connection = await getConnection(req);
-    if (pageNumber) {
-        let offset = 0;
-        if (pageNumber == 1) {
-            offset = 0;
-        } else if (pageNumber > 1) {
-            offset = (pageNumber - 1) * 10;
-        }
-        queryLimitUser = `SELECT * FROM user LIMIT 10  OFFSET  ${offset}`;
-        const listUserLimit = await query(connection, queryLimitUser);
-        const listUser = await query(connection, userSQL.queryAllUser);
-        let totalPage = getTotalPage(listUser.length, 10);
-        let listPage = [];
-        let i = 1;
-        while (i <= totalPage) {
-            listPage.push(i);
-            i++;
-        }
-        res.render('user', { listUser: listUserLimit, listPage: listPage, pageNumber: pageNumber });
-    } else {
-        pageNumber = 1;
-        let offset = 0;
-        if (pageNumber == 1) {
-            offset = 0;
-        } else if (pageNumber > 1) {
-            offset = (pageNumber - 1) * 10;
-        }
-        queryLimitUser = `SELECT * FROM user LIMIT 10  OFFSET  ${offset}`;
-        const listUserLimit = await query(connection, queryLimitUser);
-        const listUser = await query(connection, userSQL.queryAllUser);
-        let totalPage = getTotalPage(listUser.length, 10);
-        let listPage = [];
-        let i = 1;
-        while (i <= totalPage) {
-            listPage.push(i);
-            i++;
-        }
-        res.render('user', { listUser: listUserLimit, listPage: listPage, pageNumber: pageNumber });
-    }
+    queryListUser = `SELECT *FROM user`;
+    const listUser = await query(connection, queryListUser);
+    res.render('user', { listUser: listUser });
 };
 const loginWeb = async (req, res) => {
     res.render('login');
@@ -481,6 +403,33 @@ const getAllUser = async (req, res) => {
         res.render('user', { listUser: listUserLimit, listPage: listPage, pageNumber: pageNumber });
     }
 };
+const userDetail = async (req, res) => {
+    const user_id = req.query.user_id;
+    const connection = await getConnection(req);
+    detailUserQuery = 'SELECT * FROM user WHERE user_id=?';
+    queryDonDaDat = `SELECT COUNT(bill_id) AS soDon FROM bill WHERE (status="Đang Giao" OR status="Hoàn Thành" OR status="Chờ Xác Nhận") AND user_id=?`;
+    queryDonDaHuy = `SELECT COUNT(bill_id) AS soDon FROM bill WHERE (status="Đã Hủy" OR status="Đã Hoàn") AND user_id=?`;
+    queryDoanhThu = `SELECT SUM(total_price) AS doanhThu FROM bill WHERE status="Hoàn Thành" AND user_id=?`;
+    const donDaDat = await query(connection, queryDonDaDat, [user_id]);
+    const donDaHuy = await query(connection, queryDonDaHuy, [user_id]);
+    const doanhThu = await query(connection, queryDoanhThu, [user_id]);
+    const user = await query(connection, detailUserQuery, [user_id]);
+    if (user[0]?.date_of_birth) {
+        user[0].date_of_birth = moment(user[0].date_of_birth).format('DD-MM-YYYY');
+    }
+    if (user[0].created_at) {
+        user[0].created_at = moment(user[0].created_at).format('DD-MM-YYYY');
+    }
+    if (doanhThu[0].doanhThu) {
+        doanhThu[0].doanhThu = formatMoney(doanhThu[0].doanhThu);
+    }
+    res.render('detail_user', {
+        user: user[0],
+        donDaDat: donDaDat[0].soDon,
+        donDaHuy: donDaHuy[0].soDon,
+        doanhThu: doanhThu[0].doanhThu,
+    });
+};
 
 const getLogOut = async (req, res) => {
     res.clearCookie('token');
@@ -492,7 +441,6 @@ module.exports = {
     getUser,
     getInsertUser,
     postInsertUser,
-    searchUser,
     userDetail,
     getAddress,
     updateAddress,

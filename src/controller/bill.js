@@ -267,12 +267,13 @@ const billConfirm = async (req, res) => {
 };
 // Từ chối đơn
 const billCancel = async (req, res) => {
-    const { id, feedback_by_store, page } = req.body;
+    const { bill_id, feedback_by_store, page } = req.body;
+    console.log('ma id', bill_id);
     const connection = await getConnection(req);
-    const bill = await query(connection, billSQL.queryBillById, [id]);
+    const bill = await query(connection, billSQL.queryBillById, [bill_id]);
     if (isEmpty(bill)) return res.status(404).json({ message: 'Bill not found' });
-    await query(connection, billSQL.updateFeedBackStore, ['Từ Chối Đơn', [feedback_by_store], id]);
-    loadBill(req, res, connection, page, id);
+    await query(connection, billSQL.updateFeedBackStore, ['Từ Chối Đơn', [feedback_by_store], bill_id]);
+    loadBill(req, res, connection, page, bill_id);
 };
 //Đồng ý hủy
 const billCancellationConfirmation = async (req, res) => {
@@ -301,12 +302,12 @@ const billCancellationConfirmation = async (req, res) => {
 };
 //Từ Chối Hủy
 const rejectCancellationRequest = async (req, res) => {
-    const { id, feedback_by_store, page } = req.body;
+    const { bill_id, feedback_by_store, page } = req.body;
     const connection = await getConnection(req);
-    const bill = await query(connection, billSQL.queryBillById, [id]);
+    const bill = await query(connection, billSQL.queryBillById, [bill_id]);
     if (isEmpty(bill)) return res.status(404).json({ message: 'Bill not found' });
-    await query(connection, billSQL.updateFeedBackStore, ['Đang Giao', feedback_by_store, id]);
-    loadBill(req, res, connection, page, id);
+    await query(connection, billSQL.updateFeedBackStore, ['Đang Giao', feedback_by_store, bill_id]);
+    loadBill(req, res, connection, page, bill_id);
 };
 //Đồng ý hoàn
 const confirmReturnRequest = async (req, res) => {
@@ -341,14 +342,14 @@ const confirmReturnRequest = async (req, res) => {
 };
 //Từ Chối Hoàn
 const rejectReturnRequest = async (req, res) => {
-    const { id, feedback_by_store, page } = req.body;
+    const { bill_id, feedback_by_store, page } = req.body;
     const connection = await getConnection(req);
-    const bill = await query(connection, billSQL.queryBillById, [id]);
+    const bill = await query(connection, billSQL.queryBillById, [bill_id]);
     if (isEmpty(bill)) return res.status(404).json({ message: 'Bill not found' });
     bill[0].done == 1
-        ? await query(connection, billSQL.updateFeedBackStore, ['Hoàn Thành', feedback_by_store, id])
-        : await query(connection, billSQL.updateFeedBackStore, ['Đang Giao', feedback_by_store, id]);
-    loadBill(req, res, connection, page, id);
+        ? await query(connection, billSQL.updateFeedBackStore, ['Hoàn Thành', feedback_by_store, bill_id])
+        : await query(connection, billSQL.updateFeedBackStore, ['Đang Giao', feedback_by_store, bill_id]);
+    loadBill(req, res, connection, page, bill_id);
 };
 //Hoàn Thành
 const billDone = async (req, res) => {
@@ -383,12 +384,12 @@ const billDone = async (req, res) => {
 // Giao hàng thất bại
 const billFail = async (req, res) => {
     try {
-        const { id, feedback_by_store, page } = req.body;
+        const { bill_id, feedback_by_store, page } = req.body;
         const connection = await getConnection(req);
-        const bill = await query(connection, billSQL.queryBillById, [id]);
+        const bill = await query(connection, billSQL.queryBillById, [bill_id]);
         if (isEmpty(bill)) return res.status(404).json({ message: 'Bill not found' });
         const queryListBillDetail = 'SELECT product_name ,size ,quantity FROM bill_detail WHERE bill_id=?';
-        const listBillDetail = await query(connection, queryListBillDetail, [id]);
+        const listBillDetail = await query(connection, queryListBillDetail, [bill_id]);
         const queryProduct = 'SELECT product_id ,quantity_sold FROM product WHERE product_name =?';
         const querySize = 'SELECT size, quantity,size_id FROM size WHERE product_id=? AND size=?';
         const updateSize = 'UPDATE size SET quantity=? WHERE size_id=?';
@@ -398,8 +399,8 @@ const billFail = async (req, res) => {
             const newSizeQuantity = size[0].quantity + billDetail.quantity;
             await query(connection, updateSize, [newSizeQuantity, size[0].size_id]);
         }
-        await query(connection, billSQL.updateFeedBackStore, ['Thất Bại', feedback_by_store, id]);
-        loadBill(req, res, connection, page, id);
+        await query(connection, billSQL.updateFeedBackStore, ['Thất Bại', feedback_by_store, bill_id]);
+        loadBill(req, res, connection, page, bill_id);
     } catch (error) {
         return res.status(500).json({ message: `${error}` });
     }

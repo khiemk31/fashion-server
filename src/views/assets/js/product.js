@@ -20,7 +20,7 @@ product = {
     async getListProduct() {
         let method = 'GET';
         var params;
-        let url = 'http://localhost:5000/getListProduct';
+        let url = 'http://modelfashion.store/getListProduct';
         const res = await this.callAPI(url, params, method);
         console.log(res.listProduct);
         if (res.listProduct.length > 0) {

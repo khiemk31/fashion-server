@@ -16,7 +16,31 @@ module.exports = (router) => {
     router.get('/billDetailStatistics', middleware.requireAuth, main.billDetailStatistics);
     router.get('/top10User', middleware.requireAuth, main.queryTop10User);
     router.get('/top10Product', middleware.requireAuth, main.queryTop10Product);
-    //
+    //User API
+    router.get('/user/getUser', user.getUser);
+    router.post('/user/checkActive', user.checkActive);
+    router.post('/user/checkUser', user.checkUser);
+    router.get('/user/getAddress/:id', user.getAddress);
+    router.put('/user/updateAddress', user.updateAddress);
+    router.post('/user/register', user.register);
+    router.post('/user/login', user.login);
+    router.put('/user/recoveryPass', user.recoveryPassword);
+    router.put('/user/update', user.update);
+    router.get('/user/detail/:id', user.detail);
+    router.post('/user/send-otp', user.apiSendOTP);
+    router.post('/user/verify-otp', user.verifyOTP);
+    //User Web View
+    router.get('/login', user.loginWeb);
+    router.post('/login', user.loginAdmin);
+    router.get('/user/logout', user.getLogOut);
+    router.get('/user/insertUser', middleware.requireAuth, user.getInsertUser);
+    router.post('/user/insertUser', middleware.requireAuth, user.postInsertUser);
+    router.get('/user/remove/:id', middleware.requireAuth, user.blockUser);
+    router.get('/user/active/:id', middleware.requireAuth, user.activeUser);
+    router.get('/user/userDetail', middleware.requireAuth, user.userDetail);
+    router.get('/user', middleware.requireAuth, user.getAll);
+    router.get('/getUser', middleware.requireAuth, user.getAllUser);
+    //Test
     router.get('/test', main.test);
     //category API
     router.get('/category/getAll', category.getAll);
@@ -46,31 +70,7 @@ module.exports = (router) => {
     router.get('/getListProduct', middleware.requireAuth, product.getListProduct);
     router.get('/product/remove/:id', middleware.requireAuth, product.removeProduct);
     router.get('/product/getAll', product.getAll);
-    //User API
-    router.get('/user/getUser', user.getUser);
-    router.post('/user/checkActive', user.checkActive);
-    router.post('/user/checkUser', user.checkUser);
-    router.get('/user/getAddress/:id', user.getAddress);
-    router.put('/user/updateAddress', user.updateAddress);
-    router.post('/user/register', user.register);
-    router.post('/user/login', user.login);
-    router.put('/user/recoveryPass', user.recoveryPassword);
-    router.put('/user/update', user.update);
-    router.get('/user/detail/:id', user.detail);
-    router.post('/user/send-otp', user.apiSendOTP);
-    router.post('/user/verify-otp', user.verifyOTP);
-    //User Web View
-    router.get('/user/logout', user.getLogOut);
-    router.post('/user/searchUser', middleware.requireAuth, user.searchUser);
-    router.get('/user/insertUser', middleware.requireAuth, user.getInsertUser);
-    router.post('/user/insertUser', middleware.requireAuth, user.postInsertUser);
-    router.get('/user/remove/:id', middleware.requireAuth, user.blockUser);
-    router.get('/user/active/:id', middleware.requireAuth, user.activeUser);
-    router.get('/login', user.loginWeb);
-    router.post('/login', user.loginAdmin);
-    router.get('/user/userDetail', middleware.requireAuth, user.userDetail);
-    router.get('/user', middleware.requireAuth, user.getAll);
-    router.get('/getUser', middleware.requireAuth, user.getAllUser);
+
     //Bill API
     router.post('/bill/add', bill.add);
     router.get('/bill/getListBill/:id', bill.getListBill);
