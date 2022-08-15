@@ -235,6 +235,7 @@ const billConfirm = async (req, res) => {
         const connection = await getConnection(req);
         const queryListBillDetail = 'SELECT product_name ,size ,quantity FROM bill_detail WHERE bill_id=?';
         const listBillDetail = await query(connection, queryListBillDetail, [id]);
+        console.log(listBillDetail);
         const queryProduct = 'SELECT product_id ,quantity_sold FROM product WHERE product_name =?';
         const querySize = 'SELECT size, quantity,size_id FROM size WHERE product_id=? AND size=?';
         const updateSize = 'UPDATE size SET quantity=? WHERE size_id=?';
@@ -248,11 +249,13 @@ const billConfirm = async (req, res) => {
                 } else {
                     return res.status(300).json({
                         message: `Số lượng hàng của size ${size[0].size} không đủ so với đặt hàng ! Còn ${size[0].quantity} sp size ${size[0].size}`,
+                          result: false
                     });
                 }
             } else {
                 return res.status(404).json({
                     message: `Size ${size[0].size} hết hàng`,
+                    result: false
                 });
             }
         }
@@ -262,7 +265,7 @@ const billConfirm = async (req, res) => {
             result: true,
         });
     } catch (error) {
-        return res.status(500).json({ message: `${error}` });
+        return res.status(500).json({ message: `${error}`  ,result: false});
     }
 };
 // Từ chối đơn
@@ -297,7 +300,7 @@ const billCancellationConfirmation = async (req, res) => {
             result: true,
         });
     } catch (error) {
-        return res.status(500).json({ message: `${error}` });
+        return res.status(500).json({ message: `${error}`,result: false });
     }
 };
 //Từ Chối Hủy
@@ -337,7 +340,7 @@ const confirmReturnRequest = async (req, res) => {
             result: true,
         });
     } catch (error) {
-        return res.status(500).json({ message: `${error}` });
+        return res.status(500).json({ message: `${error}`,result: false });
     }
 };
 //Từ Chối Hoàn
@@ -378,7 +381,7 @@ const billDone = async (req, res) => {
             result: true,
         });
     } catch (error) {
-        return res.status(500).json({ message: `${error}` });
+        return res.status(500).json({ message: `${error}`, result: false });
     }
 };
 // Giao hàng thất bại

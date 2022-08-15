@@ -17,11 +17,11 @@ product = {
             .catch((error) => console.log('error', error));
         return data;
     },
-    getListProduct() {
+  async getListProduct() {
         let method = 'GET';
         var params;
         let url = 'http://modelfashion.store/getListProduct';
-        const res = this.callAPI(url, params, method);
+        const res =await this.callAPI(url, params, method);
         if (res.listProduct.length > 0) {
             var p = '';
             res.listProduct.forEach((product) => {

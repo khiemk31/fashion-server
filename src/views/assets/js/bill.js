@@ -1,38 +1,6 @@
 bill = {
-    callAPI(url, params, method) {
-        let myHeaders = new Headers();
-        myHeaders.append('Content-Type', 'application/json');
-        let requestOptions = {
-            method: method,
-            headers: myHeaders,
-            body: params,
-            redirect: 'follow',
-        };
-        var data;
-        fetch(url, requestOptions)
-            .then((response) => response.text())
-            .then((result) => {
-                data = JSON.parse(result);
-            })
-            .catch((error) => console.log('error', error));
-        return data;
-    },
-    confirmStatusBill(id, status) {
-        let method = 'POST';
-        var params = JSON.stringify({
-            id: id,
-        });
-        let url = 'http://modelfashion.store' + status;
-        const res = this.callAPI(url, params, method);
-        console.log('KET QUA CALL', res.result);
-        if (res.result) {
-            setTimeout(function () {
-                this.showNotification('top', 'right', res.message);
-                document.location.reload();
-            }, 1500);
-        }
-    },
     showNotification: function (from, align, message, color) {
+        this.color ? color =color : color = "primary";
         color = color;
         $.notify(
             {
@@ -48,6 +16,33 @@ bill = {
                 },
             },
         );
+    },
+ async   confirmStatusBill(id, status) {
+        let myHeaders = new Headers();
+        const params = JSON.stringify({
+             id: id,
+         });
+        myHeaders.append('Content-Type', 'application/json');
+        let requestOptions = {
+            method:  'POST',
+            headers: myHeaders,
+            body: params,
+            redirect: 'follow',
+        };
+        let url = 'http://modelfashion.store' + status;
+      await  fetch(url, requestOptions)
+                .then((response) => response.text())
+                .then((result) => {
+                const  data = JSON.parse(result);
+                if (data.result) {
+                    this.showNotification('top', 'right', data.message);
+                    setTimeout(() => {
+                         document.location.reload();  
+                    }, 5000);
+                }else{
+                    this.showNotification('top', 'right', data.message);
+                }
+                }).catch((error) => console.log('error', error));
     },
     onClickForm(status, bill_id) {
         document.querySelector('.feedback-form').style.display = 'flex';
