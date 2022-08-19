@@ -3,8 +3,9 @@ const { getConnection, query } = require('../utils/database');
 const categorySQL = require('../sql/categorySQL');
 const moment = require('moment');
 const { uploadImage } = require('../utils/image');
+let jwt = require('jsonwebtoken');
+const userSQL = require('../sql/userSQL');
 //Web View
-//Category
 const getAddCategory = async (req, res) => {
     res.render('insert_category');
 };
@@ -48,7 +49,8 @@ const addCategory = async (req, res) => {
 const category = async (req, res) => {
     const connection = await getConnection(req);
     const listCategory = await query(connection, categorySQL.listCategoryQuerySQL);
-
+    const user_id = jwt.verify(req.cookies.token, process.env.ACCESS_TOKEN_SECRET).user_id;
+    const permission = await query(connection, userSQL.queryPermissionUser, [user_id])
     for (const category of listCategory) {
         if (category.created_at) {
             category.created_at = moment(category.created_at).format('DD-MM-YYYY');
@@ -60,14 +62,14 @@ const category = async (req, res) => {
             category.deleted_at = moment(category.deleted_at).format('DD-MM-YYYY');
         }
     }
-    res.render('category', { listCategory: listCategory });
+    res.render('category', { listCategory: listCategory, permission: permission[0].permission });
 };
 //Xóa thể loại
-const removeCategory = async (req, res) => {
-    // const {permission} = req;
+const hiddenCategory = async (req, res) => {
     const { id } = req.params;
-    // if (permission !== 'super admin') return res.status(403).json({message: 'Không có quyền xóa'});
     const connection = await getConnection(req);
+    const user_id = jwt.verify(req.cookies.token, process.env.ACCESS_TOKEN_SECRET).user_id;
+    const permission = await query(connection, userSQL.queryPermissionUser, [user_id])
     await query(connection, categorySQL.deleteCategorySQL, [new Date(), id]);
     const listCategory = await query(connection, categorySQL.listCategoryQuerySQL);
     for (const category of listCategory) {
@@ -81,58 +83,7 @@ const removeCategory = async (req, res) => {
             category.deleted_at = moment(category.deleted_at).format('DD-MM-YYYY');
         }
     }
-    res.render('category', { listCategory: listCategory });
-};
-// Thể loại đã xóa
-const getCategoryDeleted = async (req, res) => {
-    const connection = await getConnection(req);
-    const listCategory = await query(connection, categorySQL.listCategoryDeleted);
-    for (const category of listCategory) {
-        if (category.created_at) {
-            category.created_at = moment(category.created_at).format('DD-MM-YYYY');
-        }
-        if (category.updated_at) {
-            category.updated_at = moment(category.updated_at).format('DD-MM-YYYY');
-        }
-        if (category.deleted_at) {
-            category.deleted_at = moment(category.deleted_at).format('DD-MM-YYYY');
-        }
-    }
-    res.render('category', { listCategory: listCategory });
-};
-//Thể loại đã Sửa
-const getCategoryUpdated = async (req, res) => {
-    const connection = await getConnection(req);
-    const listCategory = await query(connection, categorySQL.listCategoryUpdated);
-    for (const category of listCategory) {
-        if (category.created_at) {
-            category.created_at = moment(category.created_at).format('DD-MM-YYYY');
-        }
-        if (category.updated_at) {
-            category.updated_at = moment(category.updated_at).format('DD-MM-YYYY');
-        }
-        if (category.deleted_at) {
-            category.deleted_at = moment(category.deleted_at).format('DD-MM-YYYY');
-        }
-    }
-    res.render('category', { listCategory: listCategory });
-};
-// Theo ngày tạo mới nhất
-const getCategoryCreated = async (req, res) => {
-    const connection = await getConnection(req);
-    const listCategory = await query(connection, categorySQL.listCategoryCreated);
-    for (const category of listCategory) {
-        if (category.created_at) {
-            category.created_at = moment(category.created_at).format('DD-MM-YYYY');
-        }
-        if (category.updated_at) {
-            category.updated_at = moment(category.updated_at).format('DD-MM-YYYY');
-        }
-        if (category.deleted_at) {
-            category.deleted_at = moment(category.deleted_at).format('DD-MM-YYYY');
-        }
-    }
-    res.render('category', { listCategory: listCategory });
+    res.render('category', { listCategory: listCategory, permission: permission[0].permission });
 };
 //View Update thể loại
 const getUpdateCategory = async (req, res) => {
@@ -174,16 +125,13 @@ const getAll = async (req, res) => {
         return res.status(500).json({ message: `${e}` });
     }
 };
-
 module.exports = {
     getAll,
-    getCategoryUpdated,
-    getCategoryCreated,
-    getCategoryDeleted,
+    hiddenCategory,
     update,
     addCategory,
     getAddCategory,
     getUpdateCategory,
     category,
-    removeCategory,
+
 };

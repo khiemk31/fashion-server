@@ -16,6 +16,17 @@ module.exports = (router) => {
     router.get('/billDetailStatistics', middleware.requireAuth, main.billDetailStatistics);
     router.get('/top10User', middleware.requireAuth, main.queryTop10User);
     router.get('/top10Product', middleware.requireAuth, main.queryTop10Product);
+    //User Web View
+    router.get('/login', user.loginWeb);
+    router.post('/login', user.loginAdmin);
+    router.get('/user/logout', user.getLogOut);
+    router.get('/user/insertUser', middleware.requireAuth, user.getInsertUser);
+    router.post('/user/insertUser', middleware.requireAuth, user.postInsertUser);
+    router.get('/user/remove/:id', middleware.requireAuth, user.blockUser);
+    router.get('/user/active/:id', middleware.requireAuth, user.activeUser);
+    router.get('/user/userDetail', middleware.requireAuth, user.userDetail);
+    router.get('/user', middleware.requireAuth, user.getAll);
+    router.get('/getUser', middleware.requireAuth, user.getAllUser);
     //User API
     router.get('/user/getUser', user.getUser);
     router.post('/user/checkActive', user.checkActive);
@@ -29,19 +40,6 @@ module.exports = (router) => {
     router.get('/user/detail/:id', user.detail);
     router.post('/user/send-otp', user.apiSendOTP);
     router.post('/user/verify-otp', user.verifyOTP);
-    //User Web View
-    router.get('/login', user.loginWeb);
-    router.post('/login', user.loginAdmin);
-    router.get('/user/logout', user.getLogOut);
-    router.get('/user/insertUser', middleware.requireAuth, user.getInsertUser);
-    router.post('/user/insertUser', middleware.requireAuth, user.postInsertUser);
-    router.get('/user/remove/:id', middleware.requireAuth, user.blockUser);
-    router.get('/user/active/:id', middleware.requireAuth, user.activeUser);
-    router.get('/user/userDetail', middleware.requireAuth, user.userDetail);
-    router.get('/user', middleware.requireAuth, user.getAll);
-    router.get('/getUser', middleware.requireAuth, user.getAllUser);
-    //Test
-    router.get('/test', main.test);
     //category API
     router.get('/category/getAll', category.getAll);
     //category Web View
@@ -50,16 +48,15 @@ module.exports = (router) => {
     router.post('/addCategory', middleware.requireAuth, category.addCategory);
     router.get('/category/update/:id', middleware.requireAuth, category.getUpdateCategory);
     router.post('/category/update', middleware.requireAuth, category.update);
-    router.get('/category/remove/:id', middleware.requireAuth, category.removeCategory);
-    router.get('/category/deleted', middleware.requireAuth, category.getCategoryDeleted);
-    router.get('/category/updated', middleware.requireAuth, category.getCategoryUpdated);
-    router.get('/category/created', middleware.requireAuth, category.getCategoryCreated);
+    router.get('/category/hiddenCategory/:id', middleware.requireAuth, category.hiddenCategory);
+
     //Product API
     router.get('/product/getAllProductByCategory', product.getAllProductByCategory);
     router.get('/product/getProductByCategory', product.getProductByCategory);
     router.get('/product/getProductDiscount', product.getProductDiscount);
     router.get('/product/detail/:id', product.getProductDetail);
     router.get('/product/getAllProductDiscount', product.getAllProductDiscount);
+    router.get('/product/getProductByCategorySearch', product.getProductByCategorySearch);
     //Product Web View
     router.get('/updateProduct/:id', middleware.requireAuth, product.getUpdate);
     router.post('/product/update', middleware.requireAuth, product.update);

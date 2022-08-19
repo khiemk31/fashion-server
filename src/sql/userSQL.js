@@ -14,4 +14,5 @@ module.exports = {
     getLengthListUser: `SELECT * FROM user`,
     queryAllUserId: `SELECT user_id FROM user WHERE deleted_at IS null`,
     queryDetailUserByID: `SELECT *  FROM user WHERE  user_id=?`,
+    queryPermissionUser: `SELECT permission FROM user WHERE user_id=?`
 };

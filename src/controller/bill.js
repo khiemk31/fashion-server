@@ -4,7 +4,6 @@ const userSQL = require('../sql/userSQL');
 const billSQL = require('../sql/billSQL');
 const moment = require('moment');
 const { formatMoney } = require('../utils/formatMoney');
-
 //Bill API
 //Tạo hóa đơn
 const add = async (req, res) => {
@@ -171,17 +170,7 @@ const getBillDetailWeb = async (req, res) => {
         listProduct: listProduct,
     });
 };
-// Lấy tất cả bill
-const getAll = async (req, res) => {
-    const connection = await getConnection(req);
-    const queryBill = 'SELECT * FROM bill order by created_at DESC';
-    const listBill = await query(connection, queryBill);
-    for (const bill of listBill) {
-        bill.created_at = moment(bill.created_at).format('DD-MM-YYYY');
-        bill.total_price = formatMoney(bill.total_price);
-    }
-    res.render('bill', { listBill: listBill });
-};
+
 
 //LoadBill CHECK 2 man  bill & billDetail
 const loadBill = async (req, res, connection, page, id) => {
@@ -228,14 +217,28 @@ const bill = async (req, res) => {
     }
     res.render('bill', { listBill: listBill });
 };
+// Lấy tất cả bill
+const getAll = async (req, res) => {
+    try {
+        const connection = await getConnection(req);
+        const listBill = await query(connection, billSQL.queryAllBill);
+        for (const bill of listBill) {
+            bill.created_at = moment(bill.created_at).format('DD-MM-YYYY');
+            bill.total_price = formatMoney(bill.total_price);
+        }
+        return res.status(200).json({ listBill: listBill });
+    } catch (error) {
+        return res.status(500).json({ message: `${error}` });
+    }
+};
 // Nhận đơn
 const billConfirm = async (req, res) => {
     try {
         const { id } = req.body;
+        console.log("Chayj vao day roi");
         const connection = await getConnection(req);
         const queryListBillDetail = 'SELECT product_name ,size ,quantity FROM bill_detail WHERE bill_id=?';
         const listBillDetail = await query(connection, queryListBillDetail, [id]);
-        console.log(listBillDetail);
         const queryProduct = 'SELECT product_id ,quantity_sold FROM product WHERE product_name =?';
         const querySize = 'SELECT size, quantity,size_id FROM size WHERE product_id=? AND size=?';
         const updateSize = 'UPDATE size SET quantity=? WHERE size_id=?';
@@ -249,7 +252,7 @@ const billConfirm = async (req, res) => {
                 } else {
                     return res.status(300).json({
                         message: `Số lượng hàng của size ${size[0].size} không đủ so với đặt hàng ! Còn ${size[0].quantity} sp size ${size[0].size}`,
-                          result: false
+                        result: false
                     });
                 }
             } else {
@@ -260,12 +263,17 @@ const billConfirm = async (req, res) => {
             }
         }
         await query(connection, billSQL.updateStatusBillWeb, ['Đang Giao', id]);
-        return res.status(200).json({
-            message: `Đã xác nhận đơn`,
-            result: true,
-        });
+        const bill = await query(connection, billSQL.queryBillById, [id]);
+        if (bill[0].status == "Đang Giao") {
+            console.log("ádfsdfsdf");
+            console.log(bill[0]);
+            return res.status(200).json({
+                message: `Đã nhận đơn`,
+                result: true,
+            });
+        }
     } catch (error) {
-        return res.status(500).json({ message: `${error}`  ,result: false});
+        return res.status(500).json({ message: `${error}`, result: false });
     }
 };
 // Từ chối đơn
@@ -282,6 +290,7 @@ const billCancel = async (req, res) => {
 const billCancellationConfirmation = async (req, res) => {
     try {
         const { id } = req.body;
+        console.log("Ăn luôn");
         const connection = await getConnection(req);
         const queryListBillDetail = 'SELECT product_name ,size ,quantity FROM bill_detail WHERE bill_id=?';
         const listBillDetail = await query(connection, queryListBillDetail, [id]);
@@ -300,7 +309,7 @@ const billCancellationConfirmation = async (req, res) => {
             result: true,
         });
     } catch (error) {
-        return res.status(500).json({ message: `${error}`,result: false });
+        return res.status(500).json({ message: `${error}`, result: false });
     }
 };
 //Từ Chối Hủy
@@ -316,6 +325,7 @@ const rejectCancellationRequest = async (req, res) => {
 const confirmReturnRequest = async (req, res) => {
     try {
         const { id } = req.body;
+        console.log("Ăn luôn");
         const connection = await getConnection(req);
         const bill = await query(connection, billSQL.queryBill, [id]);
         const queryListBillDetail = 'SELECT product_name ,size ,quantity FROM bill_detail WHERE bill_id=?';
@@ -340,7 +350,7 @@ const confirmReturnRequest = async (req, res) => {
             result: true,
         });
     } catch (error) {
-        return res.status(500).json({ message: `${error}`,result: false });
+        return res.status(500).json({ message: `${error}`, result: false });
     }
 };
 //Từ Chối Hoàn
@@ -376,10 +386,14 @@ const billDone = async (req, res) => {
             await query(connection, updateSize, [newSizeQuantity, size[0].size_id]);
         }
         await query(connection, billSQL.updateBillDone, ['Hoàn Thành', 1, new Date(), id]);
-        return res.status(200).json({
-            message: `Đã hoàn thành đơn`,
-            result: true,
-        });
+        const bill2 = await query(connection, billSQL.queryBillById, [id]);
+        if (bill2[0].status == "Hoàn Thành") {
+            console.log("ádfsdfsdf");
+            return res.status(200).json({
+                message: `Đã hoàn thành đơn`,
+                result: true,
+            });
+        }
     } catch (error) {
         return res.status(500).json({ message: `${error}`, result: false });
     }

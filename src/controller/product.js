@@ -10,6 +10,9 @@ const { formatMoney } = require('../utils/formatMoney');
 const { render } = require('pug');
 
 //Product Web View
+const product = async (req, res) => {
+    res.render('product');
+};
 const getAll = async (req, res) => {
     const connection = await getConnection(req);
     const listProduct = await query(connection, productSQL.getAllProduct);
@@ -210,9 +213,6 @@ const update = async (req, res) => {
 };
 
 // API MOBILE
-const product = async (req, res) => {
-    res.render('product');
-};
 const getAllProductByCategory = async (req, res) => {
     try {
         const connection = await getConnection(req);
@@ -334,7 +334,19 @@ const getProductByCategory = async (req, res) => {
         return res.status(500).json({ message: `${e}` });
     }
 };
-
+const getProductByCategorySearch = async (req, res) => {
+    try {
+        const { category_id } = req.query;
+        const connection = await getConnection(req);
+        const listProduct = await query(connection, productSQL.getAllProductByCategory, [category_id]);
+        return res.status(200).json({
+            message: 'success',
+            listProduct: listProduct,
+        });
+    } catch (e) {
+        return res.status(500).json({ message: `${e}` });
+    }
+}
 module.exports = {
     product,
     getAll,
@@ -350,4 +362,5 @@ module.exports = {
     productDetail,
     getListProduct,
     removeProduct,
+    getProductByCategorySearch
 };

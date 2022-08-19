@@ -73,11 +73,12 @@ head
                     .col-md-4
                         form.ml-2.mb-2.align-self-center
                             .input-group.no-border
-                                input#myInput.form-control(onkeyup='searchUser()' type='text' name='search' placeholder='Search...')
+                                input#myInput.form-control(onkeyup='searchCategory()' type='text' name='search' placeholder='Search tên người dùng...')
                                 .input-group-append
                                     .input-group-text
                                         i.nc-icon.nc-zoom-split
-                        a.btn.btn-primary.align-self-center(href='/user/insertUser' role='button') Tạo Tài Khoản
+                        if(permission == "super admin")
+                            a.btn.btn-primary.align-self-center(href='/user/insertUser' role='button') Tạo Tài Khoản
                         .btn-group
                             button.btn.btn-info(type='button') Lọc 
                             button.btn.btn-info.dropdown-toggle.dropdown-toggle-split(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
@@ -106,7 +107,8 @@ head
                                         each user,index in listUser  
                                             tr  
                                                 td= index+1
-                                                td= user.user_id
+                                                td 
+                                                    a.text-dark(href='/user/userDetail/?user_id='+user.user_id )=user.user_id
                                                 td
                                                     a.text-dark(href='/user/userDetail/?user_id='+user.user_id )= user.user_name
                                                 td= user.phone
@@ -118,28 +120,27 @@ head
                                                 if (user.active===0)
                                                     td Hoạt Động
                                                 else  
-                                                    td Bị Khóa  
-                                .col-md-4
-                                    .row
-                                        .form-group
-                                            h5 Chọn số bản ghi
-                                            select#maxRows.form-control(name='state')
-                                                option(value='5000') Xem toàn bộ
-                                                option(value='5') 5
-                                                option(value='10') 10
-                                                option(value='15') 15
-                                                option(value='20') 20
-                                    .row
-
-                                        .pagination-container
-                                            nav
-                                                ul.pagination
-                                                    li(data-page='prev')
-                                                        span &lt; 
-                                                            span.sr-only (current)
-                                                    li#prev(data-page='next')
-                                                        span &gt; 
-                                                            span.sr-only (current)           
+                                                    td Bị Khóa Đặt Hàng  
+                            .col-md-4
+                                .row
+                                    .form-group
+                                        h6 Chọn số bản ghi
+                                        select#maxRows.form-control(name='state')
+                                            option(value='5000') Xem toàn bộ
+                                            option(value='5') 5
+                                            option(value='10') 10
+                                            option(value='15') 15
+                                            option(value='20') 20
+                                .row
+                                    .pagination-container
+                                        nav(aria-label='...')
+                                            ul.pagination
+                                                li(data-page='prev')
+                                                    span &lt; 
+                                                        span.sr-only (current)
+                                                li#prev(data-page='next')
+                                                    span &gt; 
+                                                        span.sr-only (current)           
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js
@@ -157,8 +158,6 @@ script
     include ./assets/js/paper-dashboard.min.js
 script
     include ./assets/js/user.js
-script
-    include ./assets/js/main.js
 script
     include ./assets/js/paginationTable.js
 

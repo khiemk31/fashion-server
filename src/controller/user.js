@@ -157,7 +157,7 @@ const blockUser = async (req, res) => {
             doanhThu: doanhThu[0].doanhThu,
         });
     } catch (error) {
-        return res.status(500).json({ message: `${e}` });
+        return res.status(500).json({ message: `${error}` });
     }
 };
 const activeUser = async (req, res) => {
@@ -190,7 +190,7 @@ const activeUser = async (req, res) => {
             doanhThu: doanhThu[0].doanhThu,
         });
     } catch (error) {
-        return res.status(500).json({ message: `${e}` });
+        return res.status(500).json({ message: `${error}` });
     }
 };
 
@@ -263,9 +263,10 @@ const checkActive = async (req, res) => {
 //WEB VIEW
 const getAll = async (req, res) => {
     const connection = await getConnection(req);
-    queryListUser = `SELECT *FROM user`;
-    const listUser = await query(connection, queryListUser);
-    res.render('user', { listUser: listUser });
+    const user_id = jwt.verify(req.cookies.token, process.env.ACCESS_TOKEN_SECRET).user_id;
+    const permission = await query(connection, userSQL.queryPermissionUser, [user_id])
+    const listUser = await query(connection, userSQL.queryAllUser);
+    res.render('user', { listUser: listUser, permission: permission[0].permission });
 };
 const loginWeb = async (req, res) => {
     res.render('login');

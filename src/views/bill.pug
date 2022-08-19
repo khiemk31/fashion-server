@@ -79,66 +79,30 @@ head
                                         th Tổng Tiền
                                         th Ngày đặt đơn 
                                         th Tình trạng đơn
-                                    tbody
-                                        each bill,index in listBill  
-                                            tr
-                                                a(href="/bill/getBillDetailWeb/"+bill.bill_id)
-                                                    td= index+1
-                                                    td
-                                                        a(href="/bill/getBillDetailWeb/"+bill.bill_id)= bill.bill_id
-                                                    td=bill.user_name
-                                                    td=bill.phone
-                                                    td= bill.total_price +' đ'
-                                                    td= bill.created_at
-                                                    td= bill.status
-                                                    td
-                                                        if (bill.status=="Chờ Xác Nhận")
-                                                            .row
-                                                                button.btn.btn-outline-primary.btn-round(onclick=`bill.confirmStatusBill('${bill.bill_id}','/bill/billConfirm')`)
-                                                                    i.nc-icon.nc-check-2(style= 'font-size : 14px ;')
-                                                                button.btn.btn-outline-danger.btn-round(onclick=`bill.onClickForm('Chờ Xác Nhận','${bill.bill_id}');`)
-                                                                    i.nc-icon.nc-simple-remove(style= 'font-size : 14px ;')
-                                                        if (bill.status=="Yêu Cầu Hủy Đơn")
-                                                            .row
-                                                                button.btn.btn-outline-primary.btn-round(onclick=`bill.confirmStatusBill('${bill.bill_id}','/bill/billCancellationConfirmation')`)
-                                                                    i.nc-icon.nc-check-2(style= 'font-size : 14px ;')
-                                                                button.btn.btn-outline-danger.btn-round(onclick=`bill.onClickForm('Yêu Cầu Hủy Đơn','${bill.bill_id}');`)
-                                                                    i.nc-icon.nc-simple-remove(style= 'font-size : 14px ;')
-                                                        if (bill.status=="Yêu Cầu Hoàn Đơn")
-                                                            .row
-                                                                button.btn.btn-outline-primary.btn-round(onclick=`bill.confirmStatusBill('${bill.bill_id}','/bill/confirmReturnRequest')`)
-                                                                    i.nc-icon.nc-check-2(style= 'font-size : 14px ;')
-                                                                button.btn.btn-outline-danger.btn-round(onclick=`bill.onClickForm('Yêu Cầu Hoàn Đơn','${bill.bill_id}');`)
-                                                                    i.nc-icon.nc-simple-remove(style= 'font-size : 14px ;')
-                                                        if (bill.status=="Đang Giao")
-                                                            .row
-                                                                button.btn.btn-outline-primary.btn-round(onclick=`bill.confirmStatusBill('${bill.bill_id}','/bill/billDone')`) 
-                                                                    i.nc-icon.nc-check-2(style= 'font-size : 14px ;')
-                                                                button.btn.btn-outline-danger.btn-round(onclick=`bill.onClickForm('Đang Giao','${bill.bill_id}');`)
-                                                                    i.nc-icon.nc-simple-remove(style= 'font-size : 14px ;')
-                                                .feedback-form
-                                                    .feedback-form-content
-                                                        #formFeedback
-                                .col-md-4
-                                    .row
-                                        .form-group
-                                            h6 Chọn số bản ghi
-                                            select#maxRows.form-control(name='state')
-                                                option(value='5000') Xem toàn bộ
-                                                option(value='5') 5
-                                                option(value='10') 10
-                                                option(value='15') 15
-                                                option(value='20') 20
-                                    .row
-                                        .pagination-container
-                                            nav
-                                                ul.pagination
-                                                    li(data-page='prev')
-                                                        span &lt; 
-                                                            span.sr-only (current)
-                                                    li#prev(data-page='next')
-                                                        span &gt; 
-                                                            span.sr-only (current)     
+                                    tbody#listBill
+                                    .feedback-form
+                                        .feedback-form-content
+                                            #formFeedback
+                            .col-md-4
+                                .row
+                                    .form-group
+                                        h6 Chọn số bản ghi
+                                        select#maxRows.form-control(name='state')
+                                            option(value='5000') Xem toàn bộ
+                                            option(value='5') 5
+                                            option(value='10') 10
+                                            option(value='15') 15
+                                            option(value='20') 20        
+                                .row
+                                    .pagination-container
+                                        nav
+                                            ul.pagination
+                                                li(data-page='prev')
+                                                    span &lt; 
+                                                        span.sr-only (current)
+                                                li#prev(data-page='next')
+                                                    span &gt; 
+                                                        span.sr-only (current)             
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js
@@ -158,4 +122,8 @@ script
     include ./assets/js/bill.js
 script
     include ./assets/js/paginationTable.js
+script.
+    $(document).ready(function() {
+    bill.getBill();
+    });
 

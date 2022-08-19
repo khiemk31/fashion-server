@@ -152,9 +152,9 @@ head
                                         .form-group
                                             label Tình Trạng
                                             if (user.active==0)
-                                                input.form-control(type='text' disabled  value="Đang Hoạt Động")
+                                                input.form-control(type='text' disabled  value="Đang hoạt động")
                                             if (user.active==1)
-                                                input.form-control(type='text' disabled  value="Đã Bị Block")
+                                                input.form-control(type='text' disabled  value="Đã bị khóa đặt hàng")
                                 .row
                                     .col-md-3.pr-1
                                         .form-group
@@ -164,9 +164,9 @@ head
                                     .update.ml-auto.mr-auto
                                         if(user.permission !="super admin")
                                             if (user.active==0) 
-                                                a.btn.btn-danger(href='/user/remove/'+user.user_id role='button') Khóa Tài Khoản
+                                                a.btn.btn-danger(href='/user/remove/'+user.user_id role='button') Khóa đặt hàng
                                             if (user.active==1)
-                                                a.btn.btn-primary(href='/user/active/'+user.user_id role='button')  Mở Khóa
+                                                a.btn.btn-primary(href='/user/active/'+user.user_id role='button')  Mở khóa đặt hàng
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js
