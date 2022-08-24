@@ -17,21 +17,22 @@ product = {
             .catch((error) => console.log('error', error));
         return data;
     },
-  async getListProduct() {
+    async getListProduct() {
         let method = 'GET';
-        var params;
+        let params;
         let url = 'http://modelfashion.store/getListProduct';
-        const res =await this.callAPI(url, params, method);
+        const res = await this.callAPI(url, params, method);
         if (res.listProduct.length > 0) {
             var p = '';
             res.listProduct.forEach((product) => {
+                p += `<div class="filterDiv ${product.category_id}">`
                 p += '<div class="col-md-3 pl-2" > ';
-                p += `<div class="card" id="filterDiv ${product.category_name}" style="width: 17.5rem; height : 30rem ;">`;
+                p += `<div class="card"  style="width: 17.5rem; height : 30rem ;">`;
                 p += '<h6 class="card-header">' + product.product_id + '</h6>';
                 p +=
                     '<img src="' +
                     product.product_image +
-                    '" class="card-img-top mb-2" style="width: 16rem; height: 300px;"/> ';
+                    '" class="card-img-top mb-2" style="width: 17.5rem; height: 300px;"/> ';
                 if (product.discount) {
                     p += '<div class="note on-sale">Đang sale ' + product.discount + '%</div>';
                 }
@@ -53,9 +54,11 @@ product = {
                     p += '  <p class="card-text mt-4 mb-4 font-weight-bold">Giá: ' + product.price + 'đ</p> ';
                 }
 
-                p += ' </card-body> </div> </div>';
+                p += ' </card-body> </div></div></div>';
             });
             document.getElementById('dataAllProduct').innerHTML = p;
+        } else {
+            p += '<h2>Không có dữ liệu</h2>'
         }
     },
 };

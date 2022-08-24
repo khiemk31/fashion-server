@@ -118,19 +118,9 @@ head
                                                             a.dropdown-item(href='/category/update/'+category.category_id) Sửa thể loại
                                                             if(permission=="super admin")
                                                                 if(category.deleted_at == null)
-                                                                    a.dropdown-item(type='button', data-toggle='modal', data-target='#myModal' href='/category/hiddenCategory/'+category.category_id) Ẩn thể loại
+                                                                    a.dropdown-item(type='button' href='/category/hiddenCategory/'+category.category_id) Ẩn thể loại
                                                                 else
                                                                     a.dropdown-item(href='/category/showCategory/'+category.category_id) Hiển thị lại thể loại
-                                #myModal.modal.fade( role='dialog')
-                                    .modal-dialog
-                                        .modal-content
-                                            .modal-header
-                                                button.close(type='button', data-dismiss='modal')
-                                                    span(aria-hidden='true') &times;
-                                            .modal-body Bạn có chắc muốn ẩn tất cả sản phẩm của thể loại và thể loại này ?
-                                            .modal-footer
-                                                    button.btn.btn-primary(type='button') Đồng ý                                                           
-                                                    button.btn.btn-primary(type='button', data-dismiss='modal') Từ chối
                             .col-md-4
                                 .row
                                     .form-group
@@ -148,9 +138,9 @@ head
                                                 li(data-page='prev')
                                                     span &lt; 
                                                         span.sr-only (current)
-                                                li#prev.page-item.active(aria-current='page')(data-page='next')
-                                                    span &gt; 
-                                                        span.sr-only (current)   
+                                                li#prev(data-page='next')
+                                                span &gt; 
+                                                    span.sr-only (current)                       
 script
     include ./assets/js/core/jquery.min.js
 script

@@ -1,22 +1,22 @@
 function searchTable(columnNumber) {
-    console.log(columnNumber);
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById('myInput');
-    filter = input.value.toUpperCase();
-    table = document.getElementById('myTable');
-    tr = table.getElementsByTagName('tr');
-    // Loop through all table rows, and hide those who don't match the search query
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName('td')[columnNumber];
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = '';
-            } else {
-                tr[i].style.display = 'none';
-            }
-        }
+  console.log(columnNumber);
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById('myInput');
+  filter = input.value.toUpperCase();
+  table = document.getElementById('myTable');
+  tr = table.getElementsByTagName('tr');
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName('td')[columnNumber];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = '';
+      } else {
+        tr[i].style.display = 'none';
+      }
     }
+  }
 }
 
 function sortTable(n) {
@@ -24,7 +24,7 @@ function sortTable(n) {
   table = document.getElementById("myTable");
   switching = true;
   //Đặt hướng sắp xếp tăng dần:
-  dir = "asc"; 
+  dir = "asc";
   /*Tạo một vòng lặp sẽ tiếp tục cho đến khi
   không có chuyển đổi nào được thực hiện:*/
   while (switching) {
@@ -42,11 +42,11 @@ function sortTable(n) {
       y = rows[i + 1].getElementsByTagName("TD")[n];
       /*kiểm tra xem hai hàng có nên đổi chỗ cho nhau không,
       dựa trên hướng, asc hoặc desc:*/
-      
+
       if (dir == "asc") {
         if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
           // nếu vậy, hãy đánh dấu là một công tắc và ngắt vòng lặp:
-          shouldSwitch= true;
+          shouldSwitch = true;
           break;
         }
       } else if (dir == "desc") {
@@ -63,7 +63,7 @@ function sortTable(n) {
       rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
       switching = true;
       //Each time a switch is done, increase this count by 1:
-      switchcount ++;      
+      switchcount++;
     } else {
       /*If no switching has been done AND the direction is "asc",
       set the direction to "desc" and run the while loop again.*/
@@ -72,6 +72,6 @@ function sortTable(n) {
         switching = true;
       }
     }
-    
+
   }
 }

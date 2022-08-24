@@ -15,6 +15,8 @@ head
         include ./assets/css/paper-dashboard.css 
     style 
         include ./assets/css/main.css
+    style 
+        include ./assets/css/filter.css
 .wrapper
     .sidebar(data-color='white' data-active-color='danger')
         .logo
@@ -72,7 +74,9 @@ head
                                     i.nc-icon.nc-zoom-split
         .content
             #myBtnContainer
-                button.btn.active(onclick="filterSelection('all')") Show all
+                button.btn(onclick="filterSelection('all')") Show all
+                each category of listCategory
+                    button.btn(onclick=`filterSelection('${category.category_id}')`)=category.category_name
             #dataAllProduct.row
 script
     include ./assets/js/core/jquery.min.js
@@ -90,7 +94,11 @@ script
     include ./assets/js/paper-dashboard.min.js
 script
     include ./assets/js/product.js
+script
+    include ./assets/js/filter.js
 script.
     $(document).ready(function() {
         product.getListProduct();
     });
+script(type="text/javascript").
+    filterSelection('all');

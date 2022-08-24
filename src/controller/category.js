@@ -64,13 +64,13 @@ const category = async (req, res) => {
     }
     res.render('category', { listCategory: listCategory, permission: permission[0].permission });
 };
-//Xóa thể loại
+//Ản thể loại
 const hiddenCategory = async (req, res) => {
     const { id } = req.params;
     const connection = await getConnection(req);
     const user_id = jwt.verify(req.cookies.token, process.env.ACCESS_TOKEN_SECRET).user_id;
     const permission = await query(connection, userSQL.queryPermissionUser, [user_id])
-    await query(connection, categorySQL.deleteCategorySQL, [new Date(), id]);
+    await query(connection, categorySQL.updateHiddenCategory, [new Date(), id]);
     const listCategory = await query(connection, categorySQL.listCategoryQuerySQL);
     for (const category of listCategory) {
         if (category.created_at) {
@@ -85,6 +85,27 @@ const hiddenCategory = async (req, res) => {
     }
     res.render('category', { listCategory: listCategory, permission: permission[0].permission });
 };
+//Show thể loại 
+const showCategory = async (req, res) => {
+    const { id } = req.params;
+    const connection = await getConnection(req);
+    const user_id = jwt.verify(req.cookies.token, process.env.ACCESS_TOKEN_SECRET).user_id;
+    const permission = await query(connection, userSQL.queryPermissionUser, [user_id])
+    await query(connection, categorySQL.updateShowCategory, [id]);
+    const listCategory = await query(connection, categorySQL.listCategoryQuerySQL);
+    for (const category of listCategory) {
+        if (category.created_at) {
+            category.created_at = moment(category.created_at).format('DD-MM-YYYY');
+        }
+        if (category.updated_at) {
+            category.updated_at = moment(category.updated_at).format('DD-MM-YYYY');
+        }
+        if (category.deleted_at) {
+            category.deleted_at = moment(category.deleted_at).format('DD-MM-YYYY');
+        }
+    }
+    res.render('category', { listCategory: listCategory, permission: permission[0].permission });
+}
 //View Update thể loại
 const getUpdateCategory = async (req, res) => {
     const data = req.params;
@@ -119,7 +140,7 @@ const update = async (req, res) => {
 const getAll = async (req, res) => {
     try {
         const connection = await getConnection(req);
-        const category = await query(connection, categorySQL.listCategoryQuerySQL);
+        const category = await query(connection, categorySQL.queryListCategory);
         return res.status(200).json({ message: 'thành công', data: category });
     } catch (e) {
         return res.status(500).json({ message: `${e}` });
@@ -133,5 +154,5 @@ module.exports = {
     getAddCategory,
     getUpdateCategory,
     category,
-
+    showCategory
 };

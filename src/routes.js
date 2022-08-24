@@ -49,6 +49,7 @@ module.exports = (router) => {
     router.get('/category/update/:id', middleware.requireAuth, category.getUpdateCategory);
     router.post('/category/update', middleware.requireAuth, category.update);
     router.get('/category/hiddenCategory/:id', middleware.requireAuth, category.hiddenCategory);
+    router.get('/category/showCategory/:id', middleware.requireAuth, category.showCategory);
 
     //Product API
     router.get('/product/getAllProductByCategory', product.getAllProductByCategory);

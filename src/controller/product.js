@@ -11,7 +11,9 @@ const { render } = require('pug');
 
 //Product Web View
 const product = async (req, res) => {
-    res.render('product');
+    const connection = await getConnection(req);
+    const listCategory = await query(connection, categorySQL.queryListCategory);
+    res.render('product', { listCategory: listCategory });
 };
 const getAll = async (req, res) => {
     const connection = await getConnection(req);
@@ -337,7 +339,7 @@ const getProductByCategorySearch = async (req, res) => {
     try {
         const { id } = req.query;
         const connection = await getConnection(req);
-        const listProduct = await query(connection, productSQL.getAllProductByCategory, [id ]);
+        const listProduct = await query(connection, productSQL.getAllProductByCategory, [id]);
         return res.status(200).json({
             message: 'success',
             listProduct: listProduct,
