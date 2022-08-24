@@ -272,7 +272,7 @@ const loginWeb = async (req, res) => {
     res.render('login');
 };
 const getInsertUser = async (req, res) => {
-    res.render('user/insert_user');
+    res.render('insert_user');
 };
 const postInsertUser = async (req, res) => {
     try {

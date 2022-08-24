@@ -71,23 +71,8 @@ head
                                 .input-group-text
                                     i.nc-icon.nc-zoom-split
         .content
-            form
-                .form-group.col-sm-3.col-xs-6
-                    select.filter-make.filter.form-control(data-filter='make')
-                        option(value='') Chọn thể loại
-                        option(value='') Show All
-                .form-group.col-sm-3.col-xs-6
-                    select.filter-model.filter.form-control(data-filter='model')
-                        option(value='') Select Model
-                        option(value='') Show All
-                .form-group.col-sm-3.col-xs-6
-                    select.filter-type.filter.form-control(data-filter='type')
-                        option(value='') Select Type
-                        option(value='') Show All
-                .form-group.col-sm-3.col-xs-6
-                    select.filter-price.filter.form-control(data-filter='price')
-                        option(value='') Select Price Range
-                        option(value='') Show All
+            #myBtnContainer
+                button.btn.active(onclick="filterSelection('all')") Show all
             #dataAllProduct.row
 script
     include ./assets/js/core/jquery.min.js

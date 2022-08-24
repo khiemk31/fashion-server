@@ -31,7 +31,6 @@ const getListProduct = async (req, res) => {
                 product.sale_price = product.price - product.price * (product.discount / 100);
                 product.sale_price = formatMoney(product.sale_price);
             }
-
             product.price = formatMoney(product.price);
         }
         return res.status(200).json({ listProduct: listProduct });
@@ -336,9 +335,9 @@ const getProductByCategory = async (req, res) => {
 };
 const getProductByCategorySearch = async (req, res) => {
     try {
-        const { category_id } = req.query;
+        const { id } = req.query;
         const connection = await getConnection(req);
-        const listProduct = await query(connection, productSQL.getAllProductByCategory, [category_id]);
+        const listProduct = await query(connection, productSQL.getAllProductByCategory, [id ]);
         return res.status(200).json({
             message: 'success',
             listProduct: listProduct,

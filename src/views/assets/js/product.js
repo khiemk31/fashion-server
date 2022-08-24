@@ -26,7 +26,7 @@ product = {
             var p = '';
             res.listProduct.forEach((product) => {
                 p += '<div class="col-md-3 pl-2" > ';
-                p += '<div class="card" style="width: 17.5rem; height : 30rem ;">';
+                p += `<div class="card" id="filterDiv ${product.category_name}" style="width: 17.5rem; height : 30rem ;">`;
                 p += '<h6 class="card-header">' + product.product_id + '</h6>';
                 p +=
                     '<img src="' +
@@ -55,8 +55,8 @@ product = {
 
                 p += ' </card-body> </div> </div>';
             });
-
             document.getElementById('dataAllProduct').innerHTML = p;
         }
     },
 };
+

@@ -70,7 +70,7 @@ head
             .col-md-6
                 form.ml-2.mb-2.align-self-center
                     .input-group.no-border
-                        input#myInput.form-control(onkeyup='searchCategory()' type='text' name='search' placeholder='Search...')
+                        input#myInput.form-control(onkeyup='searchTable(1)' type='text' name='search' placeholder='Tìm kiếm tên thể loại...')
                         .input-group-append
                             .input-group-text
                                 i.nc-icon.nc-zoom-split
@@ -91,12 +91,12 @@ head
                             .table-responsive   
                                 table#myTable.table.table-striped.table-class
                                     thead.text-primary
-                                        th ID
-                                        th Tên thể loại
+                                        th(onclick='sortTable(0)') ID
+                                        th(onclick='sortTable(1)') Tên thể loại
                                         th Ảnh minh họa
-                                        th Ngày thêm
-                                        th Ngày sửa
-                                        th Ngày ẩn
+                                        th(onclick='sortTable(3)') Ngày thêm
+                                        th(onclick='sortTable(4)') Ngày sửa
+                                        th(onclick='sortTable(5)') Ngày ẩn
                                         th
                                     tbody
                                         each category in listCategory
@@ -151,8 +151,6 @@ head
                                                 li#prev.page-item.active(aria-current='page')(data-page='next')
                                                     span &gt; 
                                                         span.sr-only (current)   
-                
-// Core JS Files
 script
     include ./assets/js/core/jquery.min.js
 script
@@ -168,7 +166,7 @@ script
 script
     include ./assets/js/paper-dashboard.min.js
 script
-    include ./assets/js/category.js
+    include ./assets/js/table.js
 script
     include ./assets/js/paginationTable.js
 script.

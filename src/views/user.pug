@@ -6,10 +6,12 @@ head
     meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
     title Model Fashion
     meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
-
     link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700,200' rel='stylesheet')
     link(href='https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' rel='stylesheet')
     link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' rel='stylesheet')
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css")
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js")
 
     // CSS Files
     style 
@@ -18,8 +20,6 @@ head
         include ./assets/css/paper-dashboard.css 
     style 
         include ./assets/css/main.css
-    style 
-        include ./assets/css/paginationTable.css
 .wrapper
     .sidebar(data-color='white' data-active-color='danger')
         .logo
@@ -67,81 +67,65 @@ head
             .container-fluid
                 .navbar-wrapper
                     a.navbar-brand(href='#') Quản Lý Tài Khoản
-        .content
-            .container-fluid
-                .row
-                    .col-md-4
-                        form.ml-2.mb-2.align-self-center
-                            .input-group.no-border
-                                input#myInput.form-control(onkeyup='searchCategory()' type='text' name='search' placeholder='Search tên người dùng...')
-                                .input-group-append
-                                    .input-group-text
-                                        i.nc-icon.nc-zoom-split
-                        if(permission == "super admin")
-                            a.btn.btn-primary.align-self-center(href='/user/insertUser' role='button') Tạo Tài Khoản
-                        .btn-group
-                            button.btn.btn-info(type='button') Lọc 
-                            button.btn.btn-info.dropdown-toggle.dropdown-toggle-split(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
-                                span.sr-only Toggle Dropdown
-                            .dropdown-menu
-                                a.dropdown-item(href='/getUser') Tài khoản khách hàng
-                                a.dropdown-item(href='#') Tài khoản nhân viên
-                                a.dropdown-item(href='#') Tài khoản đang bị khóa
-            .row
-                .col-md-12
-                    .card
-                        .card-header
-                            h4.card-title  Danh sách người dùng
-                        .card-body
-                            .table-responsive
-                                table#myTable.table.table-striped.table-class
-                                    thead.header.text-primary
-                                        th STT
-                                        th(onclick='sortTable(0)') ID
-                                        th Tên
-                                        th Số Điện Thoại
-                                        th Giới Tính
-                                        th Loại Tài Khoản
-                                        th Tình Trạng
-                                    tbody
-                                        each user,index in listUser  
-                                            tr  
-                                                td= index+1
-                                                td 
-                                                    a.text-dark(href='/user/userDetail/?user_id='+user.user_id )=user.user_id
-                                                td
-                                                    a.text-dark(href='/user/userDetail/?user_id='+user.user_id )= user.user_name
-                                                td= user.phone
-                                                if (user.gender===1)
-                                                    td Nam
-                                                else  
-                                                    td Nữ
-                                                td= user.permission
-                                                if (user.active===0)
-                                                    td Hoạt Động
-                                                else  
-                                                    td Bị Khóa Đặt Hàng  
-                            .col-md-4
-                                .row
-                                    .form-group
-                                        h6 Chọn số bản ghi
-                                        select#maxRows.form-control(name='state')
-                                            option(value='5000') Xem toàn bộ
-                                            option(value='5') 5
-                                            option(value='10') 10
-                                            option(value='15') 15
-                                            option(value='20') 20
-                                .row
-                                    .pagination-container
-                                        nav(aria-label='...')
-                                            ul.pagination
-                                                li(data-page='prev')
-                                                    span &lt; 
-                                                        span.sr-only (current)
-                                                li#prev(data-page='next')
-                                                    span &gt; 
-                                                        span.sr-only (current)           
-// Core JS Files
+        .content    
+            .col-md-6
+                form.ml-2.mb-2.align-self-center
+                    .input-group.no-border
+                        input#myInput.form-control(onkeyup='searchTable(1)' type='text' name='search' placeholder='Tìm tên người dùng...')
+                        .input-group-append
+                            .input-group-text
+                                i.nc-icon.nc-zoom-split  
+            .col-md-6
+                if(permission == "super admin")
+                    a.btn.btn-primary.align-self-center(href='/user/insertUser' role='button') Tạo Tài Khoản
+            .col-md-12
+                .card
+                    .card-body
+                        .table-responsive
+                            table#myTable.table.table-striped.table-class
+                                thead.header.text-primary
+                                    th ID
+                                    th(onclick='sortTable(1)') Tên
+                                    th Số Điện Thoại
+                                    th(onclick='sortTable(3)') Giới Tính
+                                    th(onclick='sortTable(4)') Loại Tài Khoản
+                                    th(onclick='sortTable(5)') Tình Trạng
+                                tbody
+                                    each user in listUser  
+                                        tr  
+                                            td 
+                                                a.text-dark(href='/user/userDetail/?user_id='+user.user_id )=user.user_id
+                                            td= user.user_name
+                                            td= user.phone
+                                            if (user.gender===1)
+                                                td Nam
+                                            else  
+                                                td Nữ
+                                            td= user.permission
+                                            if (user.active===0)
+                                                td Hoạt Động
+                                            else  
+                                                td Bị Khóa Đặt Hàng  
+                        .col-md-4
+                            .row
+                                .form-group
+                                    h6 Chọn số bản ghi
+                                    select#maxRows.form-control(name='state')
+                                        option(value='5000') Xem toàn bộ
+                                        option(value='5') 5
+                                        option(value='10') 10
+                                        option(value='15') 15
+                                        option(value='20') 20
+                            .row
+                                .pagination-container
+                                    nav(aria-label='...')
+                                        ul.pagination
+                                            li(data-page='prev')
+                                                span &lt; 
+                                                    span.sr-only (current)
+                                            li#prev(data-page='next')
+                                                span &gt; 
+                                                    span.sr-only (current)           
 script
     include ./assets/js/core/jquery.min.js
 script
@@ -157,9 +141,11 @@ script
 script
     include ./assets/js/paper-dashboard.min.js
 script
-    include ./assets/js/user.js
+    include ./assets/js/table.js
 script
     include ./assets/js/paginationTable.js
+script.
+    $('#exampleModal').on('shown.bs.modal', function () {$('#myInput').trigger('focus')})
 
 
 

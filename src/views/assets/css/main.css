@@ -188,20 +188,25 @@
   display: none;
 }
 
-#myInput {
- 
-}
+#myInput {}
 
 #myTable {
-  border-collapse: collapse; /* Collapse borders */
-  width: 100%; /* Full-width */
-  border: 1px solid #ddd; /* Add a grey border */
-  font-size: 18px; /* Increase font-size */
+  border-collapse: collapse;
+  /* Collapse borders */
+  width: 100%;
+  /* Full-width */
+  border: 1px solid #ddd;
+  /* Add a grey border */
+  font-size: 18px;
+  /* Increase font-size */
 }
 
-#myTable th, #myTable td {
-  text-align: left; /* Left-align text */
-  padding: 12px; /* Add padding */
+#myTable th,
+#myTable td {
+  text-align: left;
+  /* Left-align text */
+  padding: 12px;
+  /* Add padding */
 }
 
 #myTable tr {
@@ -209,10 +214,12 @@
   border-bottom: 1px solid #ddd;
 }
 
-#myTable tr.header, #myTable tr:hover {
+#myTable tr.header,
+#myTable tr:hover {
   /* Add a grey background color to the table header and on hover */
   background-color: #f1f1f1;
 }
+
 body {
   background-color: #eee;
 }
@@ -249,21 +256,25 @@ body {
   display: none;
   z-index: 999;
 }
+
 .feedback-form-content {
   width: 450px;
   height: 450px;
   background-color: white;
   border-radius: 5px;
 }
+
 .feedback-form-content form {
   padding: 12px 40px;
 }
+
 .feedback-form-content h2 {
   font-size: 14px;
   padding: 18px 0;
   border-bottom: 1px solid #ddd;
   position: relative;
 }
+
 .feedback-form-content h2 span {
   display: block;
   position: absolute;
@@ -278,11 +289,14 @@ body {
   color: #333;
   border-radius: 5px;
 }
+
 .feedback-form-content form p {
   font-size: 16px;
   padding: 10px;
 }
-.feedback-form-content form input, select {
+
+.feedback-form-content form input,
+select {
   height: 45px;
   display: block;
   width: 100%;
@@ -291,6 +305,7 @@ body {
   padding: 6px;
   border-radius: 5px;
 }
+
 .feedback-form-content form button {
   margin-top: 20px;
   height: 40px;
@@ -302,6 +317,7 @@ body {
   color: white;
   border-radius: 5px;
 }
+
 .table-list-container {
   max-width: 800px;
   margin: 20px auto;
@@ -316,6 +332,7 @@ body {
     border-width: 1px 0;
   }
 }
+
 .table-list {
   min-height: 176px;
 }
@@ -455,6 +472,7 @@ button.sort.desc .caret {
   font-size: 16px;
   line-height: inherit;
 }
+
 .note {
   position: absolute;
   top: 0;

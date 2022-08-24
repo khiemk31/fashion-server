@@ -69,16 +69,17 @@ head
                 .col-md-12
                     .card
                         .card-body
+                            h4 Trạng thái đơn
                             .table-responsive   
                                 table#myTable.table.table-striped.table-class
                                     thead.text-primary
-                                        th STT
-                                        th Mã đơn
-                                        th Tên người đặt
-                                        th Số điện thoại
-                                        th Tổng Tiền
-                                        th Ngày đặt đơn 
-                                        th Tình trạng đơn
+                                        th(onclick='sortTable(0)') STT
+                                        th(onclick='sortTable(1)') Mã đơn
+                                        th(onclick='sortTable(2)') Tên người đặt
+                                        th(onclick='sortTable(3)') Số điện thoại
+                                        th(onclick='sortTable(4)') Tổng Tiền
+                                        th(onclick='sortTable(5)') Ngày đặt đơn 
+                                        th(onclick='sortTable(6)') Tình trạng đơn
                                     tbody#listBill
                                     .feedback-form
                                         .feedback-form-content
@@ -92,17 +93,17 @@ head
                                             option(value='5') 5
                                             option(value='10') 10
                                             option(value='15') 15
-                                            option(value='20') 20        
+                                            option(value='20') 20
                                 .row
                                     .pagination-container
-                                        nav
+                                        nav(aria-label='...')
                                             ul.pagination
                                                 li(data-page='prev')
                                                     span &lt; 
                                                         span.sr-only (current)
-                                                li#prev(data-page='next')
+                                                li#prev.page-item.active(aria-current='page')(data-page='next')
                                                     span &gt; 
-                                                        span.sr-only (current)             
+                                                        span.sr-only (current)      
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js
@@ -122,6 +123,10 @@ script
     include ./assets/js/bill.js
 script
     include ./assets/js/paginationTable.js
+script
+    include ./assets/js/table.js
+script
+    include ./assets/js/filter.js
 script.
     $(document).ready(function() {
     bill.getBill();
