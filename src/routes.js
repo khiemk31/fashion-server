@@ -6,9 +6,11 @@ const main = require('./controller/main');
 const voucher = require('./controller/voucher');
 const middleware = require('../src/utils/middleware/authenToken.middleware');
 const profile = require('./controller/profile');
+const forgotPassword = require('./controller/forgotPassword');
 
 module.exports = (router) => {
     //Main Router
+    router.get('', middleware.requireAuth, main.main);
     router.get('/main', middleware.requireAuth, main.main);
     //Main API
     router.post('/revenue', middleware.requireAuth, main.listRevenueByYear);
@@ -19,6 +21,7 @@ module.exports = (router) => {
     //User Web View
     router.get('/login', user.loginWeb);
     router.post('/login', user.loginAdmin);
+    router.get('/forgotPassword', forgotPassword.forgotPassword)
     router.get('/user/logout', user.getLogOut);
     router.get('/user/insertUser', middleware.requireAuth, user.getInsertUser);
     router.post('/user/insertUser', middleware.requireAuth, user.postInsertUser);

@@ -161,7 +161,7 @@ bill = {
                 document.querySelector('.feedback-form').style.display = 'none';
             });
         }
-    }, showNotification: function (from, align, message, color) {
+    },showNotification: function (from, align, message, color) {
         this.color ? color = color : color = "primary";
         color = color;
         $.notify(
