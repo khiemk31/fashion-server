@@ -69,57 +69,49 @@ head
                     .card-header
                         h5.card-title  Nhập thông tin tài khoản
                     .card-body
-                        form.was-validated(action='/user/insertUser' method='POST' enctype='multipart/form-data' role='form')
+                        .was-validated
                             .row
                                 .col-md-10.pr-1
                                     .form-group
                                         label Tên Người Dùng
-                                        input.form-control(type='text' name='user_name' required='')
+                                        input#name.form-control(type='text' name='user_name' required='')
                             .row
                                 .col-md-10.pr-1
                                     .form-group
                                         label Số Điện Thoại
-                                        input.form-control(type='phone' name='phone' required='')
+                                        input#phone.form-control(type='phone' name='phone' required='')
                             .row
                                 .col-md-5.pr-1
                                     .form-group
                                         label(for='exampleInputEmail1') Giới Tính
-                                        select#inputState.form-control(name='gender' required='') Chọn Giới Tính
+                                        select#gender.form-control(name='gender' required='') Chọn Giới Tính
                                             option(value=1 name='gender'  ) Nam
                                             option(value=2 name='gender'  ) Nữ
                                             option(value=0 name='gender') Không Xác Định
                                 .col-md-5.pr-1
                                     .form-group
                                         label Loại Tài Khoản
-                                        select#inputState.form-control(name='permission' required='' ) Chọn loại tài khoản
+                                        select#permission.form-control(name='permission' required='' ) Chọn loại tài khoản
                                             option(value="user" name='permission'  ) Khách Hàng
                                             option(value='admin' name='permission'  ) Admin
-                            .row    
-                                .col-md-10.pr-1
-                                    .form-group
-                                        label Ngày Sinh
-                                        input.form-control(type='date' name='date_of_birth' )
                             .row
                                 .col-md-10.pr-1
                                     .form-group
                                         label Địa Chỉ
-                                        input.form-control(type='text' name='address')
+                                        input#address.form-control(type='text' name='address')
                             .row
                                 .col-md-10.pr-1
                                     .form-group
                                         label Mật khẩu
-                                        input.form-control(type='password' name='password' required='')
-                            .row    
-                                .col-md-5.pr-1.pb-3.align-self-center
+                                        input#password.form-control(type='password' name='password' required='')
+                            .row
+                                .col-md-10.pr-1
                                     .form-group
-                                        label Avatar
-                                    .flex.justify-between.mb-6
-                                        .flex
-                                            input#fileToUpload1(type='file' name='avatar' )
+                                        label Nhập lại mật khẩu
+                                        input#rePassword.form-control(type='password' name='password' required='')
                             .row
                                 .update.ml-auto.mr-auto
-                                    button.btn.btn-primary(type='submit' value='Tạo tài khoản' name='submit') Tạo tài khoản
-
+                                    button#btnAddUser.btn.btn-primary Tạo tài khoản
 script
     include ./assets/js/core/jquery.min.js
 script
@@ -136,3 +128,5 @@ script
     include ./assets/js/paper-dashboard.min.js
 script 
     include ./assets/js/plugins/bootstrap-notify.js
+script
+    include ./assets/js/insertUser.js

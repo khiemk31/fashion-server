@@ -281,12 +281,6 @@ const postInsertUser = async (req, res) => {
         const lengthListUser = (await query(connection, userSQL.getLengthListUser)).length;
         const id = 'USER' + (lengthListUser + 1);
         if (!isEmpty(user)) return res.status(409).json({ message: 'Số điện thoại đã được sử dụng !' });
-        var avatar;
-        if (req.files?.avatar.data) {
-            let avatar = 'data:image/jpeg;base64,' + req.files.avatar.data.toString('base64');
-            const upload = await uploadImage(avatar);
-            avatar = upload.url;
-        }
         const newPassword = await encodePassword(data.password);
         const newUser = {
             user_id: id,
@@ -297,23 +291,11 @@ const postInsertUser = async (req, res) => {
             address: data?.address || null,
             permission: data.permission,
             date_of_birth: data?.date_of_birth || new Date(),
-            avatar: avatar || null,
             active: 0,
             created_at: new Date(),
         };
         await query(connection, userSQL.insertUserSQL, newUser);
-        //load phân trang:
-        queryLimitUser = `SELECT * FROM user LIMIT 10  OFFSET  0`;
-        const listUserLimit = await query(connection, queryLimitUser);
-        const listUser = await query(connection, userSQL.queryAllUser);
-        let totalPage = getTotalPage(listUser.length, 10);
-        let listPage = [];
-        let i = 1;
-        while (i <= totalPage) {
-            listPage.push(i);
-            i++;
-        }
-        res.render('user', { listUser: listUserLimit, listPage: listPage, pageNumber: 1 });
+        return res.status(200).json({ message: "Thêm người dùng thành công" });
     } catch (e) {
         return res.status(500).json({ message: `${e}` });
     }

@@ -80,10 +80,18 @@ head
                                         th(onclick='sortTable(4)') Tổng Tiền
                                         th(onclick='sortTable(5)') Ngày đặt đơn 
                                         th(onclick='sortTable(6)') Tình trạng đơn
-                                    tbody#listBill
-                                    .feedback-form
-                                        .feedback-form-content
-                                            #formFeedback
+                                    tbody
+                                        each bill,index in listBill
+                                            tr
+                                                 a(href="/bill/getBillDetailWeb/"+bill.bill_id)
+                                                    td= index+1
+                                                    td
+                                                        a(href="/bill/getBillDetailWeb/"+bill.bill_id)= bill.bill_id
+                                                    td=bill.user_name
+                                                    td=bill.phone
+                                                    td= bill.total_price +' đ'
+                                                    td= bill.created_at
+                                                    td= bill.status
                             .col-md-4
                                 .row
                                     .form-group

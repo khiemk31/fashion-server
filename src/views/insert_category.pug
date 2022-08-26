@@ -85,7 +85,7 @@ head
                                             label Ảnh minh họa
                                         .flex.justify-between.mb-6
                                             .flex
-                                                input#fileToUpload1(type='file' name='category_image')
+                                                input#imageCategory(type='file' name='category_image')
                                 .row
                                     .update.ml-auto.mr-auto
                                         button.btn.btn-primary(type='submit' value='Update' name='submit') Update
@@ -102,11 +102,10 @@ head
                                             label Ảnh minh họa
                                         .flex.justify-between.mb-6
                                             .flex
-                                                input#fileToUpload1(type='file' name='category_image' required='')
+                                                input#imageCategory(type='file' name='category_image' required='')
                                 .row
                                     .update.ml-auto.mr-auto
                                         button.btn.btn-primary(type='submit' value='Tạo thể loại' name='submit') Tạo thể loại
-
 script
     include ./assets/js/core/jquery.min.js
 script

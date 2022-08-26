@@ -10,12 +10,6 @@ const profile = async (req, res) => {
     const user_id = jwt.verify(req.cookies.token, process.env.ACCESS_TOKEN_SECRET).user_id;
     const connection = await getConnection(req);
     detailUserQuery = 'SELECT * FROM user WHERE user_id=?';
-    queryDonDaDat = `SELECT COUNT(bill_id) AS soDon FROM bill WHERE (status="Đang Giao" OR status="Hoàn Thành" OR status="Chờ Xác Nhận") AND user_id=?`;
-    queryDonDaHuy = `SELECT COUNT(bill_id) AS soDon FROM bill WHERE (status="Đã Hủy" OR status="Đã Hoàn") AND user_id=?`;
-    queryDoanhThu = `SELECT SUM(total_price) AS doanhThu FROM bill WHERE status="Hoàn Thành" AND user_id=?`;
-    const donDaDat = await query(connection, queryDonDaDat, [user_id]);
-    const donDaHuy = await query(connection, queryDonDaHuy, [user_id]);
-    const doanhThu = await query(connection, queryDoanhThu, [user_id]);
     const user = await query(connection, detailUserQuery, [user_id]);
     if (user[0].date_of_birth) {
         user[0].date_of_birth = moment(user[0].date_of_birth).format('DD/MM/YYYY');
@@ -23,14 +17,8 @@ const profile = async (req, res) => {
     if (user[0].created_at) {
         user[0].created_at = moment(user[0].created_at).format('DD/MM/YYYY');
     }
-    if (doanhThu[0].doanhThu) {
-        doanhThu[0].doanhThu = formatMoney(doanhThu[0].doanhThu);
-    }
     res.render('profile', {
-        user: user[0],
-        donDaDat: donDaDat[0].soDon,
-        donDaHuy: donDaHuy[0].soDon,
-        doanhThu: doanhThu[0].doanhThu,
+        user: user[0]
     });
 };
 

@@ -148,12 +148,12 @@ forgotPassword = {
                     },
                 );
             }
-            if (!password.length > 5) {
+            if (password.length < 6) {
                 color = "primary";
                 return $.notify(
                     {
                         icon: 'nc-icon nc-bell-55',
-                        message: "Password không đc để trống",
+                        message: "Password phải từ 6 ký tự trở lên",
                     },
                     {
                         type: color,
@@ -165,12 +165,53 @@ forgotPassword = {
                     },
                 );
             }
-            if (!password == rePassword) {
+            if (password === rePassword) {
+                let method = 'PUT';
+                let params = JSON.stringify({
+                    password: password,
+                    phone: phone,
+                });
+                let url = 'http://modelfashion.store/user/recoveryPass';
+                let myHeaders = new Headers();
+                myHeaders.append('Content-Type', 'application/json');
+                let requestOptions = {
+                    method: method,
+                    headers: myHeaders,
+                    body: params,
+                    redirect: 'follow',
+                };
+                await fetch(url, requestOptions)
+                    .then((response) => response.text())
+                    .then((result) => {
+                        let data = JSON.parse(result);
+                        color = "primary";
+                        $.notify(
+                            {
+                                icon: 'nc-icon nc-bell-55',
+                                message: data.message,
+                            },
+                            {
+                                type: color,
+                                timer: 8000,
+                                placement: {
+                                    from: 'top',
+                                    align: 'right',
+                                },
+                            },
+                        );
+                        setTimeout(() => {
+                            location.replace(
+                                "http://modelfashion.store/login"
+                            );
+                        }, 2000);
+                    })
+                    .catch((error) => console.log('error', error));
+            } else {
                 color = "primary";
                 return $.notify(
                     {
                         icon: 'nc-icon nc-bell-55',
-                        message: "Nhập lại mật khẩu trùng với mật khẩu",
+                        message: "Nhập lại mật khẩu không trùng với mật khẩu",
                     },
                     {
                         type: color,
@@ -182,43 +223,6 @@ forgotPassword = {
                     },
                 );
             }
-            let method = 'PUT';
-
-            let params = JSON.stringify({
-                password: password,
-                phone: phone,
-            });
-            let url = 'http://modelfashion.store/user/recoveryPass';
-            let myHeaders = new Headers();
-            myHeaders.append('Content-Type', 'application/json');
-            let requestOptions = {
-                method: method,
-                headers: myHeaders,
-                body: params,
-                redirect: 'follow',
-            };
-            await fetch(url, requestOptions)
-                .then((response) => response.text())
-                .then((result) => {
-                    let data = JSON.parse(result);
-                    // color = "primary";
-                    // $.notify(
-                    //     {
-                    //         icon: 'nc-icon nc-bell-55',
-                    //         message: data.message,
-                    //     },
-                    //     {
-                    //         type: color,
-                    //         timer: 8000,
-                    //         placement: {
-                    //             from: 'top',
-                    //             align: 'right',
-                    //         },
-                    //     },
-                    // );
-                    console.log(data)
-                })
-                .catch((error) => console.log('error', error));
         }
     }
 };
