@@ -67,23 +67,15 @@ head
                 .navbar-wrapper
                     a.navbar-brand(href='#') Quản Lý Thể Loại
         .content
-            .col-md-6
-                form.ml-2.mb-2.align-self-center
-                    .input-group.no-border
-                        input#myInput.form-control(onkeyup='searchTable(1)' type='text' name='search' placeholder='Tìm kiếm tên thể loại...')
-                        .input-group-append
-                            .input-group-text
-                                i.nc-icon.nc-zoom-split
-                a.btn.btn-primary.align-self-center(href='/insertCategory' role='button')  Thêm thể loại
-            .col-md-6
-                form.md-3.mb-2.align-self-center
-                    .row
-                        .col-md-3
-                            input.form-control(type='date' name='date1'  )
-                        .col-md-3
-                            input.form-control(type='date' name='date2'  )
-                    .update.ml-auto.mr-auto
-                        button.btn.btn-primary(type='submit' value='Lọc' name='submit') Lọc
+            .row
+                .col-md-6
+                    form.ml-2.mb-2.align-self-center
+                        .input-group.no-border
+                            input#myInput.form-control(onkeyup='searchTable(1)' type='text' name='search' placeholder='Tìm kiếm tên thể loại...')
+                            .input-group-append
+                                .input-group-text
+                                    i.nc-icon.nc-zoom-split
+                    a.btn.btn-primary.align-self-center(href='/insertCategory' role='button')  Thêm thể loại
             .row
                 .col-md-12
                     .card
@@ -139,8 +131,8 @@ head
                                                     span &lt; 
                                                         span.sr-only (current)
                                                 li#prev(data-page='next')
-                                                    span &gt; 
-                                                        span.sr-only (current)                       
+                                                span &gt; 
+                                                    span.sr-only (current)                       
 script
     include ./assets/js/core/jquery.min.js
 script

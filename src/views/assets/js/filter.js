@@ -1,6 +1,8 @@
-filterSelection('all');
+window.onload = function() {
+  filterSelection("all");
+};
 function filterSelection(c) {
-  console.log("truyền vào", c)
+  console.log("lần đầu khởi tạo",c)
   var x, i;
   x = document.getElementsByClassName("filterDiv");
   if (c == "all") c = "";
@@ -11,7 +13,6 @@ function filterSelection(c) {
 };
 
 function w3AddClass(element, name) {
-  console.log(element, name);
   var i, arr1, arr2;
   arr1 = element.className.split(" ");
   arr2 = name.split(" ");
@@ -37,8 +38,8 @@ var btnContainer = document.getElementById("myBtnContainer");
 var btns = btnContainer.getElementsByClassName("btn");
 for (var i = 0; i < btns.length; i++) {
   btns[i].addEventListener("click", function () {
-    var current = document.getElementsByClassName("active");
-    current[0].className = current[0].className.replace(" active", "");
-    this.className += " active";
+    var current = document.getElementsByClassName(" btn-primary");
+    current[0].className = current[0].className.replace(" btn-primary", "");
+    this.className += " btn-primary";
   });
 }
