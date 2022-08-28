@@ -83,7 +83,6 @@ head
                             .table-responsive   
                                 table#myTable.table.table-striped.table-class
                                     thead.text-primary
-                                        th(onclick='sortTable(0)') ID
                                         th(onclick='sortTable(1)') Tên thể loại
                                         th Ảnh minh họa
                                         th(onclick='sortTable(3)') Ngày thêm
@@ -93,7 +92,6 @@ head
                                     tbody
                                         each category in listCategory
                                             tr  
-                                                td=category.category_id
                                                 td= category.category_name
                                                 td
                                                     .card(style='width: 8rem;')
@@ -131,8 +129,8 @@ head
                                                     span &lt; 
                                                         span.sr-only (current)
                                                 li#prev(data-page='next')
-                                                span &gt; 
-                                                    span.sr-only (current)                       
+                                                    span &gt; 
+                                                        span.sr-only (current)                       
 script
     include ./assets/js/core/jquery.min.js
 script
