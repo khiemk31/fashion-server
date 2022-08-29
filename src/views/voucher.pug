@@ -12,6 +12,7 @@ head
     script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p' crossorigin='anonymous')
     script(src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js' integrity='sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB' crossorigin='anonymous')
     script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js' integrity='sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13' crossorigin='anonymous')
+    meta(http-equiv="Content-Security-Policy" content="upgrade-insecure-requests")
     // CSS Files
     style 
         include ./assets/css/bootstrap.min.css
@@ -68,109 +69,111 @@ head
             .container-fluid
                 .navbar-wrapper
                     a.navbar-brand(href='javascript:;') Tạo voucher
-
         .content.d-flex.justify-content-center
-            .card.card-user
-                .card-header
-                    ul#myTab.nav.nav-tabs(role='tablist')
-                        li.nav-item(role='presentation')
-                            button#home-tab.nav-link.active(data-bs-toggle='tab' data-bs-target='#home' type='button' role='tab' aria-controls='home' aria-selected='true') Khuyến mãi riêng từng khách hàng
-                        li.nav-item(role='presentation')
-                            button#profile-tab.nav-link(data-bs-toggle='tab' data-bs-target='#profile' type='button' role='tab' aria-controls='profile' aria-selected='false') Khuyến mãi chung
-                        li.nav-item(role='presentation')
-                            button#msessages-tab.nav-link(data-bs-toggle='tab' data-bs-target='#messages' type='button' role='tab' aria-controls='messages' aria-selected='false') Khuyến mãi cho 10 khách hàng thân thiết
-                .card-body
-                    .col-md-12
-                        .tab-content
-                            #home.tab-pane.active(role='tabpanel' aria-labelledby='home-tab')
-                                form.was-validated.mt-3(action='/addVoucher' method='POST' autocomplete="off" role='form')
-                                    .autocomplete
-                                        .row
-                                            .col-md-3
-                                                .form-group
-                                                    label ID người dùng
-                                                    input#myInput(type='text' name='user_id' required='')
-                                        .row
-                                            .col-md-6
-                                                .form-group
-                                                    label Tiêu Đề
-                                                    input(type='text' name='title' maxlength="100" required='')
-                                            .col-md-3
-                                                .form-group
-                                                    label Code
-                                                    input#inputCode(type='text' name='code' maxlength="10" required='' )
-                                            .col-md-3
-                                                .form-group
-                                                    button.btn.btn-info(style="margin-top : 22px" onclick="makeid(9)") Random
-                                        .row    
-                                            .col-md-4
-                                                .form-group
-                                                    label Số tiền khuyến mãi
-                                                    input(type='number' name='price_discount' min=5000  required='')
-                                        .row
-                                            .col-md-4
-                                                .form-group
-                                                    label Hạn sử dụng 
-                                                    input(type='date' name='expired' required='')
-                                        .row
-                                            .update.ml-auto.mr-auto
-                                                button.btn.btn-primary( type='submit' value='Tạo voucher' name='submit') Tạo voucher
-                            #profile.tab-pane(role='tabpanel' aria-labelledby='profile-tab')
-                                form.was-validated.mt-3(action='/addVoucherAll' method='POST' autocomplete="off" role='form')
-                                    .autocomplete
-                                        .row
-                                            .col-md-6
-                                                .form-group
-                                                    label Tiêu Đề
-                                                    input(type='text' name='title' maxlength="100" required='')
-                                            .col-md-3
-                                                .form-group
-                                                    label Code
-                                                    input#inputCode2(type='text' name='code' maxlength="10" required='' )
-                                            .col-md-3
-                                                .form-group
-                                                    button.btn.btn-info(style="margin-top : 22px" onclick="makeid(9)") Random
-                                        .row    
-                                            .col-md-4
-                                                .form-group
-                                                    label Số tiền khuyến mãi
-                                                    input(type='number' name='price_discount' min=5000  required='')
-                                        .row
-                                            .col-md-4
-                                                .form-group
-                                                    label Hạn sử dụng 
-                                                    input(type='date' name='expired' required='')
-                                        .row
-                                            .update.ml-auto.mr-auto
-                                                button.btn.btn-primary( type='submit' value='Tạo voucher' name='submit') Tạo voucher
-                            #messages.tab-pane(role='tabpanel' aria-labelledby='messages-tab')
-                                form.was-validated.mt-3(action='/addVoucherTop10User' method='POST' autocomplete="off" role='form')
-                                    .autocomplete
-                                        .row
-                                            .col-md-6
-                                                .form-group
-                                                    label Tiêu Đề
-                                                    input(type='text' name='title' maxlength="100" required='')
-                                            .col-md-3
-                                                .form-group
-                                                    label Code
-                                                    input#inputCode3(type='text' name='code' maxlength="10" required='' )
-                                            .col-md-3
-                                                .form-group
-                                                    button.btn.btn-info(style="margin-top : 22px" onclick="makeid(9)") Random
-                                        .row    
-                                            .col-md-4
-                                                .form-group
-                                                    label Số tiền khuyến mãi
-                                                    input(type='number' name='price_discount' min=5000  required='')
-                                        .row
-                                            .col-md-4
-                                                .form-group
-                                                    label Hạn sử dụng 
-                                                    input(type='date' name='expired' required='')
-                                        .row
-                                            .update.ml-auto.mr-auto
-                                                button.btn.btn-primary( type='submit' value='Tạo voucher' name='submit') Tạo voucher
+            if(permission=="super admin")
+                .card.card-user
+                    .card-header
+                        ul#myTab.nav.nav-tabs(role='tablist')
+                            li.nav-item(role='presentation')
+                                button#home-tab.nav-link.active(data-bs-toggle='tab' data-bs-target='#home' type='button' role='tab' aria-controls='home' aria-selected='true') Khuyến mãi riêng từng khách hàng
+                            li.nav-item(role='presentation')
+                                button#profile-tab.nav-link(data-bs-toggle='tab' data-bs-target='#profile' type='button' role='tab' aria-controls='profile' aria-selected='false') Khuyến mãi chung
+                            li.nav-item(role='presentation')
+                                button#msessages-tab.nav-link(data-bs-toggle='tab' data-bs-target='#messages' type='button' role='tab' aria-controls='messages' aria-selected='false') Khuyến mãi cho 10 khách hàng thân thiết
+                    .card-body
+                        .col-md-12
+                            .tab-content
+                                #home.tab-pane.active(role='tabpanel' aria-labelledby='home-tab')
+                                    form.was-validated.mt-3(action='/addVoucher' method='POST' autocomplete="off" role='form')
+                                        .autocomplete
+                                            .row
+                                                .col-md-3
+                                                    .form-group
+                                                        label ID người dùng
+                                                        input#myInput(type='text' name='user_id' required='')
+                                            .row
+                                                .col-md-6
+                                                    .form-group
+                                                        label Tiêu Đề
+                                                        input(type='text' name='title' maxlength="100" required='')
+                                                .col-md-3
+                                                    .form-group
+                                                        label Code
+                                                        input#inputCode(type='text' name='code' maxlength="10" required='' )
+                                                .col-md-3
+                                                    .form-group
+                                                        button.btn.btn-info(style="margin-top : 22px" onclick="makeid(9)") Random
+                                            .row    
+                                                .col-md-4
+                                                    .form-group
+                                                        label Số tiền khuyến mãi
+                                                        input(type='number' name='price_discount' min=5000  required='')
+                                            .row
+                                                .col-md-4
+                                                    .form-group
+                                                        label Hạn sử dụng 
+                                                        input(type='date' name='expired' required='')
+                                            .row
+                                                .update.ml-auto.mr-auto
+                                                    button.btn.btn-primary( type='submit' value='Tạo voucher' name='submit') Tạo voucher
+                                #profile.tab-pane(role='tabpanel' aria-labelledby='profile-tab')
+                                    form.was-validated.mt-3(action='/addVoucherAll' method='POST' autocomplete="off" role='form')
+                                        .autocomplete
+                                            .row
+                                                .col-md-6
+                                                    .form-group
+                                                        label Tiêu Đề
+                                                        input(type='text' name='title' maxlength="100" required='')
+                                                .col-md-3
+                                                    .form-group
+                                                        label Code
+                                                        input#inputCode2(type='text' name='code' maxlength="10" required='' )
+                                                .col-md-3
+                                                    .form-group
+                                                        button.btn.btn-info(style="margin-top : 22px" onclick="makeid(9)") Random
+                                            .row    
+                                                .col-md-4
+                                                    .form-group
+                                                        label Số tiền khuyến mãi
+                                                        input(type='number' name='price_discount' min=5000  required='')
+                                            .row
+                                                .col-md-4
+                                                    .form-group
+                                                        label Hạn sử dụng 
+                                                        input(type='date' name='expired' required='')
+                                            .row
+                                                .update.ml-auto.mr-auto
+                                                    button.btn.btn-primary( type='submit' value='Tạo voucher' name='submit') Tạo voucher
+                                #messages.tab-pane(role='tabpanel' aria-labelledby='messages-tab')
+                                    form.was-validated.mt-3(action='/addVoucherTop10User' method='POST' autocomplete="off" role='form')
+                                        .autocomplete
+                                            .row
+                                                .col-md-6
+                                                    .form-group
+                                                        label Tiêu Đề
+                                                        input(type='text' name='title' maxlength="100" required='')
+                                                .col-md-3
+                                                    .form-group
+                                                        label Code
+                                                        input#inputCode3(type='text' name='code' maxlength="10" required='' )
+                                                .col-md-3
+                                                    .form-group
+                                                        button.btn.btn-info(style="margin-top : 22px" onclick="makeid(9)") Random
+                                            .row    
+                                                .col-md-4
+                                                    .form-group
+                                                        label Số tiền khuyến mãi
+                                                        input(type='number' name='price_discount' min=5000  required='')
+                                            .row
+                                                .col-md-4
+                                                    .form-group
+                                                        label Hạn sử dụng 
+                                                        input(type='date' name='expired' required='')
+                                            .row
+                                                .update.ml-auto.mr-auto
+                                                    button.btn.btn-primary( type='submit' value='Tạo voucher' name='submit') Tạo voucher
+            else 
+                h5 Bạn không có quyền tạo voucher
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js

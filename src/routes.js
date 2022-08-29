@@ -69,7 +69,8 @@ module.exports = (router) => {
     router.get('/product/insertProduct', middleware.requireAuth, product.insertProduct);
     router.get('/product', middleware.requireAuth, product.product);
     router.get('/getListProduct', middleware.requireAuth, product.getListProduct);
-    router.get('/product/remove/:id', middleware.requireAuth, product.removeProduct);
+    router.get('/product/hiddenProduct/:id', middleware.requireAuth, product.hiddenProduct);
+    router.get('/product/showProduct/:id', middleware.requireAuth, product.showProduct);
     router.get('/product/getAll', product.getAll);
 
     //Bill API
@@ -81,8 +82,8 @@ module.exports = (router) => {
     router.put('/bill/returnRequest', bill.returnRequest);
     //Bill Web View
     router.get('/bill', middleware.requireAuth, bill.bill);
-    router.get('/bill/getBillDetailWeb/:id', middleware.requireAuth, bill.getBillDetailWeb);
-    router.get('/bill/getAll', middleware.requireAuth, bill.getAll);
+    router.get('/bill/getBillDetailWeb/', middleware.requireAuth, bill.getBillDetailWeb);
+    router.get('/bill/updateViewBill/:id', middleware.requireAuth, bill.updateViewBill);
 
     router.post('/bill/billConfirm', middleware.requireAuth, bill.billConfirm);
     router.post('/bill/billCancel', middleware.requireAuth, bill.billCancel);

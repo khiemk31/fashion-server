@@ -1,6 +1,7 @@
 getPagination('#myTable');
 
 function getPagination(table) {
+    console.log(table)
     var lastPage = 1;
 
     $('#maxRows')

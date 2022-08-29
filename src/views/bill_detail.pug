@@ -5,8 +5,9 @@ head
     link(rel='icon' type='image/png' href='https://res.cloudinary.com/cde/image/upload/v1658206315/Icon/logo_cdrkpi.png')
     meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
     title Model Fashion
+    META(HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE")
     meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
-
+    meta(http-equiv="Content-Security-Policy" content="upgrade-insecure-requests")
     link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700,200' rel='stylesheet')
     link(href='https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' rel='stylesheet')
     // CSS Files
@@ -72,12 +73,11 @@ head
                                     li.text-muted.row.ml-5
                                         i.nc-icon.nc-badge.mr-2(style='color: #000;font-size: 18px;')
                                         p.font-weight-bold.mr-2   Tên khách hàng:  
-                                        a(href="#")
-                                            p= bill.user_name 
+                                        a(href="#")=bill.user_name 
                                     li.text-muted.row.ml-5
                                         i.nc-icon.nc-pin-3.mr-2(style='color: #000;font-size: 18px;')
                                         p.font-weight-bold.mr-2  Địa chỉ: 
-                                        p=  bill.address 
+                                        p=bill.address 
                                     li.text-muted.row.ml-5
                                         i.nc-icon.nc-mobile.mr-2(style='color: #000;font-size: 18px;')
                                         p.font-weight-bold.mr-2 Phone: 
@@ -169,7 +169,7 @@ head
                                 .column.text-center
                                     span.font-weight-bold( style=' font-size : 16px ') Hãy xác nhận đơn hàng ?
                                     .row.ml-3
-                                        button.btn.btn-outline-primary.btn-round(onclick=`bill.confirmStatusBill('${bill.bill_id}','/bill/billConfirm')`)
+                                        button.btn.btn-outline-primary.btn-round(onclick=`confirmStatusBill('${bill.bill_id}','/bill/billConfirm')`)
                                             i.nc-icon.nc-check-2.mr-1(style= 'font-size : 16px ;')
                                             | Đồng Ý
                                         #feedback-form
@@ -180,7 +180,7 @@ head
                                 .column.text-center
                                     span.font-weight-bold(style=' font-size : 16px ') Khách hàng yêu cầu hủy đơn ?
                                     .row.ml-3
-                                        button.btn.btn-outline-primary.btn-round(onclick=`bill.confirmStatusBill('${bill.bill_id}','/bill/billCancellationConfirmation')`)
+                                        button.btn.btn-outline-primary.btn-round(onclick=`confirmStatusBill('${bill.bill_id}','/bill/billCancellationConfirmation')`)
                                             i.nc-icon.nc-check-2.mr-1(style= 'font-size : 16px ;')
                                             | Đồng  Ý
                                         #feedback-form
@@ -191,7 +191,7 @@ head
                                 .column.text-center
                                     span.font-weight-bold(style=' font-size : 16px ;') Khách hàng yêu cầu hoàn đơn ?
                                     .row.ml-3
-                                        button.btn.btn-outline-primary.btn-round(onclick=`bill.confirmStatusBill('${bill.bill_id}','/bill/confirmReturnRequest')`)
+                                        button.btn.btn-outline-primary.btn-round(onclick=`confirmStatusBill('${bill.bill_id}','/bill/confirmReturnRequest')`)
                                             i.nc-icon.nc-check-2.mr-1(style= 'font-size : 16px ;')
                                             | Đồng  Ý
                                         #feedback-form
@@ -202,7 +202,7 @@ head
                                 .column.text-center
                                     span.font-weight-bold(style=' font-size : 18px ') Cập nhật trạng thái đơn ?
                                     .row.ml-3
-                                        button.btn.btn-outline-primary.btn-round(onclick=`bill.confirmStatusBill('${bill.bill_id}','/bill/billDone')`)
+                                        button.btn.btn-outline-primary.btn-round(onclick=`confirmStatusBill('${bill.bill_id}','/bill/billDone')`)
                                             i.nc-icon.nc-check-2.mr-1(style= 'font-size : 16px ;')
                                             | Giao hàng thành công
                                         #feedback-form
@@ -215,38 +215,38 @@ head
                         h2 Nhập lý do từ chối đơn
                             span#feedback-close X Đóng
                         form(action='/bill/billCancel' method='POST' role='form')
-                            input(type='text' name='id'  hidden   value=bill.bill_id )
+                            input(type='text' name='bill_id'  hidden   value=bill.bill_id )
                             input(type='text' name='page'  hidden   value="billDetail" )
                             p Nhập lý do 
                             input(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
-                            button.btn.btn-warning.btn-round(onclick="bill.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+                            button.btn.btn-warning.btn-round(onclick="showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
                     if (bill.status=="Đang Giao")
                         h2 Nhập lý do giao hàng thất bại
                             span#feedback-close X Đóng
                         form(action='/bill/billFail' method='POST' role='form')
-                            input(type='text' name='id'  hidden   value=bill.bill_id )
+                            input(type='text' name='bill_id'  hidden   value=bill.bill_id )
                             input(type='text' name='page'  hidden   value="billDetail" )
                             p Nhập lý do 
                             input(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
-                            button.btn.btn-warning.btn-round(onclick="bill.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+                            button.btn.btn-warning.btn-round(onclick="showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
                     if (bill.status=="Yêu Cầu Hủy Đơn")
                         h2 Nhập lý do từ chối yêu cầu
                             span#feedback-close X Đóng
                         form(action='/bill/rejectCancellationRequest' method='POST' role='form')
-                            input(type='text' name='id'  hidden   value=bill.bill_id )
+                            input(type='text' name='bill_id'  hidden   value=bill.bill_id )
                             input(type='text' name='page'  hidden   value="billDetail" )
                             p Nhập lý do 
                             input(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
-                            button.btn.btn-warning.btn-round(onclick="bill.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+                            button.btn.btn-warning.btn-round(onclick="showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
                     if (bill.status=="Yêu Cầu Hoàn Đơn")
                         h2 Nhập lý do từ chối yêu cầu
                             span#feedback-close X Đóng
                         form(action='/bill/rejectReturnRequest' method='POST' role='form')
-                            input(type='text' name='id'  hidden   value=bill.bill_id )
+                            input(type='text' name='bill_id'  hidden   value=bill.bill_id )
                             input(type='text' name='page'  hidden   value="billDetail" )
                             p Nhập lý do 
                             input(type='text' required='' name='feedback_by_store' placeholder='Vui Lòng nhập lý do')
-                            button.btn.btn-warning.btn-round(onclick="bill.showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
+                            button.btn.btn-warning.btn-round(onclick="showNotification('top', 'right', 'Cập nhật thành công')") Cập nhật thông tin
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js
@@ -264,7 +264,5 @@ script
     include ./assets/js/paper-dashboard.min.js
 script
     include ./assets/js/main.js
-script
-    include ./assets/js/bill.js
 script
     include ./assets/js/bill_detail.js

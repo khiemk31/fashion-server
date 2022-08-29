@@ -3,10 +3,13 @@ const voucherSQL = require('../sql/voucherSQL');
 const moment = require('moment');
 const userSQL = require('../sql/userSQL');
 const billSQL = require('../sql/billSQL');
-
+let jwt = require('jsonwebtoken');
 //WEB API
 const voucher = async (req, res) => {
-    res.render('voucher');
+    const connection = await getConnection(req);
+    const user_id = jwt.verify(req.cookies.token, process.env.ACCESS_TOKEN_SECRET).user_id;
+    const permission = await query(connection, userSQL.queryPermissionUser, [user_id])
+    res.render('voucher',{ permission: permission[0].permission});
 };
 //API Lấy tất cả user_id còn hoạt động
 const getAllUserID = async (req, res) => {

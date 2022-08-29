@@ -6,7 +6,7 @@ head
     meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
     title Model Fashion
     meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
-
+    meta(http-equiv="Content-Security-Policy" content="upgrade-insecure-requests")
     link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700,200' rel='stylesheet')
     link(href='https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' rel='stylesheet')
     link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' rel='stylesheet')
@@ -86,7 +86,7 @@ head
                                                  a(href="/bill/getBillDetailWeb/"+bill.bill_id)
                                                     td= index+1
                                                     td
-                                                        a(href="/bill/getBillDetailWeb/"+bill.bill_id)= bill.bill_id
+                                                        a(href="/bill/getBillDetailWeb/?id="+bill.bill_id)= bill.bill_id
                                                     td=bill.user_name
                                                     td=bill.phone
                                                     td= bill.total_price +' đ'
@@ -106,12 +106,13 @@ head
                                     .pagination-container
                                         nav(aria-label='...')
                                             ul.pagination
+                                                ul.pagination
                                                 li(data-page='prev')
                                                     span &lt; 
                                                         span.sr-only (current)
-                                                li#prev.page-item.active(aria-current='page')(data-page='next')
+                                                li#prev(data-page='next')
                                                     span &gt; 
-                                                        span.sr-only (current)      
+                                                        span.sr-only (current)    
 // Core JS Files
 script
     include ./assets/js/core/jquery.min.js
@@ -135,8 +136,4 @@ script
     include ./assets/js/table.js
 script
     include ./assets/js/filter.js
-script.
-    $(document).ready(function() {
-    bill.getBill();
-    });
 

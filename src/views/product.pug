@@ -5,6 +5,7 @@ head
     link(rel='icon' type='image/png' href='https://res.cloudinary.com/cde/image/upload/v1658206315/Icon/logo_cdrkpi.png')
     meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
     title Model Fashion
+    meta(http-equiv="Content-Security-Policy" content="upgrade-insecure-requests")
     meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
     link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700,200' rel='stylesheet')
     link(href='https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' rel='stylesheet')
@@ -68,13 +69,14 @@ head
                     a.btn.btn-primary.justify-content-center(href='/product/insertProduct' role='button') Thêm sản phẩm
                     form.ml-2
                         .input-group.no-border
-                            input.form-control(type='text' value='' placeholder='Search...')
+                            input#myInput.form-control(onkeyup='searchProduct()' type='text' value='' placeholder='Search...')
                             .input-group-append
                                 .input-group-text
                                     i.nc-icon.nc-zoom-split
         .content
             #myBtnContainer
                 button.btn(onclick="filterSelection('all')") Show all
+                button.btn(onclick="allProductHidden(")
                 each category of listCategory
                     button.btn(onclick=`filterSelection('${category.category_id}')`)=category.category_name
             #dataAllProduct.row
@@ -96,8 +98,9 @@ script
     include ./assets/js/product.js
 script
     include ./assets/js/filter.js
+script
+    include ./assets/js/searchProduct.js
 script.
     $(document).ready(function() {
         product.getListProduct();
-        //- filter.filterSelection("all");
     });

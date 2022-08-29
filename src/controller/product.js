@@ -40,22 +40,7 @@ const getListProduct = async (req, res) => {
         return res.status(500).json({ message: `${error}` });
     }
 };
-//delete
-const removeProduct = async (req, res) => {
-    try {
-        const { id } = req.params;
-        // if (permission !== 'admin' && permission !== 'supper admin')
-        //   return res.status(403).json({message: 'You don’t have permission to access'});
-        const connection = await getConnection(req);
-        const product = await query(connection, productSQL.productIDQuery, [id]);
-        if (isEmpty(product)) return res.status(404).json({ message: 'Product not found' });
-        await query(connection, productSQL.updateQuery, [new Date(), id]);
-        const listProduct = await query(connection, productSQL.getAllProduct);
-        res.render('product', { listProduct: listProduct });
-    } catch (e) {
-        return res.status(500).json({ message: `${e}` });
-    }
-};
+
 //add product
 const insertProduct = async (req, res) => {
     const connection = await getConnection(req);
@@ -139,6 +124,11 @@ const productDetail = async (req, res) => {
         }
         product[0].price = formatMoney(product[0].price);
         product[0].created_at = moment(product[0].created_at).format('DD-MM-YYYY');
+        if(product[0].updated_at){
+        product[0].updated_at = moment(product[0].updated_at).format('DD-MM-YYYY');
+        }
+        if(product[0].deleted_at){
+        product[0].deleted_at = moment(product[0].deleted_at).format('DD-MM-YYYY');}
     }
     res.render('detail_product', { product: product[0], listSizeProduct: listSize });
 };
@@ -164,7 +154,6 @@ const update = async (req, res) => {
         const upload = await uploadImage(newProductImage);
         product_image = upload.url;
     }
-    console.log(req.files);
     if (req.files?.image_1?.data) {
         let newProductBgr1 = 'data:image/jpeg;base64,' + req.files.image_1.data.toString('base64');
         const upload = await uploadImage(newProductBgr1);
@@ -184,7 +173,6 @@ const update = async (req, res) => {
     }
 
     const product = await query(connection, productSQL.productIDQuery, [data.product_id]);
-    console.log(product[0]);
     await query(connection, productSQL.updateProduct, [
         data.price || product[0].price,
         data.discount || product[0].discount || null,
@@ -208,9 +196,69 @@ const update = async (req, res) => {
         }
         newProduct[0].price = formatMoney(newProduct[0].price);
         newProduct[0].created_at = moment(newProduct[0].created_at).format('DD-MM-YYYY');
-        newProduct[0].updated_at = moment(newProduct[0].updated_at).format('DD-MM-YYYY');
+        if(product[0].updated_at){
+        product[0].updated_at = moment(product[0].updated_at).format('DD-MM-YYYY');
+        }
+        if(product[0].deleted_at){
+        product[0].deleted_at = moment(product[0].deleted_at).format('DD-MM-YYYY');}
     }
     res.render('detail_product', { product: newProduct[0], listSizeProduct: newListSize });
+};
+//ẩn sp
+const hiddenProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const connection = await getConnection(req);
+        const product = await query(connection, productSQL.productIDQuery, [id]);
+        if (isEmpty(product)) return res.status(404).json({ message: 'Product not found' });
+        await query(connection, productSQL.updateQuery, [new Date(), id]);
+        const newProduct = await query(connection, productSQL.getDetailProductWeb, [id]);
+        const newListSize = await query(connection, sizeSQL.queryListSizeByProductId, [id]);
+        if (newProduct.length > 0) {
+            if (newProduct[0].discount > 0) {
+                newProduct[0].sale_price = newProduct[0].price - newProduct[0].price * (newProduct[0].discount / 100);
+                newProduct[0].sale_price = formatMoney(newProduct[0].sale_price);
+            }
+            newProduct[0].price = formatMoney(newProduct[0].price);
+            newProduct[0].created_at = moment(newProduct[0].created_at).format('DD-MM-YYYY');
+            if(newProduct[0].updated_at){
+            newProduct[0].updated_at = moment(newProduct[0].updated_at).format('DD-MM-YYYY');
+            }
+            if(newProduct[0].deleted_at){
+            newProduct[0].deleted_at = moment(newProduct[0].deleted_at).format('DD-MM-YYYY');}
+            }
+        res.render('detail_product', { product: newProduct[0], listSizeProduct: newListSize });
+    } catch (e) {
+        return res.status(500).json({ message: `${e}` });
+    }
+};
+// mở bán lại
+const showProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const connection = await getConnection(req);
+        const product = await query(connection, productSQL.showProductQuery, [id]);
+        if (isEmpty(product)) return res.status(404).json({ message: 'Product not found' });
+        await query(connection, productSQL.updateQuery, [null, id]);
+         const newProduct = await query(connection, productSQL.getDetailProductWeb, [id]);
+        const newListSize = await query(connection, sizeSQL.queryListSizeByProductId, [id]);
+        if (newProduct.length > 0) {
+            if (newProduct[0].discount > 0) {
+                newProduct[0].sale_price = newProduct[0].price - newProduct[0].price * (newProduct[0].discount / 100);
+                newProduct[0].sale_price = formatMoney(newProduct[0].sale_price);
+            }
+            newProduct[0].price = formatMoney(newProduct[0].price);
+            newProduct[0].created_at = moment(newProduct[0].created_at).format('DD-MM-YYYY');
+            if(newProduct[0].updated_at){
+            newProduct[0].updated_at = moment(newProduct[0].updated_at).format('DD-MM-YYYY');
+            }
+            if(newProduct[0].deleted_at){
+            newProduct[0].deleted_at = moment(newProduct[0].deleted_at).format('DD-MM-YYYY');}
+        }
+        res.render('detail_product', { product: newProduct[0], listSizeProduct: newListSize });
+    } catch (e) {
+        return res.status(500).json({ message: `${e}` });
+    }
 };
 
 // API MOBILE
@@ -361,6 +409,7 @@ module.exports = {
     getProductDetail,
     productDetail,
     getListProduct,
-    removeProduct,
+    hiddenProduct,
+    showProduct,
     getProductByCategorySearch
 };

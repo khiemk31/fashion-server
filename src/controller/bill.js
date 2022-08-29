@@ -20,6 +20,7 @@ const add = async (req, res) => {
             address,
             payment_status,
         } = req.body;
+        console.log("Khiêm",req.body)
         const connection = await getConnection(req);
         const user = await query(connection, userSQL.getUserById, [user_id]);
         if (isEmpty(user)) return res.status(404).json({ message: 'User not found' });
@@ -145,7 +146,8 @@ const returnRequest = async (req, res) => {
 //Bill Web View
 //Chi Tiết Bill
 const getBillDetailWeb = async (req, res) => {
-    const bill_id = req.params.id;
+    console.log("Có gọi lại")
+    const bill_id = req.query.id;
     const connection = await getConnection(req);
     const bill = await query(connection, billSQL.queryBillByBillID, [bill_id]);
     const listProduct = await query(connection, billSQL.queryBillDetailByBillID, [bill_id]);
@@ -154,7 +156,6 @@ const getBillDetailWeb = async (req, res) => {
         if (bill[0].updated_at) {
             bill[0].updated_at = moment(bill[0].updated_at).format('DD-MM-YYYY');
         }
-
         var total_price_no_voucher = bill[0].total_price + bill[0].discount_voucher_price;
         bill[0].total_price = formatMoney(bill[0].total_price);
         bill[0].discount_voucher_price = formatMoney(bill[0].discount_voucher_price);
@@ -164,6 +165,7 @@ const getBillDetailWeb = async (req, res) => {
             p.price_sale = formatMoney(p.price_sale);
         }
     }
+    console.log(bill.bill)
     res.render('bill_detail', {
         bill: bill[0],
         total_price_no_voucher: total_price_no_voucher,
@@ -174,6 +176,7 @@ const getBillDetailWeb = async (req, res) => {
 
 //LoadBill CHECK 2 man  bill & billDetail
 const loadBill = async (req, res, connection, page, id) => {
+    console.log(page)
     if (page == 'bill') {
         const listBill = await query(connection, billSQL.queryAllBill);
         for (const bill of listBill) {
@@ -217,25 +220,11 @@ const bill = async (req, res) => {
     }
     res.render('bill', { listBill: listBill });
 };
-// Lấy tất cả bill
-const getAll = async (req, res) => {
-    try {
-        const connection = await getConnection(req);
-        const listBill = await query(connection, billSQL.queryAllBill);
-        for (const bill of listBill) {
-            bill.created_at = moment(bill.created_at).format('DD-MM-YYYY');
-            bill.total_price = formatMoney(bill.total_price);
-        }
-        return res.status(200).json({ listBill: listBill });
-    } catch (error) {
-        return res.status(500).json({ message: `${error}` });
-    }
-};
 // Nhận đơn
 const billConfirm = async (req, res) => {
     try {
+        console.log("có chạy vào đây?")
         const { id } = req.body;
-        console.log("Chayj vao day roi");
         const connection = await getConnection(req);
         const queryListBillDetail = 'SELECT product_name ,size ,quantity FROM bill_detail WHERE bill_id=?';
         const listBillDetail = await query(connection, queryListBillDetail, [id]);
@@ -263,15 +252,9 @@ const billConfirm = async (req, res) => {
             }
         }
         await query(connection, billSQL.updateStatusBillWeb, ['Đang Giao', id]);
-        const bill = await query(connection, billSQL.queryBillById, [id]);
-        if (bill[0].status == "Đang Giao") {
-            console.log("ádfsdfsdf");
-            console.log(bill[0]);
-            return res.status(200).json({
-                message: `Đã nhận đơn`,
-                result: true,
+        return res.status(200).json({
+            message: `Đã nhận đơn`
             });
-        }
     } catch (error) {
         return res.status(500).json({ message: `${error}`, result: false });
     }
@@ -290,7 +273,6 @@ const billCancel = async (req, res) => {
 const billCancellationConfirmation = async (req, res) => {
     try {
         const { id } = req.body;
-        console.log("Ăn luôn");
         const connection = await getConnection(req);
         const queryListBillDetail = 'SELECT product_name ,size ,quantity FROM bill_detail WHERE bill_id=?';
         const listBillDetail = await query(connection, queryListBillDetail, [id]);
@@ -314,7 +296,8 @@ const billCancellationConfirmation = async (req, res) => {
 };
 //Từ Chối Hủy
 const rejectCancellationRequest = async (req, res) => {
-    const { bill_id, feedback_by_store, page } = req.body;
+    console.log(req.body);
+    const {bill_id, feedback_by_store, page } = req.body;
     const connection = await getConnection(req);
     const bill = await query(connection, billSQL.queryBillById, [bill_id]);
     if (isEmpty(bill)) return res.status(404).json({ message: 'Bill not found' });
@@ -367,6 +350,7 @@ const rejectReturnRequest = async (req, res) => {
 //Hoàn Thành
 const billDone = async (req, res) => {
     try {
+        console.log("hoàn thành")
         const { id } = req.body;
         const connection = await getConnection(req);
         const bill = await query(connection, billSQL.queryBillById, [id]);
@@ -386,14 +370,9 @@ const billDone = async (req, res) => {
             await query(connection, updateSize, [newSizeQuantity, size[0].size_id]);
         }
         await query(connection, billSQL.updateBillDone, ['Hoàn Thành', 1, new Date(), id]);
-        const bill2 = await query(connection, billSQL.queryBillById, [id]);
-        if (bill2[0].status == "Hoàn Thành") {
-            console.log("ádfsdfsdf");
             return res.status(200).json({
                 message: `Đã hoàn thành đơn`,
-                result: true,
             });
-        }
     } catch (error) {
         return res.status(500).json({ message: `${error}`, result: false });
     }
@@ -422,7 +401,31 @@ const billFail = async (req, res) => {
         return res.status(500).json({ message: `${error}` });
     }
 };
-
+const updateViewBill= async (req, res) => {
+        const bill_id = req.params.id;
+        const connection = await getConnection(req);
+      const bill = await query(connection, billSQL.queryBillById, [bill_id]);
+        const listProduct = await query(connection, billSQL.queryBillDetailByBillID, [bill_id]);
+        if (bill.length > 0) {
+            bill[0].created_at = moment(bill[0].created_at).format('DD-MM-YYYY');
+            if (bill[0].updated_at) {
+                bill[0].updated_at = moment(bill[0].updated_at).format('DD-MM-YYYY');
+            }
+            var total_price_no_voucher = bill[0].total_price + bill[0].discount_voucher_price;
+            bill[0].total_price = formatMoney(bill[0].total_price);
+            bill[0].discount_voucher_price = formatMoney(bill[0].discount_voucher_price);
+            total_price_no_voucher = formatMoney(total_price_no_voucher);
+            for (const p of listProduct) {
+                p.price = formatMoney(p.price);
+                p.price_sale = formatMoney(p.price_sale);
+            }
+        }
+        res.render('bill_detail', {
+            bill: bill[0],
+            total_price_no_voucher: total_price_no_voucher,
+            listProduct: listProduct,
+        });
+}
 module.exports = {
     billConfirm,
     billCancel,
@@ -438,7 +441,7 @@ module.exports = {
     cancelOrder,
     feedback,
     returnRequest,
-    getAll,
     getBillDetailWeb,
     billFail,
+    updateViewBill,
 };

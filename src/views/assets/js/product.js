@@ -25,7 +25,11 @@ product = {
         if (res.listProduct.length > 0) {
             var p = '';
             res.listProduct.forEach((product) => {
-                p += `<div class="filterDiv ${product.category_id}">`
+                if(product.deleted_at){
+                    p += `<div id="delete" class="filterDiv ${product.category_id}" style="display :none">`
+                }else{
+                    p += `<div class="filterDiv ${product.category_id}">`
+                }
                 p += '<div class="col-md-3 pl-2" > ';
                 p += `<div class="card"  style="width: 17.5rem; height : 30rem ;">`;
                 p += '<h6 class="card-header">' + product.product_id + '</h6>';
@@ -41,7 +45,7 @@ product = {
                     '<a href="/product/productDetail/' +
                     product.product_id +
                     '">' +
-                    '<p class="card-title p-1 text-info" style=" height: 2.5rem ; font-size:16px">' +
+                    '<p id="productName" class="card-title p-1 text-info" style=" height: 2.5rem ; font-size:16px">' +
                     product.product_name +
                     '</p> </a>';
                 if (product.sale_price) {

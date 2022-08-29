@@ -6,7 +6,7 @@ head
     meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
     title Model Fashion
     meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport')
-
+    meta(http-equiv="Content-Security-Policy" content="upgrade-insecure-requests")
     link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700,200' rel='stylesheet')
     link(href='https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' rel='stylesheet')
     // CSS Files
@@ -82,6 +82,8 @@ head
                             p.card-text(style= "font-size: 1rem ; font-weight: bold;")="Ngày đăng bán: "+product.created_at
                             if(product.updated_at)
                                 p.card-text(style= "font-size: 1rem ; font-weight: bold;")="Ngày cập nhật mới: "+product.updated_at
+                            if(product.deleted_at)
+                                p.card-text(style= "font-size: 1rem ; font-weight: bold;")="Sản phẩm đã tạm dừng bán vào ngày: "+product.deleted_at
                             p.card-text(style= "font-size: 1rem ; font-weight: bold;") Bảng size sản phẩm
                             table.table.table-striped
                                 thead
@@ -97,13 +99,16 @@ head
                                             else
                                                 td Hết hàng
                             a.btn.btn-primary(href='/updateProduct/'+product.product_id) Sửa thông tin
+                            if(product.deleted_at == null)
+                                a.btn.btn-danger(href='/product/hiddenProduct/'+product.product_id) Ngừng kinh doanh
+                            else
+                                a.btn.btn-primary(href='/product/showProduct/'+product.product_id) Mở bán lại 
                 .col-sm-6
                     .card(style="width:20rem;")
                         h5.card-title.text-center.mt-2 Ảnh minh họa
                         img.card-img-top(src=product.product_bgr1)
                         img.card-img-top(src=product.product_bgr2)
                         img.card-img-top(src=product.product_bgr3)
-
 script
     include ./assets/js/core/jquery.min.js
 script
