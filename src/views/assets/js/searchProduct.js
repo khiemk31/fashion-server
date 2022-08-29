@@ -16,11 +16,4 @@ function searchProduct() {
     }
   }
 }
-function allProductHidden() {
-  let  listProduct, filterDiv, i ;
-  listProduct = document.getElementById('dataAllProduct');
-  filterDiv= listProduct.getElementsByClassName('filterDiv');
-  for (i = 0; i < filterDiv.length; i++) {
-    console.log( document.querySelector('filterDiv').id)
-  }
-}
+

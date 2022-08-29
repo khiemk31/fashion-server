@@ -2,7 +2,6 @@ window.onload = function() {
   filterSelection("all");
 };
 function filterSelection(c) {
-  console.log("lần đầu khởi tạo",c)
   var x, i;
   x = document.getElementsByClassName("filterDiv");
   if (c == "all") c = "";

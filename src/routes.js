@@ -26,6 +26,7 @@ module.exports = (router) => {
     router.get('/user/insertUser', middleware.requireAuth, user.getInsertUser);
     router.post('/user/insertUser', middleware.requireAuth, user.postInsertUser);
     router.get('/user/remove/:id', middleware.requireAuth, user.blockUser);
+    router.get('/user/removeAdmin/:id', middleware.requireAuth, user.removeAdmin);
     router.get('/user/active/:id', middleware.requireAuth, user.activeUser);
     router.get('/user/userDetail', middleware.requireAuth, user.userDetail);
     router.get('/user', middleware.requireAuth, user.getAll);
@@ -84,6 +85,7 @@ module.exports = (router) => {
     router.get('/bill', middleware.requireAuth, bill.bill);
     router.get('/bill/getBillDetailWeb/', middleware.requireAuth, bill.getBillDetailWeb);
     router.get('/bill/updateViewBill/:id', middleware.requireAuth, bill.updateViewBill);
+    router.get('/bill/billDoneView/:id', middleware.requireAuth, bill.billDoneView);
 
     router.post('/bill/billConfirm', middleware.requireAuth, bill.billConfirm);
     router.post('/bill/billCancel', middleware.requireAuth, bill.billCancel);

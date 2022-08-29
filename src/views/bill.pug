@@ -66,6 +66,21 @@ head
                     a.navbar-brand(href='javascript:;') Quản lý đơn hàng
         .content
             .row
+                .col-md-6
+                    form.ml-2.mb-2.align-self-center
+                        .input-group.no-border
+                            input#myInput.form-control(onkeyup='searchTable(1)' type='text' name='search' placeholder='Tìm kiếm đơn hàng theo mã...')
+                            .input-group-append
+                                .input-group-text
+                                    i.nc-icon.nc-zoom-split
+                .col-md-6
+                    form.ml-2.mb-2.align-self-center
+                        .input-group.no-border
+                            input#myInput2.form-control(onkeyup='searchTable2(2)' type='text' name='search' placeholder='Tìm kiếm theo tên người dùng...')
+                            .input-group-append
+                                .input-group-text
+                                    i.nc-icon.nc-zoom-split
+            .row
                 .col-md-12
                     .card
                         .card-body

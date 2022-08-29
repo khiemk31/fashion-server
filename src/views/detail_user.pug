@@ -167,7 +167,9 @@ head
                                                 a.btn.btn-danger(href='/user/remove/'+user.user_id role='button') Khóa đặt hàng
                                             if (user.active==1)
                                                 a.btn.btn-primary(href='/user/active/'+user.user_id role='button')  Mở khóa đặt hàng
-// Core JS Files
+                                        if(permission =="super admin")
+                                            if(user.permission =="admin")
+                                                a.btn.btn-danger(href='/user/removeAdmin/'+user.user_id role='button') Thu hồi quyền admin                                                             
 script
     include ./assets/js/core/jquery.min.js
 script

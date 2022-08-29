@@ -38,7 +38,9 @@ const addVoucher = async (req, res) => {
             active: 1,
             expired: data.expired,
         });
-        res.render('voucher');
+        const user_id = jwt.verify(req.cookies.token, process.env.ACCESS_TOKEN_SECRET).user_id;
+        const permission = await query(connection, userSQL.queryPermissionUser, [user_id])
+        res.render('voucher',{permission : permission[0]});
     } catch (error) {
         return res.status(500).json({ message: `${error}` });
     }

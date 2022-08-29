@@ -149,12 +149,15 @@ const blockUser = async (req, res) => {
         if (doanhThu[0].doanhThu) {
             doanhThu[0].doanhThu = formatMoney(doanhThu[0].doanhThu);
         }
-        res.render('detail_user', {
-            user: user[0],
-            donDaDat: donDaDat[0].soDon,
-            donDaHuy: donDaHuy[0].soDon,
-            doanhThu: doanhThu[0].doanhThu,
-        });
+    const adminID = jwt.verify(req.cookies.token, process.env.ACCESS_TOKEN_SECRET).user_id;
+    const permission = await query(connection, userSQL.queryPermissionUser, [adminID])
+    res.render('detail_user', {
+        user: user[0],
+        donDaDat: donDaDat[0].soDon,
+        donDaHuy: donDaHuy[0].soDon,
+        doanhThu: doanhThu[0].doanhThu,
+        permission : permission[0].permission
+    });
     } catch (error) {
         return res.status(500).json({ message: `${error}` });
     }
@@ -182,12 +185,15 @@ const activeUser = async (req, res) => {
         if (doanhThu[0].doanhThu) {
             doanhThu[0].doanhThu = formatMoney(doanhThu[0].doanhThu);
         }
-        res.render('detail_user', {
-            user: user[0],
-            donDaDat: donDaDat[0].soDon,
-            donDaHuy: donDaHuy[0].soDon,
-            doanhThu: doanhThu[0].doanhThu,
-        });
+    const adminID = jwt.verify(req.cookies.token, process.env.ACCESS_TOKEN_SECRET).user_id;
+    const permission = await query(connection, userSQL.queryPermissionUser, [adminID])
+    res.render('detail_user', {
+        user: user[0],
+        donDaDat: donDaDat[0].soDon,
+        donDaHuy: donDaHuy[0].soDon,
+        doanhThu: doanhThu[0].doanhThu,
+        permission : permission[0].permission
+    });
     } catch (error) {
         return res.status(500).json({ message: `${error}` });
     }
@@ -204,7 +210,7 @@ const apiSendOTP = async (req, res) => {
 const verifyOTP = async (req, res) => {
     const { otp_token, otp } = req.body;
     const data = await decodeOTP(otp_token);
-    if (new Date() > data.expire) return res.status(500).json({ message: 'OTP has expired' });
+    if (new Date() > data.expire) return res.status(500).json({ message: 'OTP has expired'});
     if (otp != data.otp) return res.status(409).json({ message: 'OTP not match' });
     return res.status(200).json({ message: 'success' });
 };
@@ -304,7 +310,6 @@ const postInsertUser = async (req, res) => {
 const loginAdmin = async (req, res) => {
     try {
         const data = req.body;
-        console.log(data);
         const connection = await getConnection(req);
         const admin = await query(connection, userSQL.getUserAdminQuerySQL, [data.phone.trim()]);
         const superAdmin = await query(connection, userSQL.getUserSupperAdminQuerySQL, [data.phone]);
@@ -388,13 +393,49 @@ const userDetail = async (req, res) => {
     if (doanhThu[0].doanhThu) {
         doanhThu[0].doanhThu = formatMoney(doanhThu[0].doanhThu);
     }
+    const adminID = jwt.verify(req.cookies.token, process.env.ACCESS_TOKEN_SECRET).user_id;
+    const permission = await query(connection, userSQL.queryPermissionUser, [adminID])
     res.render('detail_user', {
         user: user[0],
         donDaDat: donDaDat[0].soDon,
         donDaHuy: donDaHuy[0].soDon,
         doanhThu: doanhThu[0].doanhThu,
+        permission : permission[0].permission
     });
 };
+const removeAdmin =async(req,res)=>{
+    const user_id = req.params.id;
+    const connection = await getConnection(req);
+    const removeAdmin = `update user set permission ='user' where user_id=?`;
+    await query(connection, removeAdmin, [user_id]);
+    detailUserQuery = 'select *  from user where  user_id=?';
+    queryDonDaDat = `SELECT COUNT(bill_id) AS soDon FROM bill WHERE (status="Đang Giao" OR status="Hoàn Thành" OR status="Chờ Xác Nhận") AND user_id=?`;
+    queryDonDaHuy = `SELECT COUNT(bill_id) AS soDon FROM bill WHERE (status="Đã Hủy" OR status="Đã Hoàn") AND user_id=?`;
+    queryDoanhThu = `SELECT SUM(total_price) AS doanhThu FROM bill WHERE status="Hoàn Thành" AND user_id=?`;
+    const donDaDat = await query(connection, queryDonDaDat, [user_id]);
+    const donDaHuy = await query(connection, queryDonDaHuy, [user_id]);
+    const doanhThu = await query(connection, queryDoanhThu, [user_id]);
+    const user = await query(connection, detailUserQuery, [user_id]);
+    if (user[0].date_of_birth) {
+        user[0].date_of_birth = moment(user[0].date_of_birth).format('DD-MM-YYYY');
+    }
+    if (user[0].created_at) {
+        user[0].created_at = moment(user[0].created_at).format('DD-MM-YYYY');
+    }
+    if (doanhThu[0].doanhThu) {
+        doanhThu[0].doanhThu = formatMoney(doanhThu[0].doanhThu);
+    }
+    const adminID = jwt.verify(req.cookies.token, process.env.ACCESS_TOKEN_SECRET).user_id;
+    const permission = await query(connection, userSQL.queryPermissionUser, [adminID])
+    res.render('detail_user', {
+        user: user[0],
+        donDaDat: donDaDat[0].soDon,
+        donDaHuy: donDaHuy[0].soDon,
+        doanhThu: doanhThu[0].doanhThu,
+        permission : permission[0].permission
+    });
+}
+
 
 const getLogOut = async (req, res) => {
     res.clearCookie('token');
@@ -425,4 +466,5 @@ module.exports = {
     loginAdmin,
     checkActive,
     getLogOut,
+    removeAdmin,
 };

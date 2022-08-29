@@ -27,12 +27,12 @@ confirmStatusBill = async function (id, status){
         .then((result) => {
         let  data = JSON.parse(result);
         showNotification('top', 'right', data.message);
-        window.location.reload (true)
-        // if(status=="/bill/billDone"){
-        //     location.replace('http://modelfashion.store/bill/getBillDetailWeb/?id='+id);
-        // }else{
-        //     location.replace('http://modelfashion.store/bill/updateViewBill/'+id);
-        // }  
+        
+        if(status=="/bill/billDone"){
+            location.replace('http://modelfashion.store/bill/billDoneView/'+id);
+        }else{
+            location.replace('http://modelfashion.store/bill/updateViewBill/'+id);
+        }  
         })
         .catch((error) => console.log('error', error));
  };

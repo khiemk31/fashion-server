@@ -26,7 +26,7 @@ product = {
             var p = '';
             res.listProduct.forEach((product) => {
                 if(product.deleted_at){
-                    p += `<div id="delete" class="filterDiv ${product.category_id}" style="display :none">`
+                    p += `<div class="filterDiv hidden ${product.category_id}">`
                 }else{
                     p += `<div class="filterDiv ${product.category_id}">`
                 }

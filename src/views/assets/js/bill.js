@@ -12,7 +12,6 @@ bill = {
         await fetch(url, requestOptions)
             .then((response) => response.text())
             .then((result) => {
-                console.log(result)
                 data = JSON.parse(result);
             })
             .catch((error) => console.log('error', error));
@@ -23,9 +22,7 @@ bill = {
         const params = JSON.stringify({
             id: id,
         });
-        console.log("URL", url);
         const data = await this.callAPI(url, params, method);
-        console.log(typeof data);
         if (data.result) {
             this.showNotification('top', 'right', data.message);
             setTimeout(() => {

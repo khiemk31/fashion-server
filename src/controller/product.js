@@ -104,9 +104,9 @@ const add = async (req, res) => {
                 created_at: new Date(),
             });
         }
-
+        const listCategory = await query(connection, categorySQL.queryListCategory);
         const listProduct = await query(connection, productSQL.getAllProduct);
-        res.render('product', { listProduct: listProduct });
+        res.render('product', { listProduct: listProduct ,listCategory: listCategory});
     } catch (e) {
         return res.status(500).json({ message: `${e}` });
     }
@@ -143,7 +143,6 @@ const getUpdate = async (req, res) => {
 
 const update = async (req, res) => {
     const data = req.body;
-    console.log(data);
     let product_image = null;
     let product_bgr1 = null;
     let product_bgr2 = null;

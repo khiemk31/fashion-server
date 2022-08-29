@@ -75,8 +75,8 @@ head
                                     i.nc-icon.nc-zoom-split
         .content
             #myBtnContainer
-                button.btn(onclick="filterSelection('all')") Show all
-                button.btn(onclick="allProductHidden(")
+                button.btn(onclick="filterSelection('all')") Tất cả sản phẩm
+                button.btn(onclick="filterSelection('hidden')") Các sản phẩm đã ngừng bán
                 each category of listCategory
                     button.btn(onclick=`filterSelection('${category.category_id}')`)=category.category_name
             #dataAllProduct.row

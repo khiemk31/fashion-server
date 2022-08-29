@@ -111,7 +111,6 @@ forgotPassword = {
         };
         btnChangePass.onclick = async function () {
             let phone = document.querySelector("#phone").value;
-            console.log("MK Trong fun", phone)
             const password = document.querySelector("#newPass").value;
             const rePassword = document.querySelector("#rePass").value;
             if (password.indexOf(" ") >= 0 || rePassword.indexOf(" ") >= 0) {

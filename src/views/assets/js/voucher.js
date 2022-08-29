@@ -100,7 +100,7 @@ function autocomplete(inp, arr) {
     document.addEventListener('click', function (e) {
         closeAllLists(e.target);
     });
-}
+};
 
 /*Call API lấy dl tất cả User*/
 var requestOptions = {
@@ -110,6 +110,7 @@ var requestOptions = {
 fetch('http://modelfashion.store/voucher/getAllUserID', requestOptions)
     .then((response) => response.text())
     .then((result) => {
+        console.log(result);
         data = JSON.parse(result);
         autocomplete(document.getElementById('myInput'), data.listUserID);
     })
@@ -125,4 +126,21 @@ function makeid(length) {
     document.getElementById('inputCode').value = result;
     document.getElementById('inputCode2').value = result;
     document.getElementById('inputCode3').value = result;
-}
+};
+ function showNotification(from, align, message, color) {
+        this.color ? color = color : color = "primary";
+        $.notify(
+            {
+                icon: 'nc-icon nc-bell-55',
+                message: message,
+            },
+            {
+                type: color,
+                timer: 8000,
+                placement: {
+                    from: from,
+                    align: align,
+                },
+            },
+        );
+    };

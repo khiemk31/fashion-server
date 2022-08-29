@@ -20,7 +20,6 @@ const add = async (req, res) => {
             address,
             payment_status,
         } = req.body;
-        console.log("Khiêm",req.body)
         const connection = await getConnection(req);
         const user = await query(connection, userSQL.getUserById, [user_id]);
         if (isEmpty(user)) return res.status(404).json({ message: 'User not found' });
@@ -146,7 +145,6 @@ const returnRequest = async (req, res) => {
 //Bill Web View
 //Chi Tiết Bill
 const getBillDetailWeb = async (req, res) => {
-    console.log("Có gọi lại")
     const bill_id = req.query.id;
     const connection = await getConnection(req);
     const bill = await query(connection, billSQL.queryBillByBillID, [bill_id]);
@@ -165,7 +163,6 @@ const getBillDetailWeb = async (req, res) => {
             p.price_sale = formatMoney(p.price_sale);
         }
     }
-    console.log(bill.bill)
     res.render('bill_detail', {
         bill: bill[0],
         total_price_no_voucher: total_price_no_voucher,
@@ -176,7 +173,6 @@ const getBillDetailWeb = async (req, res) => {
 
 //LoadBill CHECK 2 man  bill & billDetail
 const loadBill = async (req, res, connection, page, id) => {
-    console.log(page)
     if (page == 'bill') {
         const listBill = await query(connection, billSQL.queryAllBill);
         for (const bill of listBill) {
@@ -223,7 +219,6 @@ const bill = async (req, res) => {
 // Nhận đơn
 const billConfirm = async (req, res) => {
     try {
-        console.log("có chạy vào đây?")
         const { id } = req.body;
         const connection = await getConnection(req);
         const queryListBillDetail = 'SELECT product_name ,size ,quantity FROM bill_detail WHERE bill_id=?';
@@ -262,7 +257,6 @@ const billConfirm = async (req, res) => {
 // Từ chối đơn
 const billCancel = async (req, res) => {
     const { bill_id, feedback_by_store, page } = req.body;
-    console.log('ma id', bill_id);
     const connection = await getConnection(req);
     const bill = await query(connection, billSQL.queryBillById, [bill_id]);
     if (isEmpty(bill)) return res.status(404).json({ message: 'Bill not found' });
@@ -296,7 +290,6 @@ const billCancellationConfirmation = async (req, res) => {
 };
 //Từ Chối Hủy
 const rejectCancellationRequest = async (req, res) => {
-    console.log(req.body);
     const {bill_id, feedback_by_store, page } = req.body;
     const connection = await getConnection(req);
     const bill = await query(connection, billSQL.queryBillById, [bill_id]);
@@ -308,7 +301,6 @@ const rejectCancellationRequest = async (req, res) => {
 const confirmReturnRequest = async (req, res) => {
     try {
         const { id } = req.body;
-        console.log("Ăn luôn");
         const connection = await getConnection(req);
         const bill = await query(connection, billSQL.queryBill, [id]);
         const queryListBillDetail = 'SELECT product_name ,size ,quantity FROM bill_detail WHERE bill_id=?';
@@ -350,7 +342,6 @@ const rejectReturnRequest = async (req, res) => {
 //Hoàn Thành
 const billDone = async (req, res) => {
     try {
-        console.log("hoàn thành")
         const { id } = req.body;
         const connection = await getConnection(req);
         const bill = await query(connection, billSQL.queryBillById, [id]);
@@ -426,6 +417,31 @@ const updateViewBill= async (req, res) => {
             listProduct: listProduct,
         });
 }
+const billDoneView= async (req, res) => {
+        const bill_id = req.params.id;
+        const connection = await getConnection(req);
+      const bill = await query(connection, billSQL.queryBillById, [bill_id]);
+        const listProduct = await query(connection, billSQL.queryBillDetailByBillID, [bill_id]);
+        if (bill.length > 0) {
+            bill[0].created_at = moment(bill[0].created_at).format('DD-MM-YYYY');
+            if (bill[0].updated_at) {
+                bill[0].updated_at = moment(bill[0].updated_at).format('DD-MM-YYYY');
+            }
+            var total_price_no_voucher = bill[0].total_price + bill[0].discount_voucher_price;
+            bill[0].total_price = formatMoney(bill[0].total_price);
+            bill[0].discount_voucher_price = formatMoney(bill[0].discount_voucher_price);
+            total_price_no_voucher = formatMoney(total_price_no_voucher);
+            for (const p of listProduct) {
+                p.price = formatMoney(p.price);
+                p.price_sale = formatMoney(p.price_sale);
+            }
+        }
+        res.render('bill_detail', {
+            bill: bill[0],
+            total_price_no_voucher: total_price_no_voucher,
+            listProduct: listProduct,
+        });
+}
 module.exports = {
     billConfirm,
     billCancel,
@@ -444,4 +460,5 @@ module.exports = {
     getBillDetailWeb,
     billFail,
     updateViewBill,
+    billDoneView
 };
